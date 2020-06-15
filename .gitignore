@@ -1,0 +1,6 @@
+target/
+out/
+.idea/
+EpamCafe.iml
+logs/
+META-INF/
