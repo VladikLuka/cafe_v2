@@ -1,17 +1,20 @@
 package by.javatr.cafe.controller;
 
+import by.javatr.cafe.constant.SessionAttributes;
 import by.javatr.cafe.container.BeanFactory;
+import by.javatr.cafe.container.annotation.Autowired;
 import by.javatr.cafe.controller.command.Command;
 import by.javatr.cafe.controller.command.CommandProvider;
 import by.javatr.cafe.controller.content.Navigation;
 import by.javatr.cafe.controller.content.RequestContent;
 import by.javatr.cafe.controller.content.RequestResult;
-import by.javatr.cafe.dao.Cache;
 import by.javatr.cafe.dao.connection.impl.ConnectionPool;
-import by.javatr.cafe.entity.Dish;
+import by.javatr.cafe.entity.Address;
+import by.javatr.cafe.entity.Order;
+import by.javatr.cafe.entity.User;
 import by.javatr.cafe.exception.DAOException;
 import by.javatr.cafe.exception.ServiceException;
-import by.javatr.cafe.service.impl.UserService;
+import by.javatr.cafe.util.Cache;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,6 +25,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
 
 
 @WebServlet("/controller")
@@ -29,7 +35,7 @@ public class Controller extends HttpServlet {
 
     public static Logger logger = LogManager.getLogger(Controller.class);
 
-    CommandProvider provider = new CommandProvider();
+    private CommandProvider provider = new CommandProvider();
 
     public void init(){
         try {
@@ -89,19 +95,18 @@ public class Controller extends HttpServlet {
 
         processRequest(req,resp);
 
-//        req.getRequestDispatcher("index.jsp").forward(req,resp);
     }
 
     protected void processRequest(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
 
-        Cache cache =(Cache) BeanFactory.getInstance().getBean("cache");
-        System.out.println(cache.getDishes());
-        Dish dish = new Dish();
+        final Cache cache =(Cache) BeanFactory.getInstance().getBean("cache");
 
-        UserService service = UserService.getInstance();
+        if(req.getSession().getAttribute(SessionAttributes.USER_ID) != null){
+            System.out.println(cache.getOrders((int) req.getSession().getAttribute(SessionAttributes.USER_ID)));
 
+        }
 
-
+        System.out.println(req.getSession().getAttribute(SessionAttributes.USER_ID));
         System.out.println(req.getSession().getAttribute("access"));
         RequestContent content = new RequestContent();
         content.setContent(req);
@@ -116,9 +121,11 @@ public class Controller extends HttpServlet {
 
         try {
             result = command.execute(content);
-
-        } catch (ServiceException | DAOException e) {
+        } catch (ServiceException e) {
             logger.error("Service exception ", e);
+        }
+        if(result == null){
+            result = new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
         result.setResponseData(resp);

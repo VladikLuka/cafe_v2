@@ -40,7 +40,6 @@
         <url-pattern>/static/*</url-pattern>
     </filter-mapping>
 
-
     <filter>
         <filter-name>URLFilter</filter-name>
         <filter-class>by.javatr.cafe.filter.URLFilter</filter-class>

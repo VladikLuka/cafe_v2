@@ -16,7 +16,7 @@ import com.google.gson.Gson;
 import javax.servlet.http.HttpServletResponse;
 
 @Component
-public class AddToCart implements Command {
+public final class AddToCart implements Command {
     @Autowired
     IDishService service;
 
@@ -29,7 +29,7 @@ public class AddToCart implements Command {
     public RequestResult execute(RequestContent content) throws ServiceException {
         String id = content.getRequestParam("id");
 
-        Dish dish = service.getDish(Integer.parseInt(id));
+        Dish dish = service.get(Integer.parseInt(id));
 
 
         if(content.getSessionAttr(SessionAttributes.CART) == null){

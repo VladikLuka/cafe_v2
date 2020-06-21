@@ -1,6 +1,7 @@
 package by.javatr.cafe.dao.repository.impl;
 
 import by.javatr.cafe.container.annotation.Component;
+import by.javatr.cafe.dao.AbstractRepositoryTest;
 import by.javatr.cafe.dao.connection.impl.ConnectionPool;
 import by.javatr.cafe.dao.repository.IDishRepository;
 import by.javatr.cafe.entity.Dish;
@@ -18,7 +19,7 @@ import java.util.List;
 import static by.javatr.cafe.constant.BD_Columns.*;
 
 @Component
-public class MySqlDishRepository implements IDishRepository {
+public class MySqlDishRepository extends AbstractRepositoryTest<Dish> implements IDishRepository {
 
     Logger logger = LogManager.getLogger(MySqlDishRepository.class);
 
@@ -91,18 +92,34 @@ public class MySqlDishRepository implements IDishRepository {
     }
 
     @Override
-    public boolean delete(int id) {
-        return false;
+    public boolean delete(int id) throws DAOException {
+        try {
+            super.delete(getConnection(), new Dish(id));
+        } catch (DAOException e) {
+            throw new DAOException(e);
+        }
+        return true;
     }
 
     @Override
     public Dish create(Dish dish) throws DAOException {
-        return null;
+
+        try {
+            super.create(getConnection(), dish);
+        } catch (DAOException e) {
+            throw new DAOException(e);
+        }
+        return dish;
     }
 
     @Override
     public Dish update(Dish dish) throws DAOException {
-        return null;
+        try {
+            super.update(getConnection(), dish);
+        } catch (DAOException e) {
+            throw new DAOException(e);
+        }
+        return dish;
     }
 
     private MySqlDishRepository() {}

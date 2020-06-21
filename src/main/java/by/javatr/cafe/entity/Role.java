@@ -1,14 +1,19 @@
 package by.javatr.cafe.entity;
 
+import by.javatr.cafe.dao.annotation.Field;
+
 import java.io.*;
 
 
 /**
- *  ordinal used to control access for pages
+ *  ordinal used to control access
  */
 public enum Role implements Serializable {
 
-    ADMIN, USER, GUEST;
+    @Field(name = "qwe")
+    ADMIN,
+    USER,
+    GUEST;
 
     public static Role getRoleByID(int id){
         if(id - 1 == ADMIN.ordinal()){

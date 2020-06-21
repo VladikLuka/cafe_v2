@@ -1,67 +1,95 @@
 package by.javatr.cafe.entity;
 
-import by.javatr.cafe.annotation.Ignore;
+import by.javatr.cafe.dao.annotation.*;
 import by.javatr.cafe.constant.PaymentMethod;
 import by.javatr.cafe.constant.PaymentStatus;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class Order  extends Entity implements Serializable {
+@Table(table = "orders")
+public class Order  extends Entity<Order> implements Serializable {
 
     private static final long serialVersionUID = -5305625013407239807L;
 
-    @Ignore(name="order_id")
+    @Id(name="order_id")
     private int order_id;
+//    @Join(fieldColumn = "order_id")
+//    @ManyToMany(table = "orders_dishes", joinName = "orders_order_id", type = Dish.class)
     private Map<Dish, Integer> dishes;
+    @Field(name="order_rating")
     private int order_rating;
+    @Field(name="order_review")
     private String order_review;
+    @Field(name="order_payment_method")
     private PaymentMethod method;
+    @Field(name="order_receipt_time")
     private String time;
+    @Field(name = "order_delivery_time")
+    private String delivery_time;
+    @Field(name="users_ownerId")
     private int user_id;
+    @Field(name="order_status")
     private PaymentStatus status;
-    private String braintree_id;
     private BigDecimal amount;
+    @Join(fieldColumn = "address_address_id")
+    @ManyToOne(joinName = "address_id", field = "id",type = Address.class)
+    private Address address;
     private boolean isAvailable;
 
     public Order() {
     }
 
-    public Order(PaymentMethod method, PaymentStatus status, String time, Map<Dish,Integer> dishes, int user_id, String braintree_id) {
+    public Order(PaymentMethod method, PaymentStatus status, String time,String delivery_time ,Map<Dish,Integer> dishes,BigDecimal amount,int user_id) {
         this.method = method;
         this.user_id = user_id;
         this.status = status;
         this.time = time;
-        this.braintree_id = braintree_id;
+        this.delivery_time = delivery_time;
         this.dishes = dishes;
+        this.amount = amount;
     }
 
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Order order = (Order) o;
-        return order_id == order.order_id &&
-                order_rating == order.order_rating &&
-                user_id == order.user_id &&
-                Objects.equals(dishes, order.dishes) &&
-                Objects.equals(order_review, order.order_review) &&
-                method == order.method &&
-                Objects.equals(time, order.time) &&
-                status == order.status &&
-                Objects.equals(braintree_id, order.braintree_id);
+    public Order(PaymentMethod method, PaymentStatus status, String time,String delivery_time ,Map<Dish,Integer> dishes, Address address, BigDecimal amount,int user_id) {
+        this.method = method;
+        this.user_id = user_id;
+        this.status = status;
+        this.time = time;
+        this.delivery_time = delivery_time;
+        this.dishes = dishes;
+        this.address = address;
+        this.amount = amount;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(order_id, dishes, order_rating, order_review, method, time, user_id, status, braintree_id);
+    public Order(PaymentMethod method, PaymentStatus status, String time, String delivery_time,Address address,BigDecimal amount, int user_id) {
+        this.method = method;
+        this.status = status;
+        this.time = time;
+        this.delivery_time = delivery_time;
+        this.address = address;
+        this.amount = amount;
+        this.user_id = user_id;
+
+    }
+    public Order(PaymentMethod method, PaymentStatus status, String time,String delivery_time , BigDecimal amount, int user_id) {
+        this.method = method;
+        this.status = status;
+        this.time = time;
+        this.delivery_time = delivery_time;
+        this.amount = amount;
+        this.user_id = user_id;
     }
 
+    public Order(int order_id) {
+        this.order_id = order_id;
+    }
+
+    public Order(int order_id, int user_id) {
+        this.order_id = order_id;
+        this.user_id = user_id;
+    }
 
     @Override
     public String toString() {
@@ -74,8 +102,33 @@ public class Order  extends Entity implements Serializable {
                 ", time='" + time + '\'' +
                 ", user_id=" + user_id +
                 ", status=" + status +
-                ", braintree_id='" + braintree_id + '\'' +
+                ", amount=" + amount +
+                ", address=" + address +
+                ", isAvailable=" + isAvailable +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Order order = (Order) o;
+        return order_id == order.order_id &&
+                order_rating == order.order_rating &&
+                user_id == order.user_id &&
+                isAvailable == order.isAvailable &&
+                Objects.equals(dishes, order.dishes) &&
+                Objects.equals(order_review, order.order_review) &&
+                method == order.method &&
+                Objects.equals(time, order.time) &&
+                status == order.status &&
+                Objects.equals(amount, order.amount) &&
+                Objects.equals(address, order.address);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(order_id, dishes, order_rating, order_review, method, time, user_id, status, amount, address, isAvailable);
     }
 
     public int getOrder_id() {
@@ -142,14 +195,6 @@ public class Order  extends Entity implements Serializable {
         this.time = time;
     }
 
-    public String getBraintree_id() {
-        return braintree_id;
-    }
-
-    public void setBraintree_id(String braintree_id) {
-        this.braintree_id = braintree_id;
-    }
-
     public boolean isAvailable() {
         return isAvailable;
     }
@@ -164,5 +209,21 @@ public class Order  extends Entity implements Serializable {
 
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public String getDelivery_time() {
+        return delivery_time;
+    }
+
+    public void setDelivery_time(String delivery_time) {
+        this.delivery_time = delivery_time;
     }
 }

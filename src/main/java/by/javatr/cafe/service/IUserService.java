@@ -8,7 +8,6 @@ import java.util.List;
 public interface IUserService {
 
 
-    List<User> findAllUser();
 
     User find(int id) throws ServiceException;
 
@@ -20,4 +19,5 @@ public interface IUserService {
 
     boolean replenishBalance(User user) throws ServiceException;
 
+    User update(User user) throws ServiceException;
 }

@@ -32,9 +32,7 @@ public class AddAddress implements Command {
 
         service.create(address);
 
-        RequestResult result = new RequestResult(Navigation.REDIRECT, Path.USER, HttpServletResponse.SC_OK);
-
-        return result;
+        return new RequestResult(Navigation.REDIRECT, Path.USER, HttpServletResponse.SC_OK);
     }
 
     private AddAddress() {}

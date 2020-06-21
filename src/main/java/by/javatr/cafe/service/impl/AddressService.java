@@ -2,7 +2,7 @@ package by.javatr.cafe.service.impl;
 
 import by.javatr.cafe.container.annotation.Autowired;
 import by.javatr.cafe.container.annotation.Component;
-import by.javatr.cafe.dao.Cache;
+import by.javatr.cafe.util.Cache;
 import by.javatr.cafe.dao.repository.IAddressRepository;
 import by.javatr.cafe.entity.Address;
 import by.javatr.cafe.exception.DAOException;
@@ -31,7 +31,9 @@ public class AddressService implements IAddressService {
     @Override
     public Address update(Address address) throws ServiceException {
         try {
-            addressRepository.update(address);
+            final Address update = addressRepository.update(address);
+            if(update == null) throw new ServiceException("invalid update address");
+            cache.updateAddress(address);
             return address;
         } catch (DAOException | SQLException e) {
             throw new ServiceException(e);
@@ -69,7 +71,7 @@ public class AddressService implements IAddressService {
         try {
             final Address address1 = addressRepository.create(address);
             if(address1 != null){
-                return cache.createAddress(address1);
+                return cache.addAddress(address1);
             }else{
                 return null;
             }
@@ -83,7 +85,7 @@ public class AddressService implements IAddressService {
     @Override
     public boolean delete(Address address) throws ServiceException {
         try {
-            addressRepository.delete(address.getId());
+            addressRepository.delete(address);
             cache.deleteAddress(address);
             return true;
         } catch (DAOException e) {

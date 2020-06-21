@@ -3,44 +3,54 @@ package by.javatr.cafe;
 import by.javatr.cafe.container.BeanFactory;
 import by.javatr.cafe.aspectj.annotation.Connect;
 import by.javatr.cafe.aspectj.annotation.Resources;
+import by.javatr.cafe.dao.AbstractRepositoryTest;
 import by.javatr.cafe.entity.*;
 import by.javatr.cafe.exception.DAOException;
+import by.javatr.cafe.exception.ServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
+import java.io.*;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
-import java.sql.Connection;
+import java.sql.*;
 import java.util.*;
+import java.util.concurrent.Callable;
 
 
-public class Main {
+public class Main  extends AbstractRepositoryTest<User> {
+
+
+    static abstract class Test extends AbstractRepositoryTest<Address>{
+
+        private String tes;
+        private int i;
+
+        @Override
+        public Address update(Connection connection, Entity<Address> entity) throws DAOException {
+            return super.update(connection, entity);
+        }
+    }
+
+
+
+
     private static final Logger logger = LogManager.getLogger(Main.class);
 
-    public static void main(String[] args) throws NoSuchMethodException, IOException, InstantiationException, URISyntaxException, IllegalAccessException, InvocationTargetException, ClassNotFoundException, DAOException {
+    public static void main(String[] args) throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, DAOException, ServiceException, NoSuchFieldException, FileNotFoundException {
 
-//        DateFormat instance = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//        String format = instance.format(Calendar.getInstance().getTime());
-//
-//        System.out.println(format);
+//        final Connection connection = getConnection();
 
 
-        ArrayList<Dish> list = new ArrayList<>();
+//        Test test = new Test();
+//            test.delete(connection, new Address(205, "25", 1));
+    }
 
-        list.add(new Dish(1));
-        list.add(new Dish(1));
+    class B {
+        public void test(){
 
-
-
-        final Map<Dish, Integer> dishIntegerMap = countSameDish2(list);
-
-        System.out.println(dishIntegerMap);
-
-        for (Dish dish:dishIntegerMap.keySet()) {
-            System.out.println(dish + " " + dishIntegerMap.get(dish));
         }
-
     }
 
 
@@ -96,8 +106,8 @@ public class Main {
 
     private static BeanFactory beanFactoryInit(String path) throws NoSuchMethodException, IOException, InstantiationException, URISyntaxException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
         BeanFactory factory = BeanFactory.getInstance();
-        factory.instantiate(path);
-        factory.populateProperties();
+//        factory.instantiate(path);
+//        factory.populateProperties();
         return factory;
     }
 

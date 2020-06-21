@@ -2,6 +2,8 @@ package by.javatr.cafe.filter;
 
 import by.javatr.cafe.constant.AccessLevel;
 import by.javatr.cafe.constant.SessionAttributes;
+import by.javatr.cafe.container.BeanFactory;
+import by.javatr.cafe.util.Cache;
 import by.javatr.cafe.entity.Role;
 
 import javax.servlet.*;
@@ -26,57 +28,28 @@ public class AccessFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         HttpSession session = request.getSession();
-        String role = (String) session.getAttribute(SessionAttributes.ACCESS_LEVEL);
+        Object logged = session.getAttribute(SessionAttributes.USER_ID);
         Map<String, String> business_url = (Map<String, String>) request.getServletContext().getAttribute("BUSINESS_URL");
 
         String page_access_level = business_url.get(request.getAttribute("get_page").toString().split("/")[0]);
 
 
-        if(role != null){
-            if (Role.getRoleByName(role).ordinal() > Role.getRoleByName(page_access_level).ordinal()) {
+        if(logged != null){
+            Cache cache = (Cache)BeanFactory.getInstance().getBean("cache");
+            int id = (Integer) logged;
+
+            if(cache.getUser(id).isBan()){
+                request.getRequestDispatcher("WEB-INF/jsp/error.jsp").forward(request,response);
+            }
+            final Role role = cache.getUser(id).getRole();
+            if (role.ordinal() > Role.getRoleByName(page_access_level).ordinal()) {
                 request.getRequestDispatcher("WEB-INF/jsp/error.jsp").forward(request,response);
             }else{
                 filterChain.doFilter(request,response);
-                //request.getRequestDispatcher(SERVLET).forward(request,response);
             }
-        }else{
-            session.setAttribute(SessionAttributes.ACCESS_LEVEL, AccessLevel.GUEST);
-
+        }else if(Role.getRoleByName(AccessLevel.GUEST).ordinal() <= Role.getRoleByName(page_access_level).ordinal()){
             filterChain.doFilter(request,response);
-        }
-
-
-
-//        Role user_access_level_string = (Role) session.getAttribute(ACCESS_LEVEL);
-//
-//        if(user_access_level_string == null){
-//            user_access_level_string = Role.GUEST;
-//        }
-//
-//        String get_page = (String) request.getAttribute("get_page");
-//
-//        Map<String, String> business_url = (Map<String, String>) request.getServletContext().getAttribute("BUSINESS_URL");
-//
-//
-//            String page_access_level_string = business_url.get(get_page);
-//
-//            if(page_access_level_string == null){
-//                filterChain.doFilter(request,response);
-//                return;
-//            }
-//
-//
-//            Role page_access_level = Role.getRoleByName(page_access_level_string);
-//
-//
-//
-//            if (user_access_level_string.ordinal() > page_access_level.ordinal()) {
-//                request.getRequestDispatcher("WEB-INF/jsp/error.jsp").forward(request,response);
-//            }else{
-//                filterChain.doFilter(request,response);
-//                //request.getRequestDispatcher(SERVLET).forward(request,response);
-//            }
-
+        }else request.getRequestDispatcher("WEB-INF/jsp/error.jsp").forward(request,response);
 
     }
 

@@ -9,6 +9,8 @@ import by.javatr.cafe.controller.content.RequestContent;
 import by.javatr.cafe.controller.content.RequestResult;
 import by.javatr.cafe.exception.ServiceException;
 
+import javax.servlet.http.HttpServletResponse;
+
 @Component
 public class LogOut implements Command {
     @Override
@@ -16,12 +18,10 @@ public class LogOut implements Command {
 
         content.invalidate();
 
-        content.addSessionAttr(SessionAttributes.USER_EMAIL, null);
         content.addSessionAttr(SessionAttributes.USER_ID, null);
-        content.addSessionAttr(SessionAttributes.ACCESS_LEVEL, null);
-        content.addSessionAttr(SessionAttributes.USER_MONEY, null);
+        content.addSessionAttr(SessionAttributes.CART, null);
 
-        return new RequestResult(Navigation.REDIRECT, Path.PIZZA);
+        return new RequestResult(Navigation.REDIRECT,Path.PIZZA);
 
     }
 }

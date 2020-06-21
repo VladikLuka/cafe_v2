@@ -32,7 +32,11 @@
                 <div class="inside_wrap" style="margin-top: 20px">
                     <h6 style="color: #aaaaaa">email</h6>
                     <div style="text-decoration-line: underline; width: 100%">
-                        <h5>${sessionScope.user_email}</h5>
+                        <h5>${applicationScope.cache.getUser(sessionScope.user_id).mail}</h5>
+                    </div>
+                    <h6>loyalty points</h6>
+                    <div style="text-decoration-line: underline; width: 100%">
+                        <h5>${applicationScope.cache.getUser(sessionScope.user_id).loyalty_point}</h5>
                     </div>
                 </div>
                 <div class="personal_address">
@@ -63,7 +67,6 @@
                         </c:forEach>
                     </div>
                     <button class="btn btn-success" id="add_address">add address</button>
-                    <button class="btn btn-success" id="deposit">deposit</button>
                 </div>
             </div>
         </div>
@@ -94,34 +97,41 @@
 
         <div class="inside_wrap" style="margin-top: 20px">
             <h2>Change password</h2>
-            <div>
-                <lable style="color:#aaaaaa;">Old password</lable>
-                <input type="pas" id="old_password" class="form-control" name="old_pass">
-            </div>
-            <div>
-                <lable style="color:#aaaaaa;">New password</lable>
-                <input type="pas" id="new_password" class="form-control" name="new_pass">
-            </div>
-            <button class="btn" style="background-color:#fbec5d; margin-top: 10px" id="submit_change_pass">Change</button>
+            <form action="${pageContext.request.contextPath}/controller" method="post"><div>
+                    <lable style="color:#aaaaaa;">Old password</lable>
+                    <input type="password" id="old_password" class="form-control" name="old_pass">
+                </div>
+                <div>
+                    <lable style="color:#aaaaaa;">New password</lable>
+                    <input type="password" id="new_password" class="form-control" name="new_pass">
+                </div>
+                <input type="hidden" name="command" value="CHANGE_PASS">
+                <button class="btn" style="background-color:#fbec5d; margin-top: 10px" id="submit_change_pass">Change</button>
+            </form>
         </div>
     </div>
 
     <div class="container_right">
         <h2>Orders history</h2>
-
         <c:forEach items="${applicationScope.cache.getOrders(sessionScope.user_id)}" var="order">
-            <div style="background-color: #767676; max-width: 500px; max-height: 300px; margin-top: 20px; border-radius: 15px; margin-left: 50px">
-                <div>${order.order_id}</div>
-                <div><img src="${order.method}" alt="" style="max-width: 100px;"></div>
-                <div>${order.time}</div>
+            <div style="background-color: #767676; min-height: 40px;max-width: 500px; max-height: 300px; margin-top: 20px; border-radius: 15px; margin-left: 50px">
+                <div style="display:inline-block; color: white; margin-left: 30px">${order.time}</div>
+                <div style="float: right; display: inline-block;">
+                    <button class="order_info" data-id = "${order.order_id}" type="button" style="outline: none; border: 0;  background: transparent;">
+                        <a href="/checkout/${order.order_id}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="26" viewBox="0 0 22 22">
+                                <g fill="#FFF">
+                                    <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
+                                </g>
+                            </svg>
+                        </a>
+                    </button>
+                </div>
             </div>
         </c:forEach>
 
     </div>
 </div>
-
-
-
 
 <div class="overlay2">
     <div class="js-button-address">

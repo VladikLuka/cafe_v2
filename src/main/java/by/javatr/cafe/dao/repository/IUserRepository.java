@@ -12,12 +12,12 @@ public interface IUserRepository {
 
     User findUser(User user)throws DAOException;
 
-    boolean deleteUser(int id)throws DAOException;
+    boolean delete(User user) throws DAOException;
 
-    User createUser(User user)throws DAOException;
+    User create(User user)throws DAOException;
 
     User update(User user)throws DAOException;
 
-    User findUser(String email, String password) throws DAOException;
+    User find(String email, String password) throws DAOException;
 
 }

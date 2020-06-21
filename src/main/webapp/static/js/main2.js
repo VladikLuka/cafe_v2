@@ -72,23 +72,23 @@ $(document).ready(function() {
 
 
 	////////////////////////////////////////////
-	jQuery(function($) {
-		function fixDiv() {
-			var $cache = $('#second-header');
-			if ($(window).scrollTop() > 100)
-				$cache.css({
-					'z-index': '9999',
-					'position': 'fixed',
-					'top': '0px',
-					'width': '100%'
-				});
-			else
-				$cache.css({
-					'position': 'relative',
-				});
-		}
-		$(window).scroll(fixDiv);
-		fixDiv();
-	});
+	// jQuery(function($) {
+	// 	function fixDiv() {
+	// 		var $cache = $('#second-header');
+	// 		if ($(window).scrollTop() > 95)
+	// 			$cache.css({
+	// 				'z-index': '9999',
+	// 				'position': 'fixed',
+	// 				'top': '0px',
+	// 				'width': '100%'
+	// 			});
+	// 		else
+	// 			$cache.css({
+	// 				'position': 'relative',
+	// 			});
+	// 	}
+	// 	$(window).scroll(fixDiv);
+	// 	fixDiv();
+	// });
 
 });

@@ -2,6 +2,7 @@ package by.javatr.cafe.container;
 
 import by.javatr.cafe.container.annotation.Autowired;
 import by.javatr.cafe.container.annotation.Component;
+import by.javatr.cafe.exception.DIException;
 
 import java.io.*;
 import java.lang.reflect.Constructor;
@@ -33,7 +34,7 @@ public class BeanFactory {
         return singletons.get(beanName);
     }
 
-    public void instantiate(String basePackage) throws IOException, URISyntaxException, ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    public void instantiate(String basePackage) throws DIException {
 
         String fileName = null;
 
@@ -54,10 +55,15 @@ public class BeanFactory {
 
         String pat = basePackage.substring(1);
 
-        List<File> collect = Files.walk(Paths.get(pat))
-                .filter(Files::isRegularFile)
-                .map(Path::toFile)
-                .collect(Collectors.toList());
+        List<File> collect = null;
+        try {
+            collect = Files.walk(Paths.get(pat))
+                    .filter(Files::isRegularFile)
+                    .map(Path::toFile)
+                    .collect(Collectors.toList());
+        } catch (IOException e) {
+            throw new DIException("Path not found" + e);
+        }
 
 
         for (File file:collect) {
@@ -89,22 +95,31 @@ public class BeanFactory {
             String newClass = filePackage + "." + className;
             newClass = newClass.replaceAll("\\.\\.", ".");
 
-            Class<?> classObject = Class.forName(newClass);
+            Class<?> classObject = null;
+            try {
+                classObject = Class.forName(newClass);
+            } catch (ClassNotFoundException e) {
+                throw new DIException(e);
+            }
 
             if(classObject.isAnnotationPresent(Component.class)){
+                try {
                 Constructor<?> declaredConstructor = classObject.getDeclaredConstructor();
                 declaredConstructor.setAccessible(true);
                 Object instance = declaredConstructor.newInstance();
                 declaredConstructor.setAccessible(false);
                 String beanName = className.substring(0,1).toLowerCase() + className.substring(1);
                 singletons.put(beanName, instance);
+                } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+                    throw new DIException(e);
+                }
             }
 
         }
 
     }
 
-    public void populateProperties() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+    public void populateProperties() throws DIException {
 
         final Set<String> strings = singletons.keySet();
 
@@ -126,7 +141,11 @@ public class BeanFactory {
                         while (!aClass.getTypeName().equals(Object.class.getTypeName())) {
                             if (aClass.equals(field.getType())) {
                                 field.setAccessible(true);
-                                field.set(object, dependency);
+                                try {
+                                    field.set(object, dependency);
+                                } catch (IllegalAccessException e) {
+                                    throw new DIException(e);
+                                }
                                 field.setAccessible(false);
                                 counter++;
                             }
@@ -143,7 +162,11 @@ public class BeanFactory {
                                 }
                                 if (var.equals(type)) {
                                     field.setAccessible(true);
-                                    field.set(object, dependency);
+                                    try {
+                                        field.set(object, dependency);
+                                    } catch (IllegalAccessException e) {
+                                        throw new DIException(e);
+                                    }
                                     field.setAccessible(false);
                                     counter++;
                                 }
@@ -158,7 +181,7 @@ public class BeanFactory {
     }
 
 
-    public void run(String name) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException, URISyntaxException, ClassNotFoundException, InstantiationException, IOException {
+    public void run(String name) throws DIException {
         instantiate(name);
         populateProperties();
 

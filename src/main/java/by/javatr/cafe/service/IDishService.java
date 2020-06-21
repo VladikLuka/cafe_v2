@@ -1,12 +1,24 @@
 package by.javatr.cafe.service;
 
 import by.javatr.cafe.entity.Dish;
+import by.javatr.cafe.exception.DAOException;
 import by.javatr.cafe.exception.ServiceException;
+
+import java.util.List;
 
 public interface IDishService {
 
-    boolean loadDishes();
+    List<Dish> getDishes() throws ServiceException;
 
-    Dish getDish(int id) throws ServiceException;
+    Dish get(int id) throws ServiceException;
 
+    Dish update(Dish dish) throws ServiceException;
+
+    Dish create(Dish dish) throws DAOException, ServiceException;
+
+    boolean delete(Dish dish) throws ServiceException;
+
+    boolean hideDish(Dish dish) throws ServiceException;
+
+    boolean showDish(Dish dish) throws ServiceException;
 }

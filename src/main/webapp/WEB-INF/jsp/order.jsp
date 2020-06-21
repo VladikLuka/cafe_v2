@@ -24,7 +24,7 @@
 
 <div class="wrapper">
 
-    <div class="user_info container_left" style="background-color:#fff; box-shadow: 0 0 5px rgba(0,0,0,0.5);">
+    <div class="user_info container_left" style="background-color:#fff; box-shadow: 0 0 5px rgba(0,0,0,0.5); margin-bottom: 100px; padding-left: 20px;">
 
         <h2>Checkout</h2>
 
@@ -54,20 +54,21 @@
                     </div>
                 </c:forEach>
             </div>
-            <h2>Payment</h2>
-            <div>
-                <h6 style="color: #aaaaaa">Payment type</h6>
-            </div>
+            <h3>Payment</h3>
+
+            <label>
+                <input type="datetime-local" placeholder="yyyy-MM-dd hh-mm" lang="en_Us" value="2020-06-19T12:05">
+            </label>
+
         </div>
         <div>
 
             <h4>Pay from balance</h4>
-            <form id="payment-form2" action="${pageContext.request.contextPath}/controller" class="payment" method="POST">
+            <form action="${pageContext.request.contextPath}/controller" method="post" id="payment-form2" class="payment">
 
                 <input type="hidden" name="command" value="balance_order">
                 <button id="pay2" class="btn btn-success make_order" type="submit"><span>Test Transaction</span></button>
             </form>
-
         </div>
         <div>
             <form id="payment-form" method="post" class="payment" action="${pageContext.request.contextPath}/controller">
@@ -82,13 +83,13 @@
                 <button id="pay" class="button make_order" type="submit"><span>Test Transaction</span></button>
             </form>
         </div>
+
     </div>
     <div class="container_right">
-        <h2>Order</h2>
+        <h2 style="padding-left: 20px">Order</h2>
 
         <c:forEach items="${sessionScope.cart.cart}" var="dish">
             <div style="background-color: #767676; max-width: 500px; max-height: 300px; margin-top: 20px; border-radius: 15px; margin-left: 50px">
-                <div>${dish.id}</div>
                 <div><img src="${dish.picture_path}" alt="" style="max-width: 100px;"></div>
                 <div>${dish.price}</div>
                 <div>${dish.description}</div>

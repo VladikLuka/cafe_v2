@@ -33,7 +33,9 @@ public enum ConnectionPool implements IConnectionPool {
 
     @Override
     public Connection retrieve() throws SQLException {
-        Connection connection = null;
+        System.out.println("freeConnection" + freeConnections.size());
+        System.out.println("busyConnection" + busyConnections.size());
+            Connection connection = null;
         if(freeConnections.size() != 0){
             try {
                     connection = freeConnections.poll(properties.getTimeout(), TimeUnit.MILLISECONDS);
@@ -103,13 +105,22 @@ public enum ConnectionPool implements IConnectionPool {
         } catch (ClassNotFoundException e) {
             logger.error("DB DRIVER NOT FOUND");
         }
+        String jdbcUrl;
+//        if(System.getenv("RDS_DB_NAME") != null) {
+//            String dbName = System.getenv("RDS_DB_NAME");
+//            String userName = System.getenv("RDS_USERNAME");
+//            String password = System.getenv("RDS_PASSWORD");
+//            String hostname = System.getenv("RDS_HOSTNAME");
+//            String port = System.getenv("RDS_PORT");
+//             jdbcUrl = "jdbc:mysql://" + hostname + ":" + port + "/" + dbName + "?user=" + userName + "&password=" + password + "&useUnicode=true&serverTimezone=UTC";
+//        }else {
+//            jdbcUrl = properties.getDbUrl()+ "&user=" + properties.getDbUser() + "&password=" + properties.getDbPassword();
+              jdbcUrl = "jdbc:mysql://database-1.cs3cgmjptspr.us-east-2.rds.amazonaws.com:3306/ebdb?user=admin&password=vladislav7890&useUnicode=true&serverTimezone=UTC";
+//        }
         for (int i = 0; i < connectCount; i++) {
             try {
-
-                ConnectionProxy connection = new ConnectionProxy(DriverManager.getConnection(properties.getDbUrl(),
-                                properties.getDbUser(),
-                                properties.getDbPassword()));
-
+                ConnectionProxy connection = null;
+                    connection = new ConnectionProxy(DriverManager.getConnection(jdbcUrl));
                 freeConnections.put(connection);
             } catch (SQLException e){
                 logger.error("an error occurred while creating the connection", e);

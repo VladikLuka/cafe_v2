@@ -32,4 +32,5 @@ public class Path {
     public static final String FRW_ERROR = "/WEB-INF/jsp/error.jsp";
 
 
+    private Path() {}
 }

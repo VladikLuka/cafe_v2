@@ -16,11 +16,11 @@ public class BD_Columns {
 
     //ADDRESS//
     public static final String ADDRESS_ID = "address_id";
-    public static final String ADDRESS_CITY = "city";
-    public static final String ADDRESS_STREET = "street";
-    public static final String ADDRESS_HOUSE = "house";
-    public static final String ADDRESS_FLAT = "flat";
-    public static final String USER_ID = "user_id";
+    public static final String ADDRESS_CITY = "address_city";
+    public static final String ADDRESS_STREET = "address_street";
+    public static final String ADDRESS_HOUSE = "address_house";
+    public static final String ADDRESS_FLAT = "address_flat";
+    public static final String ADDRESS_USER_ID = "address_user_id";
 
 
     //CATEGORY//
@@ -32,6 +32,7 @@ public class BD_Columns {
     public static final String ORDER_ID = "order_id";
     public static final String ORDER_STATUS = "order_status";
     public static final String ORDER_RECEIPT_TIME = "order_receipt_time";
+    public static final String ORDER_DELIVERY_TIME = "order_delivery_time";
     public static final String ORDER_PAYMENT_METHOD = "order_payment_method";
     public static final String ORDER_RATING = "order_rating";
     public static final String ORDER_REVIEW = "order_review";
@@ -44,5 +45,24 @@ public class BD_Columns {
     public static final String ORDERS_ORDER_ID = "orders_order_id";
     public static final String DISHES_DISH_ID = "dishes_dish_id";
     public static final String BRAINTREE_ORDER_ID = "braintree_order_id";
+
+    //USER//
+    public static final String USER_ID = "user_id";
+    public static final String USER_NAME = "user_name";
+    public static final String USER_SURNAME = "user_surname";
+    public static final String USER_PHONE = "user_phone";
+    public static final String USER_EMAIL = "user_email";
+    public static final String USER_PASSWORD = "user_password";
+    public static final String USER_MONEY = "user_money";
+    public static final String USER_LOYALTY = "user_loyaltyPoints";
+    public static final String USER_ROLE_ID = "roles_role_id";
+    public static final String USER_IS_BAN = "user_isBan";
+
+    //ROLE//
+    public static final String ROLE_ID = "role_id";
+    public static final String ROLE_NAME = "role_name";
+
+    private BD_Columns() {
+    }
 }
 

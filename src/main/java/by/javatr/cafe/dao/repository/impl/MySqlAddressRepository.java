@@ -1,10 +1,12 @@
 package by.javatr.cafe.dao.repository.impl;
 
 import by.javatr.cafe.container.annotation.Component;
+import by.javatr.cafe.dao.AbstractRepositoryTest;
 import by.javatr.cafe.dao.connection.impl.ConnectionPool;
 import by.javatr.cafe.dao.repository.IAddressRepository;
 import by.javatr.cafe.entity.Address;
 import by.javatr.cafe.exception.DAOException;
+import by.javatr.cafe.exception.ServiceException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,10 +15,10 @@ import java.sql.SQLException;
 import java.util.*;
 
 @Component
-public class MySqlAddressRepository extends AbstractRepository implements IAddressRepository {
+public class MySqlAddressRepository extends AbstractRepositoryTest<Address> implements IAddressRepository {
 
     private static final String GET_ALL_ADDRESSES = "select * from address";
-    private static final String GET_ALL_ADDRESSES_ID = "select SQL_NO_CACHE * from address where user_id = ?";
+    private static final String GET_ALL_ADDRESSES_ID = "select SQL_NO_CACHE * from address where address_user_id = ?";
     private static final String CREATE_ADDRESS = "INSERT INTO address (city, street, house, flat, user_id) VALUES (?, ?, ?, ?, ?);";
     private static final String UPDATE_ADDRESS = "UPDATE address set city = ?, street = ? , house = ? , flat = ? where address_id = ?";
     private static final String DELETE_ADDRESS = "delete from address where address_id = ?";
@@ -86,66 +88,30 @@ public class MySqlAddressRepository extends AbstractRepository implements IAddre
     @Override
     public Address create(Address address) throws DAOException {
 
-        try (final Connection connection = ConnectionPool.CONNECTION_POOL.retrieve();
-             PreparedStatement statement = connection.prepareStatement(CREATE_ADDRESS);
-        ){
-            connection.setAutoCommit(false);
-            statement.setString(1, address.getCity());
-            statement.setString(2, address.getStreet());
-            statement.setString(3, address.getHouse());
-            statement.setString(4, address.getFlat());
-            statement.setInt(5, address.getUser_id());
-            statement.executeUpdate();
-            PreparedStatement statement1 = connection.prepareStatement(GET_LAST_ID);
-            ResultSet resultSet = statement1.executeQuery();
-            resultSet.next();
-            address.setId(resultSet.getInt("last_insert_id()"));
-            connection.commit();
-        } catch (SQLException e) {
-            throw new DAOException(" failed create address", e);
+        super.create(getConnection(), address);
+        return address;
+    }
+
+    @Override
+    public Address read(Address address) throws DAOException {
+        return super.read(getConnection(), address.getClass(), address.getId());
+    }
+
+    @Override
+    public Address update(Address address) throws ServiceException {
+
+        try {
+            super.update(getConnection(), address);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
         }
         return address;
     }
 
     @Override
-    public Address read(int id) {
-        return null;
-    }
+    public boolean delete(Address address) throws DAOException {
 
-    @Override
-    public Address update(Address address) throws DAOException, SQLException {
-
-
-        try (Connection connection = ConnectionPool.CONNECTION_POOL.retrieve();
-             PreparedStatement statement = connection.prepareStatement(UPDATE_ADDRESS);
-        ){
-            connection.setAutoCommit(false);
-            statement.setString(1, address.getCity());
-            statement.setString(2, address.getFlat());
-            statement.setString(3, address.getHouse());
-            statement.setString(4, address.getFlat());
-            statement.setInt(5, address.getUser_id());
-            statement.executeUpdate();
-            connection.commit();
-        } catch (SQLException e) {
-            throw new DAOException("failed to update address",e);
-        }
-        return address;
-    }
-
-    @Override
-    public boolean delete(int id) throws DAOException {
-
-        try(Connection connection = ConnectionPool.CONNECTION_POOL.retrieve();
-            PreparedStatement statement = connection.prepareStatement(DELETE_ADDRESS)){
-            connection.setAutoCommit(false);
-            statement.setInt(1, id);
-            statement.executeUpdate();
-            connection.commit();
-        } catch (SQLException e) {
-            throw  new DAOException("failed to delete address", e);
-        }
-
+        super.delete(getConnection(), address);
         return true;
     }
 

@@ -5,6 +5,7 @@ public enum PaymentStatus {
     PAID,
     CANCELED,
     VIOLATED,
-    EXPECTED
+    EXPECTED,
+    CLOSED,
 
 }

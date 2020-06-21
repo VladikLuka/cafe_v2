@@ -25,6 +25,7 @@ public class LogIn implements Command {
     private static final String LOGIN_EMAIL = RequestParameters.LOGIN_EMAIL;
     private static final String LOGIN_PASSWORD = RequestParameters.LOGIN_PASSWORD;
     private static final String USER_MONEY = SessionAttributes.USER_MONEY;
+    private static final String USER_IS_BAN = SessionAttributes.USER_IS_BAN;
 
     @Autowired
     IUserService service;
@@ -40,10 +41,11 @@ public class LogIn implements Command {
         if(user == null){
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }else{
-            content.addSessionAttr(USER_EMAIL, user.getMail());
+//            content.addSessionAttr(USER_EMAIL, user.getMail());
             content.addSessionAttr(USER_ID, user.getId());
-            content.addSessionAttr(ACCESS_LEVEL, user.getRole().name());
-            content.addSessionAttr(USER_MONEY, user.getMoney());
+//            content.addSessionAttr(ACCESS_LEVEL, user.getRole().name());
+//            content.addSessionAttr(USER_MONEY, user.getMoney());
+//            content.addSessionAttr(USER_IS_BAN, user.isBan());
              return new RequestResult(Navigation.REDIRECT, Path.PIZZA);
         }
     }

@@ -1,6 +1,6 @@
 package by.javatr.cafe.entity;
 
-import by.javatr.cafe.annotation.*;
+import by.javatr.cafe.dao.annotation.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,7 +18,7 @@ public class User extends Entity<User> implements Serializable {
 
     private static final long serialVersionUID = 7789895012127236697L;
     @Id(name = "user_id")
-    @Ignore(name="user_id")
+    @Field(name = "user_id")
     private int id;
     @Field(name="user_name")
     private String name;
@@ -34,14 +34,31 @@ public class User extends Entity<User> implements Serializable {
     private BigDecimal money = new BigDecimal(0);
     @Field(name="user_loyaltyPoints")
     private int loyalty_point = 0;
-    @Ignore(name="roles_role_id")
+    @Join(fieldColumn =  "roles_role_id")
+//    @ManyToOne(joinName = "role_id",field = ,type = Role.class)
     private Role role = Role.GUEST;
+    @Field(name = "user_isBan")
+    private boolean isBan;
+    @Join(fieldColumn = "user_id")
+//    @OneToMany(joinName = "address_user_id",  ,type = Address.class)
     private List<Address> address = new ArrayList<>();
 
     public User(){
 
     }
 
+    public User(int id, String name, String surname, String phone, String mail, String password, BigDecimal money, int loyalty_point, Role role, boolean isBan) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.phone = phone;
+        this.mail = mail;
+        this.password = password;
+        this.money = money;
+        this.loyalty_point = loyalty_point;
+        this.role = role;
+        this.isBan = isBan;
+    }
 
     public User(String email, String password, String phone){
         this.mail = email;
@@ -226,5 +243,13 @@ public class User extends Entity<User> implements Serializable {
 
     public void setAddress(List<Address> address) {
         this.address = address;
+    }
+
+    public boolean isBan() {
+        return isBan;
+    }
+
+    public void setBan(boolean ban) {
+        isBan = ban;
     }
 }

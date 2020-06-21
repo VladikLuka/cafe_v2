@@ -6,20 +6,15 @@ $.ajax({
     type:"post",
     url:"/controller",
     success:function (token) {
-
     },
     statusCode:{
         200:function (response) {
             braintree.dropin.create({
                 authorization: response,
                 container: '#bt-dropin',
-                // card: {
-                //     cardholderName: {
-                //         required: true
-                //     }
-                // }
+
             }, function (createErr, instance) {
-                form.addEventListener('submit', function (event) {
+                    form.addEventListener('submit', function (event) {
                     event.preventDefault();
 
                     instance.requestPaymentMethod(function (err, payload) {

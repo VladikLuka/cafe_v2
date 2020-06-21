@@ -9,17 +9,14 @@ import by.javatr.cafe.controller.command.Command;
 import by.javatr.cafe.controller.content.Navigation;
 import by.javatr.cafe.controller.content.RequestContent;
 import by.javatr.cafe.controller.content.RequestResult;
-import by.javatr.cafe.dao.connection.impl.ConnectionPool;
+import by.javatr.cafe.util.Cache;
 import by.javatr.cafe.entity.*;
+import by.javatr.cafe.entity.Address;
 import by.javatr.cafe.exception.DAOException;
 import by.javatr.cafe.exception.ServiceException;
 import by.javatr.cafe.service.ICartService;
 import by.javatr.cafe.service.IOrderService;
 import by.javatr.cafe.service.IUserService;
-import com.braintreegateway.Result;
-import com.braintreegateway.Transaction;
-import com.braintreegateway.TransactionRequest;
-import com.braintreegateway.ValidationErrors;
 
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
@@ -31,28 +28,33 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static by.javatr.cafe.util.Utils.countSameDish;
+
 @Component
 public class BalanceOrder implements Command {
 
     @Autowired
-    IOrderService orderService;
+    private IOrderService orderService;
     @Autowired
-    IUserService userService;
+    private IUserService userService;
     @Autowired
-    ICartService cartService;
+    private ICartService cartService;
+    @Autowired
+    private Cache cache;
 
 
     @Override
-    public RequestResult execute(RequestContent content) throws ServiceException, DAOException {
+    public RequestResult execute(RequestContent content) throws ServiceException   {
 
         String address_id_str = content.getRequestParam("address");
-        Address user_address = null;
         int address_id = Integer.parseInt(address_id_str);
-        int user_id = (int) content.getSessionAttr(SessionAttributes.USER_ID);
-        final User user = userService.find(user_id);
+        User user = cache.getUser((int)content.getSessionAttr(SessionAttributes.USER_ID));
+
         Cart cart = (Cart) content.getSessionAttr(SessionAttributes.CART);
 
         List<Address> address1 = user.getAddress();
+
+        Address user_address = null;
 
         for (Address addr : address1) {
             if (addr.getId() == address_id) {
@@ -69,42 +71,30 @@ public class BalanceOrder implements Command {
         DateFormat instance = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String format = instance.format(Calendar.getInstance().getTime());
         final Map<Dish, Integer> dishes = countSameDish(cart.getCart());
-        System.out.println(dishes);
         Order order = new Order();
         order.setMethod(PaymentMethod.BALANCE);
         order.setDishes(dishes);
-        order.setUser_id(user_id);
+        order.setUser_id(user.getId());
         order.setTime(format);
+        order.setDelivery_time(format);
+        order.setAddress(user_address);
         order.setAmount(amount);
-        order.setStatus(PaymentStatus.EXPECTED);
+        order.setStatus(PaymentStatus.PAID);
 
-        if (money.compareTo(amount) != -1) {
-            orderService.makeOrderBalance(order);
-            cartService.clear((Cart) cart);
-            final User user1 = userService.find(user_id);
-            content.addSessionAttr(SessionAttributes.USER_MONEY, user1.getMoney());
-        } else {
+        if (money.compareTo(amount) >= 0) {
+                order = orderService.makeOrderBalance(order, user);
+                if(order == null){
+                    return new RequestResult(Navigation.REDIRECT, "/payment_error", HttpServletResponse.SC_BAD_REQUEST);
+                }
+                cartService.clear(cart);
+                cache.addOrder(order);
+            }
+        else {
             return new RequestResult(Navigation.REDIRECT, "/payment_error", HttpServletResponse.SC_BAD_REQUEST);
         }
-
-        return new RequestResult(Navigation.REDIRECT, "/checkout/" + order.getOrder_id());
-    }
-
-    private Map<Dish, Integer> countSameDish(List<Dish> dishes){
-        HashMap<Dish, Integer> map = new HashMap<>();
-
-        map.put(dishes.get(0), 1);
-
-        for (int i = 1; i < dishes.size(); i++) {
-            Dish dish = dishes.get(i);
-            if(map.containsKey(dishes.get(i))){
-                Integer integer = map.get(dishes.get(i));
-                map.put(dishes.get(i), integer + 1);
-            }else{
-                map.put(dish, 1);
-            }
-        }
-
-        return map;
+        RequestResult result = new RequestResult(Navigation.REDIRECT, "/checkout/" + order.getOrder_id(), HttpServletResponse.SC_FOUND);
+        result.setHeaders("Location", "/checkout/" + order.getOrder_id() );
+        result.setHeaders("content-type", "application/json;charset=UTF-8");
+        return result;
     }
 }

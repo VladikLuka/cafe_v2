@@ -17,5 +17,11 @@ public enum CommandName {
     CHANGE_PASS,
     MAKE_ORDER,
     BALANCE_ORDER,
+    HIDE_DISH,
+    SHOW_DISH,
+    EXPECT_ORDER,
+    FEEDBACK,
+    CANCEL_ORDER,
+    CLOSE_ORDER,
 
 }

@@ -1,9 +1,6 @@
 package by.javatr.cafe.entity;
 
-import by.javatr.cafe.annotation.Field;
-import by.javatr.cafe.annotation.Id;
-import by.javatr.cafe.annotation.Ignore;
-import by.javatr.cafe.annotation.Table;
+import by.javatr.cafe.dao.annotation.*;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -13,18 +10,18 @@ public class Address extends Entity<Address> implements Serializable {
 
     private static final long serialVersionUID = 477027772878727562L;
 
-    @Ignore(name = "address_id")
     @Id(name = "address_id")
     private int id;
-    @Field(name="city")
+    @Field(name="address_city")
     private String city;
-    @Field(name="street")
+    @Field(name="address_street")
     private String street;
-    @Field(name="house")
+    @Field(name="address_house")
     private String house;
-    @Field(name="flat")
+    @Field(name="address_flat")
     private String flat;
-    @Field(name="user_id")
+    @Join(fieldColumn = "address_user_id")
+    @ManyToOne(joinName = "user_id", field = "id",type = User.class)
     private int user_id;
 
 
@@ -52,6 +49,16 @@ public class Address extends Entity<Address> implements Serializable {
         this.user_id = user_id;
     }
     public Address(){}
+
+    public Address(int id) {
+        this.id = id;
+    }
+
+    public Address(int i, String s, int i1) {
+        this.id = i;
+        this.city = s;
+        this.user_id = i1;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -135,10 +142,10 @@ public class Address extends Entity<Address> implements Serializable {
 
 //package by.javatr.cafe.entity;
 //
-//import by.javatr.cafe.annotation.Field;
-//import by.javatr.cafe.annotation.Id;
-//import by.javatr.cafe.annotation.Ignore;
-//import by.javatr.cafe.annotation.Table;
+//import by.javatr.cafe.dao.annotation.Field;
+//import by.javatr.cafe.dao.annotation.Id;
+//import by.javatr.cafe.dao.annotation.Ignore;
+//import by.javatr.cafe.dao.annotation.Table;
 //
 //import java.io.Serializable;
 //import java.util.Objects;

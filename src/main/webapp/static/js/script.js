@@ -73,6 +73,11 @@ $(document).ready(function(){
 
 	})
 
+	$("#feedback_submit").click(function () {
+
+
+
+	})
 
 
 	$("#login_button").click(function(e){
@@ -201,6 +206,9 @@ $("#submit_address").click(function () {
 	let address={};
 
 	document.onclick = event =>{
+		if(event.target.classList.contains("123")){
+			close_order(event.target.dataset.id);
+		}
 		if(event.target.classList.contains("address")){
 			delete_addr(event.target.dataset.id);
 		}
@@ -215,7 +223,7 @@ $("#submit_address").click(function () {
 			address[1] = event.target.dataset.id;
 			var dropdown_content_ths = document.querySelector('.address_wrapper[data-id="'+address[1]+'"]');
 			dropdown_content_ths.style="background-color: #93eda5";
-			if(address[0] != null){
+			if(address[0] != null && address[0] !== address[1]){
 				var dropdown_content_ths2 = document.querySelector('.address_wrapper[data-id="'+address[0]+'"]');
 				dropdown_content_ths2.style="e6a6fa";
 			}
@@ -224,28 +232,76 @@ $("#submit_address").click(function () {
 			if (document.getElementById("chosen_address") == null){
 			createInputAddressBefore("pay", address[1], "payment-form");
 			createInputAddressBefore("pay2", address[1], "payment-form2");
-			alert(address[1]);
 			}else{
-			deleteAddressBefore("pay");
+			deleteAddressBefore("chosen_address");
 			createInputAddressBefore("pay", address[1], "payment-form");
-			deleteAddressBefore("pay2");
+			deleteAddressBefore("chosen_address");
 			createInputAddressBefore("pay2", address[1], "payment-form2");
-				alert(address[1]);
-
-				// 	element = document.getElementById("chosen_address");
-			// 	element.parentNode.removeChild(element);
-			// 	element = document.createElement("input");
-			//
-			// 	element.setAttribute("id", "chosen_address");
-			// 	element.setAttribute("type", "hidden");
-			// 	element.setAttribute("name", "address");
-			// 	element.setAttribute("value", address[1]);
-			//
-			// 	document.getElementsByClassName("payment").insertBefore(element, document.getElementsByClassName("make_order"));
 			 }
 		}
 }
 
+
+	// $("#pay2").click(function () {
+	// 	alert("Ok");
+	// 	if (document.getElementById("chosen_address") == null) {
+	//
+	// 	}else{
+	// 		let address = document.getElementById("chosen_address");
+	// 		var address_id= address.getAttribute("value");
+	//
+	// 		let data =
+	// 			{"address" : address_id,
+	// 			 "command" : "balance_order",
+	// 			}
+	//
+	// 			$.ajax({
+	// 				type:"POST",
+	// 				url:"/controller",
+	// 				data:data,
+	// 				dataType: "json",
+	// 				success:function (data, status, jqXHR) {
+	// 					alert(JSON.stringify(data));
+	// 					alert(data.url);
+	// 					document.location.replace(date.url);
+	// 				},
+	// 				statusCode:{
+	// 					302:function (data) {
+	// 						alert(JSON.stringify(data));
+	// 						alert(data.url);
+	// 						document.location.replace(date.url);
+	// 					},
+	// 					200:function (data) {
+	// 						alert(JSON.stringify(data));
+	// 						alert(data.url);
+	// 						document.location.replace(date.url);
+	// 					}
+	// 				}
+	//
+	// 		})
+	// 	}
+	// })
+
+
+	$("#cancel_order").click(function () {
+		alert("ok");
+
+		let data = {
+			"order_id": $("#order_id").val(),
+			"command": "cancel_order"
+		}
+
+		$.ajax({
+			type:"POST",
+			url:"/controller",
+			data:data,
+			success:function(response){
+				window.location.reload(true);
+			}
+
+		})
+
+	})
 
 
 
@@ -256,6 +312,24 @@ function getAddress() {
     // heightBlock($("#product > div"));
 });
 
+
+function close_order(id){
+
+	let data = {
+		"command": "close_order",
+		"id":id
+	}
+
+	$.ajax({
+		type:"post",
+		url:"/controller",
+		data:data,
+		success:function (response) {
+			var el = document.getElementById("delete"+id);
+			el.parentNode.removeChild(el);
+		}
+	})
+}
 
 
 function deleteItem(item){
@@ -416,18 +490,6 @@ function getLocCart() {
 
 
 	document.getElementById("total_price").innerHTML = "Total " + total_price + " BYN";
-
-
-	// for (let j = i + 1; j < locCart.length; j++) {
-	// 	if(locCart[i] === locCart[j]){
-	// 		var id = locCart[i]["id"];
-	// 		alert("count_"+id);
-	// 		var value1 = document.getElementById("count_"+id).value;
-	// 		alert(value1);
-	//
-	// 	}
-	//
-	// }
 }
 
 function delete_addr(id){
@@ -447,6 +509,8 @@ function delete_addr(id){
 	})
 
 }
+
+
 
 function getCart() {
 

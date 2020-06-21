@@ -15,5 +15,6 @@ public class DBQuery {
 
     public static final String GET_LAST_ID = "SELECT LAST_INSERT_ID()";
 
-
+    private DBQuery() {
+    }
 }

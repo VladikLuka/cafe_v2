@@ -13,7 +13,6 @@ import java.util.*;
 
 public class URLFilter implements Filter {
 
-    //public static final Set<String> BUSINESS_URL = new HashSet<>();
     public static final Map<String, String> BUSINESS_URL = new HashMap<>();
     public static final String SERVLET = "/controller";
 
@@ -59,7 +58,7 @@ public class URLFilter implements Filter {
         }
         String[] URL = request.getRequestURI().split("/");
 
-        if(servletRequest.getServletContext().getAttribute("BUSINNES_URL")==null) {
+        if(servletRequest.getServletContext().getAttribute("BUSINESS_URL")==null) {
             servletRequest.getServletContext().setAttribute("BUSINESS_URL", BUSINESS_URL);
         }
 

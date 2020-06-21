@@ -1,7 +1,7 @@
 package by.javatr.cafe.dao.repository.impl;
 
-import by.javatr.cafe.annotation.Field;
-import by.javatr.cafe.annotation.Table;
+import by.javatr.cafe.dao.annotation.Field;
+import by.javatr.cafe.dao.annotation.Table;
 import by.javatr.cafe.entity.Entity;
 
 import java.sql.*;

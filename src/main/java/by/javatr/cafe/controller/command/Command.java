@@ -7,6 +7,6 @@ import by.javatr.cafe.exception.ServiceException;
 
 public interface Command {
 
-    public RequestResult execute(RequestContent content) throws ServiceException, DAOException;
+    public RequestResult execute(RequestContent content) throws ServiceException;
 
 }

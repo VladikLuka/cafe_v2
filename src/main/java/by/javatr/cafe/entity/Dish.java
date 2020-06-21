@@ -1,9 +1,8 @@
 package by.javatr.cafe.entity;
 
-import by.javatr.cafe.annotation.Field;
-import by.javatr.cafe.annotation.Id;
-import by.javatr.cafe.annotation.Ignore;
-import by.javatr.cafe.annotation.Table;
+import by.javatr.cafe.dao.annotation.Field;
+import by.javatr.cafe.dao.annotation.Id;
+import by.javatr.cafe.dao.annotation.Table;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -14,7 +13,6 @@ public class Dish extends Entity<Dish> implements Serializable {
 
     private static final long serialVersionUID = -5205629040527211345L;
 
-    @Ignore(name="dish_id")
     @Id(name="dish_id")
     int id;
     @Field(name="dish_name")
