@@ -47,7 +47,7 @@ public final class Cache {
 
     public Order updateOrder(Order order){
         ArrayList<Order> orders = mapOrders.get(order.getUser_id());
-        orders.remove(order);
+        orders.removeIf(user_order -> user_order.getOrder_id() == order.getOrder_id());
         orders.add(order);
         return order;
     }

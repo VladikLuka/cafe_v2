@@ -7,12 +7,14 @@ import by.javatr.cafe.dao.AbstractRepositoryTest;
 import by.javatr.cafe.entity.*;
 import by.javatr.cafe.exception.DAOException;
 import by.javatr.cafe.exception.ServiceException;
+import com.google.gson.Gson;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.net.URISyntaxException;
 import java.sql.*;
 import java.util.*;
@@ -42,6 +44,15 @@ public class Main  extends AbstractRepositoryTest<User> {
 
 //        final Connection connection = getConnection();
 
+        User user = new User("asd", "qwe", "qwe", "qwe", "qwe");
+
+        Role role = Role.ADMIN;
+
+        BigDecimal decimal = new BigDecimal(0);
+
+        Gson gson = new Gson();
+        final String s = gson.toJson(decimal);
+        System.out.println(s);
 
 //        Test test = new Test();
 //            test.delete(connection, new Address(205, "25", 1));

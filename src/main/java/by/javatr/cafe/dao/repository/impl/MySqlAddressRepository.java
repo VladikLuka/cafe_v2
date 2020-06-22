@@ -29,7 +29,7 @@ public class MySqlAddressRepository extends AbstractRepositoryTest<Address> impl
 
         List<Address> list = new ArrayList<>();
 
-        try (final Connection connection = ConnectionPool.CONNECTION_POOL.retrieve();
+        try (final Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(GET_ALL_ADDRESSES);
              ResultSet resultSet = statement.executeQuery();) {
 
@@ -56,7 +56,7 @@ public class MySqlAddressRepository extends AbstractRepositoryTest<Address> impl
     public List<Address> getAllId(int id) throws DAOException {
         List<Address> list = new ArrayList<>();
         ResultSet resultSet = null;
-        try (final Connection connection = ConnectionPool.CONNECTION_POOL.retrieve();
+        try (final Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(GET_ALL_ADDRESSES_ID);) {
             statement.setInt(1, id);
             resultSet = statement.executeQuery();

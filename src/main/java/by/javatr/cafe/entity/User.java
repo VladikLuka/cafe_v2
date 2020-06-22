@@ -13,10 +13,8 @@ import java.util.Objects;
 @Table(table = "user")
 public class User extends Entity<User> implements Serializable {
 
-
-    Logger logger = LogManager.getLogger(User.class);
-
     private static final long serialVersionUID = 7789895012127236697L;
+
     @Id(name = "user_id")
     @Field(name = "user_id")
     private int id;
@@ -64,6 +62,20 @@ public class User extends Entity<User> implements Serializable {
         this.mail = email;
         this.password = password;
         this.phone = phone;
+    }
+
+    public User(int id, String name, String surname, String phone, String mail, String password, BigDecimal money, int loyalty_point, Role role, boolean isBan, List<Address> address) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.phone = phone;
+        this.mail = mail;
+        this.password = password;
+        this.money = money;
+        this.loyalty_point = loyalty_point;
+        this.role = role;
+        this.isBan = isBan;
+        this.address = address;
     }
 
     public User(int id, String name, String surname, String phone, String mail, String password, BigDecimal money, int loyalty_point, List<Address> address) {

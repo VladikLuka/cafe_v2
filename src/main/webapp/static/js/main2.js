@@ -91,4 +91,36 @@ $(document).ready(function() {
 	// 	fixDiv();
 	// });
 
+
+
+	$('.show_info').click(function (e) {
+		$('.user_overlay').fadeIn().addClass('disabled');
+
+		let id = e.target.dataset.id;
+
+		let data = {
+			"command":"show_user_info",
+			"id":id
+		}
+
+		$.ajax({
+			type:"POST",
+			url:"/controller",
+			data:data,
+			dataType:"json",
+			success:function (response) {
+				alert(JSON.parse(response))
+			}
+		})
+
+	});
+
+// закрыть по клику вне окна
+	$(document).mouseup(function (e) {
+		var popup = $('.user_popup');
+		if (e.target != popup[0] && popup.has(e.target).length === 0) {
+			$('.user_overlay').fadeOut();
+
+		}
+	});
 });

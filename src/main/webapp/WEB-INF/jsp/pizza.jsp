@@ -25,29 +25,91 @@
 <div class="container" id="catalog">
 
     <c:forEach items="${applicationScope.cache.dishes}" var="dish">
-        <c:if test="${dish.category_id == 4 and dish.available == true}">
-            <div id="product">
-                <div id="product_wrapper">
-                    <div>
-                        <img src="${dish.picture_path}"  class="css-adaptive" alt="">
-                    </div>
-
-                    <div id="product_title">${dish.name}</div>
-                    <div id="product_description">${dish.description}</div>
-                    <div id="product_modification">
-                        <div id="product_info">
-                            <div id="test-line">
-                                <div id="product_price">${dish.price}</div>
-                                <div id="product_weight">${dish.weight}</div>
+        <c:if test="${dish.category_id == 4}">
+            <c:choose>
+                <c:when test="${dish.available eq true}">
+                    <div id="product">
+                        <div id="product_wrapper">
+                            <div>
+                                <img src="${dish.picture_path}"  class="css-adaptive" alt="">
                             </div>
-                            <div id="product_action">
-        <%--                            <input type="hidden" name="dish" value="${dish.id}">--%>
-                                    <button class="btn btn-success" type="button" id="${dish.id}" onClick="getdetails(this)">Add to cart</button>
+
+                            <div id="product_title">${dish.name}</div>
+                            <div id="product_description">${dish.description}</div>
+                            <div id="product_modification">
+                                <div id="product_info">
+                                    <div id="test-line">
+                                        <div id="product_price">${dish.price} BYN</div>
+                                        <div id="product_weight">${dish.weight} gr</div>
+                                    </div>
+                                    <div id="product_action">
+                <%--                            <input type="hidden" name="dish" value="${dish.id}">--%>
+                                            <button class="btn btn-success" type="button" id="${dish.id}" onClick="getdetails(this)">Add to cart</button>
+
+                                    <c:if test="${applicationScope.cache.getUser(sessionScope.user_id).role eq 'ADMIN'}">
+                                        <c:if test="${dish.available eq true}">
+<%--                                            <form action="${pageContext.request.contextPath}/controller" method="post">--%>
+<%--                                                <input type="hidden" name="command" value="hide_dish">--%>
+<%--                                                <input type="hidden" name="id" value="${dish.id}">--%>
+                                                    <button class="btn btn-success hide2" type="submit" data-id="${dish.id}" id="${dish.id}">hide</button>
+<%--                                                </form>--%>
+                                        </c:if>
+                                        <c:if test="${dish.available eq false}">
+<%--                                            <form action="${pageContext.request.contextPath}/controller" method="post">--%>
+<%--                                            <input type="hidden" name="command" value="show_dish">--%>
+<%--                                            <input type="hidden" name="id" value="${dish.id}">--%>
+                                            <button class="btn btn-success show2" type="submit" data-id="${dish.id}" id="${dish.id}">show</button>
+                                        </c:if>
+                                    </c:if>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                </c:when>
+                <c:otherwise>
+                    <c:if test="${applicationScope.cache.getUser(sessionScope.user_id).role eq 'ADMIN'}">
+                    <div id="product" style="background-color:#aaaaaa;">
+                        <div id="product_wrapper">
+                            <div>
+                                <img src="${dish.picture_path}"  class="css-adaptive" alt="">
+                            </div>
+
+                            <div id="product_title">${dish.name}</div>
+                            <div id="product_description">${dish.description}</div>
+                            <div id="product_modification">
+                                <div id="product_info">
+                                    <div id="test-line">
+                                        <div id="product_price">${dish.price}</div>
+                                        <div id="product_weight">${dish.weight}</div>
+                                    </div>
+                                    <div id="product_action">
+                                            <%--                            <input type="hidden" name="dish" value="${dish.id}">--%>
+                                        <button class="btn btn-success" type="button" id="${dish.id}" onClick="getdetails(this)">Add to cart</button>
+
+                                        <c:if test="${applicationScope.cache.getUser(sessionScope.user_id).role eq 'ADMIN'}">
+                                            <c:if test="${dish.available eq true}">
+<%--                                                <form action="${pageContext.request.contextPath}/controller" method="post">--%>
+<%--                                                <input type="hidden" name="command" value="hide_dish">--%>
+<%--                                                <input type="hidden" name="id" value="${dish.id}">--%>
+                                                    <button class="btn btn-success hide2" type="submit" data-id="${dish.id}" id="${dish.id}">hide</button>
+                                            </c:if>
+                                            <c:if test="${dish.available eq false}">
+<%--                                                <form action="${pageContext.request.contextPath}/controller" method="post">--%>
+<%--                                                    <input type="hidden" name="command" value="show_dish">--%>
+<%--                                                    <input type="hidden" name="id" value="${dish.id}">--%>
+                                                        <button class="btn btn-success show2" type="submit" data-id="${dish.id}" id="${dish.id}">show</button>
+                                                            <%--                                                </form>--%>
+                                            </c:if>
+                                        </c:if>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </c:if>
+                </c:otherwise>
+            </c:choose>
         </c:if>
     </c:forEach>
 </div>

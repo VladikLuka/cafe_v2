@@ -6,6 +6,7 @@ import by.javatr.cafe.controller.command.impl.*;
 import by.javatr.cafe.controller.command.impl.admin.CloseOrder;
 import by.javatr.cafe.controller.command.impl.admin.HideDish;
 import by.javatr.cafe.controller.command.impl.admin.ShowDish;
+import by.javatr.cafe.controller.command.impl.admin.ShowUserInfo;
 import by.javatr.cafe.controller.command.impl.payment.*;
 
 import java.util.HashMap;
@@ -41,6 +42,7 @@ public class CommandProvider {
         repository.put(CommandName.FEEDBACK, (Feedback) factory.getBean("feedback"));
         repository.put(CommandName.CANCEL_ORDER, (CancelOrder) factory.getBean("cancelOrder"));
         repository.put(CommandName.CLOSE_ORDER, (CloseOrder) factory.getBean("closeOrder"));
+        repository.put(CommandName.SHOW_USER_INFO, (ShowUserInfo) factory.getBean("showUserInfo"));
     }
 
     public Command getCommand(String name){

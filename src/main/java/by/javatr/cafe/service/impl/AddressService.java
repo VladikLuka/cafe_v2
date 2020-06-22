@@ -2,6 +2,7 @@ package by.javatr.cafe.service.impl;
 
 import by.javatr.cafe.container.annotation.Autowired;
 import by.javatr.cafe.container.annotation.Component;
+import by.javatr.cafe.entity.User;
 import by.javatr.cafe.util.Cache;
 import by.javatr.cafe.dao.repository.IAddressRepository;
 import by.javatr.cafe.entity.Address;
@@ -12,6 +13,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -69,9 +71,13 @@ public class AddressService implements IAddressService {
     public Address create(Address address) throws ServiceException {
 
         try {
-            final Address address1 = addressRepository.create(address);
-            if(address1 != null){
-                return cache.addAddress(address1);
+            address = addressRepository.create(address);
+            if(address != null){
+                final User user = cache.getUser(address.getUser_id());
+                if (user.getAddress() == null) {
+                    user.setAddress(new ArrayList<>());
+                }
+                return cache.addAddress(address);
             }else{
                 return null;
             }

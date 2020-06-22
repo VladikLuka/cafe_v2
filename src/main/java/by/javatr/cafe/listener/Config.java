@@ -75,7 +75,7 @@ public class Config implements ServletContextListener {
 
     }
 
-        
+
     private String getResource(String name) throws MalformedURLException {
 
         name = name.replaceAll("\\.", "/");

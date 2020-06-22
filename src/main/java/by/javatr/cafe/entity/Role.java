@@ -10,10 +10,13 @@ import java.io.*;
  */
 public enum Role implements Serializable {
 
+
     @Field(name = "qwe")
     ADMIN,
     USER,
     GUEST;
+
+    private static final long serialVersionUID = 7789895012113235497L;
 
     public static Role getRoleByID(int id){
         if(id - 1 == ADMIN.ordinal()){

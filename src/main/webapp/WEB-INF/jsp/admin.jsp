@@ -17,6 +17,7 @@
 
     <script src="https://code.jquery.com/jquery-3.5.0.js" integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc=" crossorigin="anonymous"></script>
     <script src="../../static/js/script.js"></script>
+    <script src="../../static/js/main2.js"></script>
 
     <link rel="stylesheet" href="../../static/css/user.css">
 </head>
@@ -43,6 +44,36 @@
         </c:forEach>
     </c:forEach>
 
+</div>
+
+<div class="container_right" style="right: 0; margin-right: 30px">
+    <h2>Users</h2>
+    <c:forEach items="${applicationScope.cache.mapUser}" var="user">
+            <div id="users"  style="background-color: #767676; min-height: 40px;max-width: 500px; max-height: 300px; margin-top: 20px; border-radius: 15px; margin-left: 50px">
+                <div style="display:inline-block; color: white; margin-left: 30px">${user.value.id} ${user.value.mail}</div>
+                <div style="float: right; display: inline-block;">
+                    <button data-id="${user.value.id}" type="button" style="outline: none; border: 0;  background: transparent;">
+                        <svg class="show_info" data-id="${user.value.id}" xmlns="http://www.w3.org/2000/svg" width="22" height="26" viewBox="0 0 22 22">
+                            <g fill="#FFF">
+                                <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
+                            </g>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+    </c:forEach>
+</div>
+
+<div class="overlay user_overlay">
+    <div class="popup user_popup">
+
+        <input type="text" class="form-control" id="user_id" disabled>
+        <input type="text" class="form-control" id="user_email" disabled>
+        <input type="text" class="form-control" id="user_phone" disabled>
+        <input type="text" class="form-control" id="user_money" disabled>
+        <input type="text" class="form-control" id="user_point" disabled>
+
+    </div>
 </div>
 
 

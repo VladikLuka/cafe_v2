@@ -23,5 +23,7 @@ public enum CommandName {
     FEEDBACK,
     CANCEL_ORDER,
     CLOSE_ORDER,
+    SHOW_USER_INFO,
+
 
 }

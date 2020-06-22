@@ -98,16 +98,6 @@ public class Controller extends HttpServlet {
     }
 
     protected void processRequest(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-
-        final Cache cache =(Cache) BeanFactory.getInstance().getBean("cache");
-
-        if(req.getSession().getAttribute(SessionAttributes.USER_ID) != null){
-            System.out.println(cache.getOrders((int) req.getSession().getAttribute(SessionAttributes.USER_ID)));
-
-        }
-
-        System.out.println(req.getSession().getAttribute(SessionAttributes.USER_ID));
-        System.out.println(req.getSession().getAttribute("access"));
         RequestContent content = new RequestContent();
         content.setContent(req);
         Command command;

@@ -221,10 +221,11 @@ public class AbstractRepositoryTest<T extends Entity<T>> {
 
             for (String key : keys) {
                 final Object o = vars.get(key);
+                if(o.getClass().equals(Boolean.class)){
+                    str.append(key).append("=").append(o).append(",");
+                }else {
                     str.append(key).append("=").append("\"").append(o).append("\"").append(",");
-//                else {
-//                    str.append(key).append("=").append(o).append(",");
-//                }
+                }
             }
 
 

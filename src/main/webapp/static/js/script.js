@@ -206,6 +206,12 @@ $("#submit_address").click(function () {
 	let address={};
 
 	document.onclick = event =>{
+		if(event.target.classList.contains("hide2")){
+			hide_dish(event.target.dataset.id);
+		}
+		if(event.target.classList.contains("show2")){
+			show_dish(event.target.dataset.id);
+		}
 		if(event.target.classList.contains("123")){
 			close_order(event.target.dataset.id);
 		}
@@ -281,6 +287,8 @@ $("#submit_address").click(function () {
 	// 		})
 	// 	}
 	// })
+
+
 
 
 	$("#cancel_order").click(function () {
@@ -510,7 +518,69 @@ function delete_addr(id){
 
 }
 
+function hide_dish(id){
 
+	let data = {
+		"command":"hide_dish",
+		"id":id
+	}
+
+	$.ajax({
+
+		url:"/controller",
+		type:"POST",
+		data:data,
+		success:function (response) {
+			let element = document.getElementById(id);
+			element.style = "background-color: #aaaaaa";
+			document.location.href = location.href;
+		}
+
+
+	})
+
+}
+
+function show_dish(id){
+
+	let data = {
+		"command":"show_dish",
+		"id":id
+	}
+
+	$.ajax({
+
+		url:"/controller",
+		type:"POST",
+		data:data,
+		success:function (response) {
+			let element = document.getElementById(id);
+			element.style = "background-color: #ffffff";
+			document.location.href = location.href;
+		}
+
+
+	})
+
+}
+
+function show_info(id){
+
+	let data = {
+		"command":"show_user_info",
+		"id":id
+	}
+
+	$.ajax({
+		type:"POST",
+		url:"/controller",
+		data:data,
+		success:function (response) {
+
+		}
+	})
+
+}
 
 function getCart() {
 
