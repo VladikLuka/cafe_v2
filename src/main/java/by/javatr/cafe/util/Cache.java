@@ -18,7 +18,7 @@ public final class Cache {
     private final Map<Integer, ArrayList<Order>> mapOrders = new ConcurrentHashMap<>();
     private final Map<Integer, User> mapUser = new ConcurrentHashMap<>();
 
-        public void setOrders(List<Order> orders) {
+    public void setOrders(List<Order> orders) {
         for (Order order: orders) {
             if(mapOrders.containsKey(order.getUser_id())){
                 mapOrders.get(order.getUser_id()).add(order);
@@ -29,8 +29,9 @@ public final class Cache {
         }
     }
 
-    public List<Order> getOrders(int id) {
-        return mapOrders.get(id);
+
+    public List<Order> getOrders(int user_id) {
+        return mapOrders.get(user_id);
     }
 
     public Order addOrder(Order order){
@@ -52,6 +53,29 @@ public final class Cache {
         return order;
     }
 
+    public Order getOrder(Order order) {
+        final Set<Integer> keySet = mapOrders.keySet();
+        for (Integer i :keySet) {
+            final ArrayList<Order> orders = mapOrders.get(i);
+            for (Order order1 :orders) {
+                if(order1.getOrder_id() == order.getOrder_id()){
+                    return order1;
+                }
+            }
+        }
+        return null;
+    }
+
+    public List<Order> getListOrders(){
+        List<Order> list = new ArrayList<>();
+        final Set<Integer> keySet = mapOrders.keySet();
+        for (Integer i:keySet) {
+            final ArrayList<Order> orders = mapOrders.get(i);
+            list.addAll(orders);
+        }
+        return list;
+    }
+
     public void deleteOrder(Order order){
         ArrayList<Order> orders = mapOrders.get(order.getUser_id());
         orders.remove(order);
@@ -61,19 +85,20 @@ public final class Cache {
         dishList.addAll(list);
     }
 
+
     public List<Dish> getDishes(){
         return dishList;
     }
 
-    public Dish getDish(int id){
+    public Dish getDish(Dish dish){
 
-        for (Dish dish:dishList) {
-            if(dish.getId() == id){
-                return dish;
+        for (Dish dish1:dishList) {
+            if(dish.getId() == dish1.getId()){
+                return dish1;
             }
         }
 
-        return dishList.get(id);
+        return null;
     }
 
     public Dish updateDish(Dish dish){
@@ -109,8 +134,19 @@ public final class Cache {
         }
     }
 
-    public List<Address> getAddress(int id){
-        return mapAddress.get(id);
+    public Address getAddress(Address address) {
+        ArrayList<Address> addresses = mapAddress.get(address.getUser_id());
+        for (Address address1 :addresses) {
+            if(address.getId() == address1.getId()){
+                return address1;
+            }
+        }
+        return null;
+
+    }
+
+    public List<Address> getAddresses(int user_id) {
+        return mapAddress.get(user_id);
     }
 
     public Address addAddress(Address address){
@@ -129,6 +165,10 @@ public final class Cache {
         addresses.removeIf(next -> next.getId() == address.getId());
     }
 
+    public List<Address> getUserAddresses(int user_id) {
+        return mapAddress.get(user_id);
+    }
+
     public Address updateAddress(Address address){
         final ArrayList<Address> addresses = mapAddress.get(address.getUser_id());
 
@@ -141,8 +181,8 @@ public final class Cache {
         return address;
     }
 
-    public User getUser(int id){
-        return mapUser.get(id);
+    public User getUser(int user_id){
+        return mapUser.get(user_id);
     }
 
     public void setUsers(List<User> users){
@@ -151,8 +191,9 @@ public final class Cache {
         }
     }
 
-    public void addUser(User user){
+    public User addUser(User user){
             mapUser.put(user.getId(), user);
+            return user;
     }
 
     public void deleteUser(User user){
@@ -165,8 +206,27 @@ public final class Cache {
         return user;
     }
 
+    public List<User> getListUser(){
+        List<User> list = new ArrayList<>();
+        final Set<Integer> keySet = mapUser.keySet();
+        for (Integer i :keySet) {
+            list.add(mapUser.get(i));
+        }
+        return list;
+    }
+
     public Map<Integer, ArrayList<Address>> getMapAddress() {
         return mapAddress;
+    }
+
+    public List<Address> getListAddress(){
+        List<Address> list = new ArrayList<>();
+        final Set<Integer> keySet = mapAddress.keySet();
+        for (Integer i :keySet) {
+            final ArrayList<Address> addresses = mapAddress.get(i);
+            list.addAll(addresses);
+        }
+        return list;
     }
 
     public List<Dish> getDishList() {

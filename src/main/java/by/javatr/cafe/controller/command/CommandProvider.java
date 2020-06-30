@@ -3,10 +3,7 @@ package by.javatr.cafe.controller.command;
 import by.javatr.cafe.container.BeanFactory;
 import by.javatr.cafe.container.annotation.Component;
 import by.javatr.cafe.controller.command.impl.*;
-import by.javatr.cafe.controller.command.impl.admin.CloseOrder;
-import by.javatr.cafe.controller.command.impl.admin.HideDish;
-import by.javatr.cafe.controller.command.impl.admin.ShowDish;
-import by.javatr.cafe.controller.command.impl.admin.ShowUserInfo;
+import by.javatr.cafe.controller.command.impl.admin.*;
 import by.javatr.cafe.controller.command.impl.payment.*;
 
 import java.util.HashMap;
@@ -43,6 +40,14 @@ public class CommandProvider {
         repository.put(CommandName.CANCEL_ORDER, (CancelOrder) factory.getBean("cancelOrder"));
         repository.put(CommandName.CLOSE_ORDER, (CloseOrder) factory.getBean("closeOrder"));
         repository.put(CommandName.SHOW_USER_INFO, (ShowUserInfo) factory.getBean("showUserInfo"));
+        repository.put(CommandName.ADD_MONEY, (AddMoney) factory.getBean("addMoney"));
+        repository.put(CommandName.SUBTRACT_MONEY, (SubtractMoney) factory.getBean("subtractMoney"));
+        repository.put(CommandName.ADD_POINTS, (AddPoints) factory.getBean("addPoints"));
+        repository.put(CommandName.SUBTRACT_POINTS, (SubtractPoints) factory.getBean("subtractPoints"));
+        repository.put(CommandName.VIOLATE_ORDER, (ViolateOrder) factory.getBean("violateOrder"));
+        repository.put(CommandName.BAN_USER, (BanUser) factory.getBean("banUser"));
+        repository.put(CommandName.UNBAN_USER, (UnbanUser) factory.getBean("unbanUser"));
+        repository.put(CommandName.CASH_ORDER, (CashOrder) factory.getBean("cashOrder"));
     }
 
     public Command getCommand(String name){

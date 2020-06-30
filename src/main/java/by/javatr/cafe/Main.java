@@ -1,9 +1,11 @@
 package by.javatr.cafe;
 
+import by.javatr.cafe.constant.Regex;
 import by.javatr.cafe.container.BeanFactory;
 import by.javatr.cafe.aspectj.annotation.Connect;
 import by.javatr.cafe.aspectj.annotation.Resources;
-import by.javatr.cafe.dao.AbstractRepositoryTest;
+import by.javatr.cafe.dao.repository.AbstractRepository;
+import by.javatr.cafe.dao.repository.impl.MySqlUserRepository;
 import by.javatr.cafe.entity.*;
 import by.javatr.cafe.exception.DAOException;
 import by.javatr.cafe.exception.ServiceException;
@@ -12,57 +14,38 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
-import java.lang.reflect.Field;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.net.URISyntaxException;
 import java.sql.*;
 import java.util.*;
-import java.util.concurrent.Callable;
 
 
-public class Main  extends AbstractRepositoryTest<User> {
+public class Main  extends AbstractRepository<User> {
 
 
-    static abstract class Test extends AbstractRepositoryTest<Address>{
+    static class Test extends AbstractRepository<User> {
 
         private String tes;
         private int i;
 
         @Override
-        public Address update(Connection connection, Entity<Address> entity) throws DAOException {
+        public User update(Connection connection, Entity<User> entity) throws DAOException {
             return super.update(connection, entity);
         }
     }
-
-
 
 
     private static final Logger logger = LogManager.getLogger(Main.class);
 
     public static void main(String[] args) throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, DAOException, ServiceException, NoSuchFieldException, FileNotFoundException {
 
-//        final Connection connection = getConnection();
+        String str = "+375333044914";
+        System.out.println(str.matches("^\\+\\d{12}$"));
 
-        User user = new User("asd", "qwe", "qwe", "qwe", "qwe");
-
-        Role role = Role.ADMIN;
-
-        BigDecimal decimal = new BigDecimal(0);
-
-        Gson gson = new Gson();
-        final String s = gson.toJson(decimal);
-        System.out.println(s);
-
-//        Test test = new Test();
-//            test.delete(connection, new Address(205, "25", 1));
     }
 
-    class B {
-        public void test(){
-
-        }
-    }
 
 
     static private List<ArrayList<Integer>> countSameDish(List<Dish> dishes){
@@ -153,6 +136,32 @@ class B{
 
         System.out.println("OK");
 
+    }
+
+    private String coord(String str){
+
+        str = str.replaceAll(" ", "\n");
+        System.out.println(str);
+
+        String res = "";
+        int co = 0;
+        for (int i = 0; i < str.length(); i++) {
+            if(str.charAt(i) == ','){
+                res +="{ lng: " + str.substring(co+1, i) + ", ";
+                co = i;
+            }
+
+            if(str.charAt(i) == '\n'){
+                res += " lat: " + str.substring(co+1, i) + " }," + "\n";
+                co = i;
+            }
+
+        }
+
+        System.out.println(res);
+
+
+        return res;
     }
 
 }

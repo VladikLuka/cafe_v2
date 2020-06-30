@@ -23,7 +23,16 @@ public enum CommandName {
     FEEDBACK,
     CANCEL_ORDER,
     CLOSE_ORDER,
+    VIOLATE_ORDER,
     SHOW_USER_INFO,
+    ADD_MONEY,
+    SUBTRACT_MONEY,
+    ADD_POINTS,
+    SUBTRACT_POINTS,
+    BAN_USER,
+    UNBAN_USER,
+    CASH_ORDER,
+
 
 
 }

@@ -2,6 +2,7 @@ package by.javatr.cafe.service.impl;
 
 import by.javatr.cafe.container.annotation.Autowired;
 import by.javatr.cafe.container.annotation.Component;
+import by.javatr.cafe.dao.repository.IUserRepository;
 import by.javatr.cafe.entity.User;
 import by.javatr.cafe.util.Cache;
 import by.javatr.cafe.dao.repository.IAddressRepository;
@@ -23,9 +24,8 @@ public class AddressService implements IAddressService {
 
     @Autowired
     IAddressRepository addressRepository;
-
     @Autowired
-    Cache cache;
+    IUserRepository userRepository;
 
     private AddressService(){}
 
@@ -35,7 +35,7 @@ public class AddressService implements IAddressService {
         try {
             final Address update = addressRepository.update(address);
             if(update == null) throw new ServiceException("invalid update address");
-            cache.updateAddress(address);
+//            cache.updateAddress(address);
             return address;
         } catch (DAOException | SQLException e) {
             throw new ServiceException(e);
@@ -73,11 +73,12 @@ public class AddressService implements IAddressService {
         try {
             address = addressRepository.create(address);
             if(address != null){
-                final User user = cache.getUser(address.getUser_id());
+                final User user = userRepository.findUser(new User(address.getUser_id()));
                 if (user.getAddress() == null) {
                     user.setAddress(new ArrayList<>());
                 }
-                return cache.addAddress(address);
+                user.getAddress().add(address);
+                return address;
             }else{
                 return null;
             }
@@ -89,10 +90,21 @@ public class AddressService implements IAddressService {
     }
 
     @Override
+    public Address find(Address address) throws ServiceException {
+
+        try {
+            address = addressRepository.get(address);
+            return address ;
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+
+    }
+
+    @Override
     public boolean delete(Address address) throws ServiceException {
         try {
             addressRepository.delete(address);
-            cache.deleteAddress(address);
             return true;
         } catch (DAOException e) {
             throw new ServiceException(e);

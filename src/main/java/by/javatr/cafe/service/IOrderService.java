@@ -12,8 +12,6 @@ import java.util.Map;
 
 public interface IOrderService {
 
-    boolean deposit(User user) throws ServiceException;
-
     Order makeOrder(Order order, User user) throws ServiceException;
 
     Order makeOrderBalance(Order order, User user) throws ServiceException;
@@ -28,5 +26,9 @@ public interface IOrderService {
 
     Order updateOrder(Order order) throws ServiceException;
 
-    Order getOrder(Order order);
+    Order getOrder(Order order) throws ServiceException;
+
+    boolean cancelOrder(Order order) throws ServiceException;
+
+    boolean violateOrder(Order order) throws ServiceException;
 }

@@ -42,6 +42,8 @@ public class GetPage implements Command {
             System.out.println(orders);
         }
 
-        return new RequestResult(Navigation.FORWARD, "WEB-INF/jsp/" + path[0] + ".jsp", HttpServletResponse.SC_OK);
+        RequestResult result =new RequestResult(Navigation.FORWARD, "WEB-INF/jsp/" + path[0] + ".jsp", HttpServletResponse.SC_OK);
+        result.setHeaders("Location",(String) content.getRequestAttr("URL"));
+        return result;
     }
 }

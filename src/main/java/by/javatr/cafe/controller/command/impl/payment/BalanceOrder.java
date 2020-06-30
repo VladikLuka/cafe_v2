@@ -22,11 +22,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static by.javatr.cafe.util.Utils.countSameDish;
 
@@ -39,16 +37,31 @@ public class BalanceOrder implements Command {
     private IUserService userService;
     @Autowired
     private ICartService cartService;
-    @Autowired
-    private Cache cache;
+
 
 
     @Override
     public RequestResult execute(RequestContent content) throws ServiceException   {
 
+        String delivery_time = content.getRequestParam("delivery_time");
+        System.out.println(delivery_time);
         String address_id_str = content.getRequestParam("address");
         int address_id = Integer.parseInt(address_id_str);
-        User user = cache.getUser((int)content.getSessionAttr(SessionAttributes.USER_ID));
+
+        if(!delivery_time.matches("^(\\d{4})-(\\d{2})-(\\d{2}) (\\d{2}):(\\d{2}):(\\d{2})")){
+            return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
+        }
+        long del_time;
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            del_time = simpleDateFormat.parse(delivery_time).getTime();
+//            del_time = SimpleDateFormat.getInstance().parse(delivery_time).getTime();
+        } catch (ParseException e) {
+            throw new ServiceException(e);
+        }
+
+        User user = userService.find((int)content.getSessionAttr(SessionAttributes.USER_ID));
+
 
         Cart cart = (Cart) content.getSessionAttr(SessionAttributes.CART);
 
@@ -63,6 +76,14 @@ public class BalanceOrder implements Command {
             }
         }
 
+        if(cart.getCart() == null){
+            return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
+        }
+
+        if(user_address == null){
+            return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
+        }
+
         BigDecimal amount = orderService.amount(cart);
         amount.setScale(2, RoundingMode.HALF_UP);
         BigDecimal money = user.getMoney();
@@ -70,31 +91,30 @@ public class BalanceOrder implements Command {
 
         DateFormat instance = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String format = instance.format(Calendar.getInstance().getTime());
+
+        long time = Calendar.getInstance().getTime().getTime();
+
+        if(time > del_time){
+            return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
+        }
+
+        if(del_time - time > 259_200_000){
+            return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
+        }
+
         final Map<Dish, Integer> dishes = countSameDish(cart.getCart());
-        Order order = new Order();
-        order.setMethod(PaymentMethod.BALANCE);
-        order.setDishes(dishes);
-        order.setUser_id(user.getId());
-        order.setTime(format);
-        order.setDelivery_time(format);
-        order.setAddress(user_address);
-        order.setAmount(amount);
-        order.setStatus(PaymentStatus.PAID);
+        Order order = new Order(PaymentMethod.BALANCE, dishes, user.getId(), format, delivery_time, user_address, amount,PaymentStatus.PAID);
 
         if (money.compareTo(amount) >= 0) {
                 order = orderService.makeOrderBalance(order, user);
                 if(order == null){
-                    return new RequestResult(Navigation.REDIRECT, "/payment_error", HttpServletResponse.SC_BAD_REQUEST);
+                    return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
                 }
                 cartService.clear(cart);
-                cache.addOrder(order);
             }
         else {
-            return new RequestResult(Navigation.REDIRECT, "/payment_error", HttpServletResponse.SC_BAD_REQUEST);
+            return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
-        RequestResult result = new RequestResult(Navigation.REDIRECT, "/checkout/" + order.getOrder_id(), HttpServletResponse.SC_FOUND);
-        result.setHeaders("Location", "/checkout/" + order.getOrder_id() );
-        result.setHeaders("content-type", "application/json;charset=UTF-8");
-        return result;
+        return new RequestResult(Navigation.REDIRECT, "/checkout/" + order.getOrder_id(), HttpServletResponse.SC_FOUND);
     }
 }

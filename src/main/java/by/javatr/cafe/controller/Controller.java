@@ -14,6 +14,7 @@ import by.javatr.cafe.entity.Order;
 import by.javatr.cafe.entity.User;
 import by.javatr.cafe.exception.DAOException;
 import by.javatr.cafe.exception.ServiceException;
+import by.javatr.cafe.service.impl.UserService;
 import by.javatr.cafe.util.Cache;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -98,6 +99,9 @@ public class Controller extends HttpServlet {
     }
 
     protected void processRequest(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        final String url1 = req.getRequestURI();
+        System.out.println("CONTROLLER URL " + url1);
+
         RequestContent content = new RequestContent();
         content.setContent(req);
         Command command;
@@ -113,8 +117,6 @@ public class Controller extends HttpServlet {
             result = command.execute(content);
         } catch (ServiceException e) {
             logger.error("Service exception ", e);
-        }
-        if(result == null){
             result = new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
@@ -128,12 +130,14 @@ public class Controller extends HttpServlet {
 
 
     public void frw(HttpServletRequest req, HttpServletResponse resp, RequestResult result) throws IOException, ServletException {
-
         if(result.getNav() != null && result.getNav().equals(Navigation.REDIRECT)){
             resp.sendRedirect(result.getPage());
         }else if(result.getNav() != null && result.getNav().equals(Navigation.FORWARD)){
             req.getRequestDispatcher(result.getPage()).forward(req,resp);
         }else {
+            if(result.getStatus() == 400 && req.getMethod().equals("GET")){
+                req.getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(req,resp);
+            }
             resp.getWriter().println(result.getCommand());
         }
 

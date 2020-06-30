@@ -23,11 +23,7 @@ public class Feedback implements Command {
     @Override
     public RequestResult execute(RequestContent content) throws ServiceException {
 
-        final String stars = content.getRequestParam("stars");
-        Integer rating = null;
-        if(stars != null){
-            rating = Integer.parseInt(stars);
-        }
+        final int rating = Integer.parseInt(content.getRequestParam("stars"));
         final String feedback = content.getRequestParam("feedback");
         int order_id = Integer.parseInt(content.getRequestParam("order_id"));
         int user_id = (int)content.getSessionAttr(SessionAttributes.USER_ID);

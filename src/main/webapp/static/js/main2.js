@@ -109,7 +109,24 @@ $(document).ready(function() {
 			data:data,
 			dataType:"json",
 			success:function (response) {
-				alert(JSON.parse(response))
+				let user_id = document.getElementById("user_id");
+				user_id.value = response["id"];
+				let user_name = document.getElementById("user_name");
+				user_name.value = response["name"];
+				let user_surname = document.getElementById("user_surname");
+				user_surname.value = response["surname"];
+				let user_phone = document.getElementById("user_phone");
+				user_phone.value = response["phone"];
+				let user_mail = document.getElementById("user_email");
+				user_mail.value = response["mail"];
+				let user_point = document.getElementById("user_point");
+				user_point.value = response["loyalty_point"];
+				let user_money = document.getElementById("user_money");
+				user_money.value = response["money"];
+				let user_isBan = document.getElementById("isBanned");
+				user_isBan.value = response["isBan"];
+
+
 			}
 		})
 

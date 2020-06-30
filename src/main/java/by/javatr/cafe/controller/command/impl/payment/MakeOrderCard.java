@@ -36,8 +36,6 @@ public class MakeOrderCard implements Command {
     ICartService cartService;
     @Autowired
     IOrderService orderService;
-    @Autowired
-    Cache cache;
 
 
     @Override
@@ -47,10 +45,10 @@ public class MakeOrderCard implements Command {
         int address_id = Integer.parseInt(content.getRequestParam("address"));
         int user_id =(int) content.getSessionAttr(SessionAttributes.USER_ID);
 
-        User user = cache.getUser(user_id);
+        final User user = userService.find(user_id);
+
         final List<Address> addresses = user.getAddress();
         Address address = null;
-
 
         for (Address addr:addresses) {
                 if(addr.getId() == address_id){

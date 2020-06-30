@@ -73,9 +73,23 @@ $(document).ready(function(){
 
 	})
 
+	function isCheck(name) {
+		return document.querySelector('input[name="' + name + '"]:checked');
+	}
+
 	$("#feedback_submit").click(function () {
 
 
+
+		alert("ok")
+		let doc = isCheck("stars");
+		alert(doc.value);
+
+		// $.ajax({
+		//
+		//
+		//
+		// })
 
 	})
 
@@ -104,6 +118,150 @@ $(document).ready(function(){
 			})
 
 	});
+
+
+	$("#ban_user").click(function(){
+
+		let data = {
+			"command":"ban_user",
+			"user_id": $("#user_id").val()
+		}
+
+		$.ajax({
+
+			type:"POST",
+			url:"/controller",
+			data:data,
+			datatype:"json",
+			success:function(response){
+				let element = document.getElementById("isBanned")
+				element.value = JSON.parse(response)["isBan"];
+			}
+
+		})
+
+
+	})
+
+
+	$("#unban_user").click(function(){
+
+		let data = {
+			"command":"unban_user",
+			"user_id": $("#user_id").val()
+		}
+
+		$.ajax({
+
+			type:"POST",
+			url:"/controller",
+			data:data,
+			datatype:"json",
+			success:function(response){
+				let element = document.getElementById("isBanned")
+				element.value = JSON.parse(response)["isBan"];
+			}
+
+		})
+
+
+	})
+
+	$("#add_money").click(function () {
+
+		let data = {
+			"command":"add_money",
+			"amount":$("#add_user_money").val(),
+			"user_id":$("#user_id").val()
+		}
+
+		$.ajax({
+
+			type:"POST",
+			url:"/controller",
+			data:data,
+			datatype:"json",
+			success:function (response) {
+				let element = document.getElementById("user_money")
+				element.value = JSON.parse(response)["money"]
+			}
+
+		})
+
+	})
+
+	$("#add_points").click(function () {
+
+		let data = {
+			"command":"add_points",
+			"points":$("#give_user_points").val(),
+			"user_id":$("#user_id").val()
+		}
+
+		$.ajax({
+
+			type:"POST",
+			url:"/controller",
+			data:data,
+			datatype:"json",
+			success:function (response) {
+				let element = document.getElementById("user_point")
+				element.value = JSON.parse(response)["loyalty_point"]
+			}
+
+		})
+
+	})
+
+	$("#subtract_money").click(function () {
+
+		let data = {
+			"command":"SUBTRACT_MONEY",
+			"amount":$("#substr_user_money").val(),
+			"user_id":$("#user_id").val()
+		}
+
+		$.ajax({
+
+			type:"POST",
+			url:"/controller",
+			data:data,
+			datatype:"json",
+			success:function (response) {
+				let element = document.getElementById("user_money")
+				element.value = JSON.parse(response)["money"]
+			}
+
+		})
+
+	})
+
+	$("#grab_points").click(function () {
+
+		let data = {
+			"command":"SUBTRACT_POINTS",
+			"points":$("#grab_user_points").val(),
+			"user_id":$("#user_id").val()
+		}
+
+		$.ajax({
+
+			type:"POST",
+			url:"/controller",
+			data:data,
+			datatype:"json",
+			success:function (response) {
+				let element = document.getElementById("user_point")
+				element.value = JSON.parse(response)["loyalty_point"]
+			}
+
+		})
+
+	})
+
+	// document.querySelector("#add_money").addEventListener('click', function(){
+	// 	swal("Our First Alert", "With some body text and success icon!", "success");
+	// });
 
 	$(".js-button-logout").click(function () {
 
@@ -204,6 +362,7 @@ $("#submit_address").click(function () {
 })
 
 	let address={};
+	let adr;
 
 	document.onclick = event =>{
 		if(event.target.classList.contains("hide2")){
@@ -212,8 +371,11 @@ $("#submit_address").click(function () {
 		if(event.target.classList.contains("show2")){
 			show_dish(event.target.dataset.id);
 		}
-		if(event.target.classList.contains("123")){
+		if(event.target.classList.contains("close_ord")){
 			close_order(event.target.dataset.id);
+		}
+		if(event.target.classList.contains("violate_ord")){
+			violate_ord(event.target.dataset.id);
 		}
 		if(event.target.classList.contains("address")){
 			delete_addr(event.target.dataset.id);
@@ -225,6 +387,8 @@ $("#submit_address").click(function () {
 			addItem(event.target.dataset.id);
 		}
 		if(event.target.classList.contains("address_wrapper")){
+
+
 			address[0] = address[1];
 			address[1] = event.target.dataset.id;
 			var dropdown_content_ths = document.querySelector('.address_wrapper[data-id="'+address[1]+'"]');
@@ -234,65 +398,140 @@ $("#submit_address").click(function () {
 				dropdown_content_ths2.style="e6a6fa";
 			}
 
-			let element;
-			if (document.getElementById("chosen_address") == null){
-			createInputAddressBefore("pay", address[1], "payment-form");
-			createInputAddressBefore("pay2", address[1], "payment-form2");
-			}else{
-			deleteAddressBefore("chosen_address");
-			createInputAddressBefore("pay", address[1], "payment-form");
-			deleteAddressBefore("chosen_address");
-			createInputAddressBefore("pay2", address[1], "payment-form2");
-			 }
+			// let element;
+			// if (document.getElementById("chosen_address") == null){
+			// element =
+			// createInputAddressBefore("pay2", address[1], "payment-form2");
+			// }else{
+			// deleteAddressBefore("chosen_address");
+			// createInputAddressBefore("pay2", address[1], "payment-form2");
+			//  }
 		}
 }
 
 
-	// $("#pay2").click(function () {
-	// 	alert("Ok");
-	// 	if (document.getElementById("chosen_address") == null) {
-	//
-	// 	}else{
-	// 		let address = document.getElementById("chosen_address");
-	// 		var address_id= address.getAttribute("value");
-	//
-	// 		let data =
-	// 			{"address" : address_id,
-	// 			 "command" : "balance_order",
-	// 			}
-	//
-	// 			$.ajax({
-	// 				type:"POST",
-	// 				url:"/controller",
-	// 				data:data,
-	// 				dataType: "json",
-	// 				success:function (data, status, jqXHR) {
-	// 					alert(JSON.stringify(data));
-	// 					alert(data.url);
-	// 					document.location.replace(date.url);
-	// 				},
-	// 				statusCode:{
-	// 					302:function (data) {
-	// 						alert(JSON.stringify(data));
-	// 						alert(data.url);
-	// 						document.location.replace(date.url);
-	// 					},
-	// 					200:function (data) {
-	// 						alert(JSON.stringify(data));
-	// 						alert(data.url);
-	// 						document.location.replace(date.url);
-	// 					}
-	// 				}
-	//
-	// 		})
-	// 	}
-	// })
 
+
+	$("#pay2").click(function () {
+
+
+		if (address[1] === undefined) {
+			swal("Something went wrong", "chose address", "error");
+		}else{
+
+			let data =
+				{"address" : address[1],
+				 "command" : "balance_order",
+				 "delivery_time" : document.getElementById("delivery_time").value
+				}
+
+				$.ajax({
+					type:"POST",
+					url:"/controller",
+					data:data,
+					success:function (data, error, jqXHR) {
+						localStorage.clear();
+						document.location.href = jqXHR.getResponseHeader("Location");
+					},
+					statusCode:{
+						400:function () {
+							swal("Something went wrong", "check balance", "error");
+						}
+					}
+
+			})
+		}
+	})
+
+	$("#pay3").click(function () {
+
+
+		if (address[1] === undefined) {
+			swal("Something went wrong", "chose address", "error");
+		}else{
+
+			let data =
+				{"address" : address[1],
+					"command" : "cash_order",
+					"delivery_time" : document.getElementById("delivery_time").value
+				}
+
+			$.ajax({
+				type:"POST",
+				url:"/controller",
+				data:data,
+				success:function (data, error, jqXHR) {
+					localStorage.clear();
+					document.location.href = jqXHR.getResponseHeader("Location");
+				},
+				statusCode:{
+					400:function () {
+						swal("Something went wrong", "check balance", "error");
+					}
+				}
+
+			})
+		}
+	})
+
+	// var form = document.querySelector('#payment-form');
+	var form = document.getElementById("pay");
+
+	$.ajax({
+
+		data:{"command" : "get_token"},
+		type:"post",
+		url:"/controller",
+		success:function (token) {
+		},
+		statusCode:{
+			200:function (response) {
+				braintree.dropin.create({
+					authorization: response,
+					container: '#bt-dropin',
+
+				}, function (createErr, instance) {
+					form.addEventListener('click', function (event) {
+						event.preventDefault();
+
+						instance.requestPaymentMethod(function (err, payload) {
+							if (err) {
+								console.log('Error', err);
+								return;
+							}
+
+							let data = {
+								"command":"make_order",
+								"payment_method_nonce":payload.nonce,
+								"delivery_time" : document.getElementById("delivery_time").value,
+								"address" : address[1]
+							}
+
+							$.ajax({
+								type:"POST",
+								url:"/controller",
+								data:data,
+								success:function (data, error, jqXHR) {
+									localStorage.clear();
+									document.location.href = jqXHR.getResponseHeader("Location");
+								},
+								statusCode:{
+									400:function () {
+										swal("Something went wrong", "check balance", "error");
+									}
+								}
+							})
+						});
+					});
+				});
+			}
+		}
+
+	})
 
 
 
 	$("#cancel_order").click(function () {
-		alert("ok");
 
 		let data = {
 			"order_id": $("#order_id").val(),
@@ -312,10 +551,27 @@ $("#submit_address").click(function () {
 	})
 
 
+	function ban_user(id){
 
-function getAddress() {
-		return address[1];
-}
+		let data = {
+			"command" : "ban_user",
+			"id":id
+		}
+
+		$.ajax({
+
+			type:"post",
+			url:"/controller",
+			data:data,
+			success:function () {
+
+			}
+
+
+		})
+	}
+
+
 
     // heightBlock($("#product > div"));
 });
@@ -397,107 +653,113 @@ function getdetails(obj) {
 
 }
 
+
+
+
 function getLocCart() {
 
 	var locCart = JSON.parse(localStorage.getItem("cart"));
 
 	var total_price = 0;
 
-	document.getElementById("cart_item").innerHTML = '';
 
 
-	for (let i = 0; i < locCart.length; i++){
-		let counter1= 1;
+	if(locCart != null && locCart.length !== undefined && document.getElementById("cart_item") !== null) {
 
-		for (let j = 0; j < i; j++) {
-			if(locCart[i]["id"] === locCart[j]["id"]){
-				counter1++;
-				var v = document.getElementById("count_" + locCart[i]["id"]);
-				v.value = counter1;
-				console.log(v.value);
+		document.getElementById("cart_item").innerHTML = '';
+
+
+		for (let i = 0; i < locCart.length; i++) {
+			let counter1 = 1;
+
+			for (let j = 0; j < i; j++) {
+				if (locCart[i]["id"] === locCart[j]["id"]) {
+					counter1++;
+					var v = document.getElementById("count_" + locCart[i]["id"]);
+					v.value = counter1;
+					console.log(v.value);
+				}
 			}
+
+			total_price = total_price + locCart[i]["price"];
+
+			if (counter1 > 1) {
+				continue;
+			}
+
+			var cart_item = document.createElement("div");
+			cart_item.id = "crt_itm_" + locCart[i]["id"];
+			cart_item.classList.add("item_class");
+			document.getElementById("cart_item").appendChild(cart_item);
+
+			var item_name = document.createElement("div");
+			item_name.id = "item_name_id_" + locCart[i]["id"];
+			item_name.classList.add("item_name_id");
+			item_name.innerHTML = locCart[i]["name"];
+			document.getElementById("crt_itm_" + locCart[i]["id"]).appendChild(item_name);
+
+			var item_description = document.createElement("div");
+			item_description.id = "item_description_id";
+			item_description.classList.add("item_description_id");
+			item_description.innerHTML = locCart[i]["description"];
+			document.getElementById("crt_itm_" + locCart[i]["id"]).appendChild(item_description);
+
+			var item_low_part = document.createElement("div");
+			item_low_part.id = "low_part_" + locCart[i]["id"];
+			document.getElementById("crt_itm_" + locCart[i]["id"]).appendChild(item_low_part);
+
+			var weight_price = document.createElement("div");
+			weight_price.id = "weight_price_" + locCart[i]["id"];
+			weight_price.classList.add("weight_price");
+			document.getElementById("crt_itm_" + locCart[i]["id"]).appendChild(weight_price);
+
+			var weight = document.createElement("div");
+			weight.innerHTML = locCart[i]["weight"];
+			weight.id = "weight_id_" + locCart[i]["id"];
+			weight.classList.add("item_weight");
+			document.getElementById("weight_price_" + locCart[i]["id"]).appendChild(weight);
+
+
+			var price = document.createElement("div");
+			price.id = "price_id_" + locCart[i]["id"];
+			price.innerHTML = locCart[i]["price"];
+			price.classList.add("item_price");
+			document.getElementById("weight_price_" + locCart[i]["id"]).appendChild(price);
+
+
+			var minus = document.createElement("button");
+
+			minus.classList.add("btn");
+			minus.classList.add("button-info");
+			minus.id = "minus_" + locCart[i]["id"];
+			minus.classList.add("minus");
+			minus.dataset.id = locCart[i]["id"];
+			document.getElementById("low_part_" + locCart[i]["id"]).appendChild(minus);
+
+
+			var count = document.createElement("input");
+			count.id = "count_" + locCart[i]["id"];
+			count.classList.add("count");
+			count.dataset.id = locCart[i]["id"];
+			count.disabled = true;
+			count.value = 1;
+			document.getElementById("low_part_" + locCart[i]["id"]).appendChild(count);
+
+
+			var plus = document.createElement("button");
+
+			plus.classList.add("btn");
+			plus.classList.add("button-info");
+			plus.id = "plus_" + locCart[i]["id"];
+			plus.classList.add("plus");
+			plus.dataset.id = locCart[i]["id"];
+			document.getElementById("low_part_" + locCart[i]["id"]).appendChild(plus);
+
 		}
 
-		total_price = total_price + locCart[i]["price"];
 
-		if(counter1>1){
-			continue;
-		}
-
-		var cart_item = document.createElement("div");
-		cart_item.id = "crt_itm_"+locCart[i]["id"];
-		cart_item.classList.add("item_class");
-		document.getElementById("cart_item").appendChild(cart_item);
-
-		var item_name = document.createElement("div");
-		item_name.id = "item_name_id_"+locCart[i]["id"];
-		item_name.classList.add("item_name_id");
-		item_name.innerHTML = locCart[i]["name"];
-		document.getElementById("crt_itm_"+locCart[i]["id"]).appendChild(item_name);
-
-		var item_description = document.createElement("div");
-		item_description.id = "item_description_id";
-		item_description.classList.add("item_description_id");
-		item_description.innerHTML = locCart[i]["description"];
-		document.getElementById("crt_itm_"+locCart[i]["id"]).appendChild(item_description);
-
-		var item_low_part = document.createElement("div");
-		item_low_part.id = "low_part_"+locCart[i]["id"];
-		document.getElementById("crt_itm_"+locCart[i]["id"]).appendChild(item_low_part);
-
-		var weight_price = document.createElement("div");
-		weight_price.id = "weight_price_"+locCart[i]["id"];
-		weight_price.classList.add("weight_price");
-		document.getElementById("crt_itm_"+locCart[i]["id"]).appendChild(weight_price);
-
-		var weight = document.createElement("div");
-		weight.innerHTML = locCart[i]["weight"];
-		weight.id = "weight_id_"+locCart[i]["id"];
-		weight.classList.add("item_weight");
-		document.getElementById("weight_price_"+locCart[i]["id"]).appendChild(weight);
-
-
-		var price = document.createElement("div");
-		price.id = "price_id_"+locCart[i]["id"];
-		price.innerHTML = locCart[i]["price"];
-		price.classList.add("item_price");
-		document.getElementById("weight_price_"+locCart[i]["id"]).appendChild(price);
-
-
-		var minus = document.createElement("button");
-
-		minus.classList.add("btn");
-		minus.classList.add("button-info");
-		minus.id = "minus_"+locCart[i]["id"];
-		minus.classList.add("minus");
-		minus.dataset.id = locCart[i]["id"];
-		document.getElementById("low_part_"+locCart[i]["id"]).appendChild(minus);
-
-
-		var count = document.createElement("input");
-		count.id = "count_"+locCart[i]["id"];
-		count.classList.add("count");
-		count.dataset.id = locCart[i]["id"];
-		count.disabled = true;
-		count.value = 1;
-		document.getElementById("low_part_"+locCart[i]["id"]).appendChild(count);
-
-
-		var plus = document.createElement("button");
-
-		plus.classList.add("btn");
-		plus.classList.add("button-info");
-		plus.id = "plus_"+locCart[i]["id"];
-		plus.classList.add("plus");
-		plus.dataset.id = locCart[i]["id"];
-		document.getElementById("low_part_"+locCart[i]["id"]).appendChild(plus);
-
-
-
+		document.getElementById("total_price").innerHTML = "Total " + total_price + " BYN";
 	}
-
-
-	document.getElementById("total_price").innerHTML = "Total " + total_price + " BYN";
 }
 
 function delete_addr(id){
@@ -541,6 +803,25 @@ function hide_dish(id){
 
 }
 
+function violate_ord(id){
+
+	let data = {
+		"command": "violate_order",
+		"id":id
+	}
+
+	$.ajax({
+		type:"post",
+		url:"/controller",
+		data:data,
+		success:function (response) {
+			var el = document.getElementById("delete"+id);
+			el.parentNode.removeChild(el);
+		}
+	})
+
+}
+
 function show_dish(id){
 
 	let data = {
@@ -564,23 +845,23 @@ function show_dish(id){
 
 }
 
-function show_info(id){
-
-	let data = {
-		"command":"show_user_info",
-		"id":id
-	}
-
-	$.ajax({
-		type:"POST",
-		url:"/controller",
-		data:data,
-		success:function (response) {
-
-		}
-	})
-
-}
+// function show_info(id){
+//
+// 	let data = {
+// 		"command":"show_user_info",
+// 		"id":id
+// 	}
+//
+// 	$.ajax({
+// 		type:"POST",
+// 		url:"/controller",
+// 		data:data,
+// 		success:function (response) {
+//
+// 		}
+// 	})
+//
+// }
 
 function getCart() {
 
@@ -674,7 +955,7 @@ function isValidPhone(myPhone) {
 }
 
 function isValidPassword(password){
-	return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s){8,}/.test(password);
+		return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s){8,}/.test(password);
 }
 
 function isValidNameSurname(name){

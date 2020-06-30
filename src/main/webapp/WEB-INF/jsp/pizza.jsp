@@ -17,6 +17,7 @@
 
     <link rel="stylesheet" href="../../static/css/catalog.css">
 
+
 </head>
 <body>
 
@@ -43,24 +44,15 @@
                                         <div id="product_weight">${dish.weight} gr</div>
                                     </div>
                                     <div id="product_action">
-                <%--                            <input type="hidden" name="dish" value="${dish.id}">--%>
-                                            <button class="btn btn-success" type="button" id="${dish.id}" onClick="getdetails(this)">Add to cart</button>
-
-                                    <c:if test="${applicationScope.cache.getUser(sessionScope.user_id).role eq 'ADMIN'}">
-                                        <c:if test="${dish.available eq true}">
-<%--                                            <form action="${pageContext.request.contextPath}/controller" method="post">--%>
-<%--                                                <input type="hidden" name="command" value="hide_dish">--%>
-<%--                                                <input type="hidden" name="id" value="${dish.id}">--%>
-                                                    <button class="btn btn-success hide2" type="submit" data-id="${dish.id}" id="${dish.id}">hide</button>
-<%--                                                </form>--%>
+                                        <button class="btn btn-success" type="button" id="${dish.id}" onClick="getdetails(this)">Add to cart</button>
+                                        <c:if test="${applicationScope.cache.getUser(sessionScope.user_id).role eq 'ADMIN'}">
+                                            <c:if test="${dish.available eq true}">
+                                                <button class="btn btn-success hide2" type="submit" data-id="${dish.id}" id="${dish.id}">hide</button>
+                                            </c:if>
+                                            <c:if test="${dish.available eq false}">
+                                                <button class="btn btn-success show2" type="submit" data-id="${dish.id}" id="${dish.id}">show</button>
+                                            </c:if>
                                         </c:if>
-                                        <c:if test="${dish.available eq false}">
-<%--                                            <form action="${pageContext.request.contextPath}/controller" method="post">--%>
-<%--                                            <input type="hidden" name="command" value="show_dish">--%>
-<%--                                            <input type="hidden" name="id" value="${dish.id}">--%>
-                                            <button class="btn btn-success show2" type="submit" data-id="${dish.id}" id="${dish.id}">show</button>
-                                        </c:if>
-                                    </c:if>
                                     </div>
                                 </div>
                             </div>
@@ -84,22 +76,14 @@
                                         <div id="product_weight">${dish.weight}</div>
                                     </div>
                                     <div id="product_action">
-                                            <%--                            <input type="hidden" name="dish" value="${dish.id}">--%>
                                         <button class="btn btn-success" type="button" id="${dish.id}" onClick="getdetails(this)">Add to cart</button>
 
                                         <c:if test="${applicationScope.cache.getUser(sessionScope.user_id).role eq 'ADMIN'}">
                                             <c:if test="${dish.available eq true}">
-<%--                                                <form action="${pageContext.request.contextPath}/controller" method="post">--%>
-<%--                                                <input type="hidden" name="command" value="hide_dish">--%>
-<%--                                                <input type="hidden" name="id" value="${dish.id}">--%>
                                                     <button class="btn btn-success hide2" type="submit" data-id="${dish.id}" id="${dish.id}">hide</button>
                                             </c:if>
                                             <c:if test="${dish.available eq false}">
-<%--                                                <form action="${pageContext.request.contextPath}/controller" method="post">--%>
-<%--                                                    <input type="hidden" name="command" value="show_dish">--%>
-<%--                                                    <input type="hidden" name="id" value="${dish.id}">--%>
                                                         <button class="btn btn-success show2" type="submit" data-id="${dish.id}" id="${dish.id}">show</button>
-                                                            <%--                                                </form>--%>
                                             </c:if>
                                         </c:if>
                                     </div>
@@ -113,7 +97,6 @@
         </c:if>
     </c:forEach>
 </div>
-
 
 
 

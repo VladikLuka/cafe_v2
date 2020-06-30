@@ -8,14 +8,11 @@
 </head>
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
-<script src="https://code.jquery.com/jquery-3.5.0.js" integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc=" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
 <link rel="stylesheet" href="../../static/css/user.css">
-<script src="https://js.braintreegateway.com/js/braintree-2.32.1.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.0.js" integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc=" crossorigin="anonymous"></script>
+<script src="../../static/js/moment.js"></script>
 
 
 <body>
@@ -31,7 +28,7 @@
         <div class="personal_address">
             <h2>Address</h2>
             <div class="addresses" style="padding: 20px">
-                <c:forEach items="${applicationScope.cache.getAddress(sessionScope.user_id)}" var="address">
+                <c:forEach items="${applicationScope.cache.getAddresses(sessionScope.user_id)}" var="address">
                     <div class="address_wrapper" data-id=${address.id}>
                         <div class="user_address" >
                             <div class="user_city_street">
@@ -56,32 +53,44 @@
             </div>
             <h3>Payment</h3>
 
-            <label>
-                <input type="datetime-local" placeholder="yyyy-MM-dd hh-mm" lang="en_Us" value="2020-06-19T12:05">
-            </label>
+<%--            <label>--%>
+<%--                <input type="datetime-local" placeholder="yyyy-MM-dd hh-mm" lang="en_Us" value="2020-06-19T12:05">--%>
+<%--            </label>--%>
 
+            <div class="form-group">
+                <div class='input-group date' id='datetimepicker1'>
+                    <input type='text' id="delivery_time" class="form-control" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
         </div>
+
+
+
+        <script>
+            var calendar = document.getElementById("delivery_time");
+            console.log(moment().format("YYYY-MM-DD hh:mm:ss"));
+            var mom = moment().add(1, "hours").add(5, "minutes").format("DD-MM-YYYY hh:mm:ss");
+            calendar.setAttribute("value", moment().add(1, "hours").add(5, "minutes").format("YYYY-MM-DD HH:mm:ss"));
+            console.log(document.getElementById("delivery_time").value)
+        </script>
+
         <div>
 
             <h4>Pay from balance</h4>
-            <form action="${pageContext.request.contextPath}/controller" method="post" id="payment-form2" class="payment">
+                <button id="pay2" class="btn btn-success make_order" type="submit"><span>Balance</span></button>
+                <button id="pay3" class="btn btn-success make_order" type="submit"><span>Cash</span></button>
 
-                <input type="hidden" name="command" value="balance_order">
-                <button id="pay2" class="btn btn-success make_order" type="submit"><span>Test Transaction</span></button>
-            </form>
         </div>
         <div>
-            <form id="payment-form" method="post" class="payment" action="${pageContext.request.contextPath}/controller">
                 <section>
                     <div class="bt-drop-in-wrapper">
                         <div id="bt-dropin"></div>
                     </div>
                 </section>
-
-                <input type="hidden" id="nonce" name="payment_method_nonce" />
-                <input type="hidden" name="command" value="make_order">
                 <button id="pay" class="button make_order" type="submit"><span>Test Transaction</span></button>
-            </form>
         </div>
 
     </div>
@@ -99,12 +108,25 @@
     </div>
 </div>
 
+
+
+<script type="text/javascript">
+    $(function () {
+        $('#datetimepicker1').datetimepicker({
+            format: "YYYY-MM-DD HH:mm:ss",
+        });
+    });
+</script>
+
 <jsp:include page="part/footer.jsp"/>
+
+</body>
+
+<script src="https://js.braintreegateway.com/js/braintree-2.32.1.min.js"></script>
 
 <script src="../../static/js/pay.js"></script>
 <script src="https://js.braintreegateway.com/web/dropin/1.22.1/js/dropin.min.js"></script>
+<script src="../../static/js/sweetalert2.all.js"></script>
 
-<script src="../../static/js/demo.js"></script>
-
-</body>
+<script src="../../static/js/dateTimePicker.js"></script>
 </html>

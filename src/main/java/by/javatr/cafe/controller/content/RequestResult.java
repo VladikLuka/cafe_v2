@@ -1,7 +1,6 @@
 package by.javatr.cafe.controller.content;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -13,6 +12,7 @@ public class RequestResult {
     String command;
     int status;
     Map<String, String> headers = new HashMap<>();
+    String URL;
 
 
     public RequestResult(Navigation nav, String page, int status){
@@ -117,5 +117,13 @@ public class RequestResult {
 
     public void setCommand(String command) {
         this.command = command;
+    }
+
+    public String getURL() {
+        return URL;
+    }
+
+    public void setURL(String URL) {
+        this.URL = URL;
     }
 }

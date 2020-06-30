@@ -65,9 +65,6 @@ public class Config implements ServletContextListener {
             e.printStackTrace();
         }
 
-        sce.getServletContext().setAttribute("cache",cache);
-
-
     }
 
     @Override

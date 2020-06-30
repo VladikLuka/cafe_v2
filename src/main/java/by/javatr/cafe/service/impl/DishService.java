@@ -16,8 +16,6 @@ public final class DishService implements IDishService {
 
     @Autowired
     IDishRepository dishRepository;
-    @Autowired
-    Cache cache;
 
     private DishService(){}
 
@@ -34,11 +32,8 @@ public final class DishService implements IDishService {
     public Dish update(Dish dish) throws ServiceException {
 
         try {
-            dish = cache.getDish(dish.getId());
+            dishRepository.getById(dish.getId());
             dish = dishRepository.update(dish);
-            if(dish != null){
-                cache.updateDish(dish);
-            }
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -51,9 +46,6 @@ public final class DishService implements IDishService {
 
         try {
             dish = dishRepository.create(dish);
-            if(dish != null){
-                cache.addDish(dish);
-            }
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -85,11 +77,10 @@ public final class DishService implements IDishService {
     @Override
     public boolean hideDish(Dish dish) throws ServiceException {
 
-        Dish cacheDish = cache.getDish(dish.getId());
-        cacheDish.setAvailable(false);
         try {
-            dishRepository.update(cacheDish);
-            cache.updateDish(cacheDish);
+            dish = dishRepository.getById(dish.getId());
+            dish.setAvailable(false);
+            dishRepository.update(dish);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -98,11 +89,10 @@ public final class DishService implements IDishService {
 
     @Override
     public boolean showDish(Dish dish) throws ServiceException {
-        Dish cacheDish = cache.getDish(dish.getId());
-        cacheDish.setAvailable(true);
         try {
-            dishRepository.update(cacheDish);
-            cache.updateDish(cacheDish);
+            dish = dishRepository.getById(dish.getId());
+            dish.setAvailable(true);
+            dishRepository.update(dish);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }

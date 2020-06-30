@@ -18,11 +18,9 @@ public class URLFilter implements Filter {
 
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) {
         BUSINESS_URL.put("signup", AccessLevel.GUEST);
-        BUSINESS_URL.put("menu", AccessLevel.GUEST);
         BUSINESS_URL.put("error", AccessLevel.GUEST);
-        BUSINESS_URL.put("cart", AccessLevel.USER);
         BUSINESS_URL.put("drink", AccessLevel.GUEST);
         BUSINESS_URL.put("garnish", AccessLevel.GUEST);
         BUSINESS_URL.put("meat", AccessLevel.GUEST);
@@ -37,6 +35,7 @@ public class URLFilter implements Filter {
         BUSINESS_URL.put("admin", AccessLevel.ADMIN);
         BUSINESS_URL.put("checkout", AccessLevel.USER);
         BUSINESS_URL.put("payment_order", AccessLevel.USER);
+        BUSINESS_URL.put("map", AccessLevel.GUEST);
 
     }
 
@@ -45,7 +44,8 @@ public class URLFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         String URI = request.getRequestURI();
-
+        request.setAttribute("URL", URI);
+        request.setAttribute("method", request.getMethod());
         Object role = request.getSession().getAttribute(SessionAttributes.ACCESS_LEVEL);
 
         if(role == null){

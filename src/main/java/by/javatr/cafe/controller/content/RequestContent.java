@@ -3,9 +3,7 @@ package by.javatr.cafe.controller.content;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class RequestContent{
 
@@ -13,6 +11,7 @@ public class RequestContent{
     private Map<String, Object> requestAttributes;
     private Map<String, Object> sessionAttributes;
     String method;
+    String URL;
 
     public RequestContent() {
         requestParameters = new HashMap<>();
@@ -59,8 +58,9 @@ public class RequestContent{
      */
 
     public String getRequestParam(String key){
-        String[] strings = requestParameters.get(key);
-        return strings[0];
+        if (requestParameters.containsKey(key)) {
+            return requestParameters.get(key)[0];
+        }else return null;
     }
 
     public Object getSessionAttr(String key){
@@ -84,6 +84,11 @@ public class RequestContent{
         setRequestParams(req);
         setSessionAttrs(req);
         method = req.getMethod();
+        URL = (String) req.getAttribute("URL");
+    }
+
+    public String getURL(){
+        return URL;
     }
 
     public void invalidate(){

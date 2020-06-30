@@ -41,7 +41,7 @@
                                     <br> Here you can leave feedback</section>
                                 </c:if>
                                 <c:if test="${requestScope.order.status eq 'CLOSED'}">
-                                    <form action="${pageContext.request.contextPath}/controller" method="post">
+<%--                                    <form action="${pageContext.request.contextPath}/controller" method="post">--%>
                                         <textarea name="feedback" id="" cols="70" rows="3" required></textarea>
                                             <div id="reviewStars-input" style="margin-right: 180px;">
                                                 <input id="star-4" type="radio" name="stars" value="5"/>
@@ -66,7 +66,7 @@
                                                 <span style="width: 350px">leave feedback</span>
                                             </button>
                                         </section>
-                                    </form>
+<%--                                    </form>--%>
                                 </c:if>
 
                             <c:if test="${requestScope.order.status ne 'CLOSED'}">
@@ -138,7 +138,7 @@
                 </tr>
                 <tr>
                     <td>delivery time</td>
-                    <td>${requestScope.order.time}</td>
+                    <td>${requestScope.order.delivery_time}</td>
                 </tr>
                 </tbody>
             </table>

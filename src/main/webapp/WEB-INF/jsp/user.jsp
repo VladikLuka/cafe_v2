@@ -42,7 +42,7 @@
                 <div class="personal_address">
                     <h2>Address</h2>
                     <div class="addresses">
-                        <c:forEach items="${applicationScope.cache.getAddress(sessionScope.user_id)}" var="address">
+                        <c:forEach items="${applicationScope.cache.getAddresses(sessionScope.user_id)}" var="address">
                             <div class="address_wrapper" data-id=${address.id} >
                                 <div class="user_address">
                                     <div class="user_city_street">

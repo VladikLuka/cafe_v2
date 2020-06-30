@@ -62,6 +62,9 @@ public class BD_Columns {
     public static final String ROLE_ID = "role_id";
     public static final String ROLE_NAME = "role_name";
 
+
+    public static final String LAST_ID = "last_insert_id()";
+
     private BD_Columns() {
     }
 }

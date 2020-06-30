@@ -91,22 +91,19 @@ public class Order  extends Entity<Order> implements Serializable {
         this.user_id = user_id;
     }
 
-    @Override
-    public String toString() {
-        return "Order{" +
-                "order_id=" + order_id +
-                ", dishes=" + dishes +
-                ", order_rating=" + order_rating +
-                ", order_review='" + order_review + '\'' +
-                ", method=" + method +
-                ", time='" + time + '\'' +
-                ", user_id=" + user_id +
-                ", status=" + status +
-                ", amount=" + amount +
-                ", address=" + address +
-                ", isAvailable=" + isAvailable +
-                '}';
+    public Order(PaymentMethod method, Map<Dish, Integer> dishes, int user_id, String create_time, String delivery_time, Address user_address, BigDecimal amount, PaymentStatus status) {
+        this.method = method;
+        this.dishes = dishes;
+        this.user_id = user_id;
+        this.time = create_time;
+        this.delivery_time = delivery_time;
+        this.address = user_address;
+        this.amount = amount;
+        this.status = status;
     }
+
+
+
 
     @Override
     public boolean equals(Object o) {
@@ -121,6 +118,7 @@ public class Order  extends Entity<Order> implements Serializable {
                 Objects.equals(order_review, order.order_review) &&
                 method == order.method &&
                 Objects.equals(time, order.time) &&
+                Objects.equals(delivery_time, order.delivery_time) &&
                 status == order.status &&
                 Objects.equals(amount, order.amount) &&
                 Objects.equals(address, order.address);
@@ -128,7 +126,7 @@ public class Order  extends Entity<Order> implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(order_id, dishes, order_rating, order_review, method, time, user_id, status, amount, address, isAvailable);
+        return Objects.hash(order_id, dishes, order_rating, order_review, method, time, delivery_time, user_id, status, amount, address, isAvailable);
     }
 
     public int getOrder_id() {

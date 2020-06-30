@@ -20,6 +20,7 @@ public class LogOut implements Command {
 
         content.addSessionAttr(SessionAttributes.USER_ID, null);
         content.addSessionAttr(SessionAttributes.CART, null);
+        content.addSessionAttr(SessionAttributes.LOCALE, null);
 
         return new RequestResult(Navigation.REDIRECT,Path.PIZZA);
 

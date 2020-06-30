@@ -1,14 +1,16 @@
 package by.javatr.cafe.dao.repository.impl;
 
+import by.javatr.cafe.aspectj.annotation.Connect;
 import by.javatr.cafe.constant.BD_Columns;
+import by.javatr.cafe.container.annotation.Autowired;
 import by.javatr.cafe.container.annotation.Component;
-import by.javatr.cafe.constant.DBQuery;
-import by.javatr.cafe.dao.AbstractRepositoryTest;
+import by.javatr.cafe.dao.repository.AbstractRepository;
 import by.javatr.cafe.dao.connection.impl.ConnectionPool;
 import by.javatr.cafe.entity.Role;
 import by.javatr.cafe.entity.User;
 import by.javatr.cafe.dao.repository.IUserRepository;
 import by.javatr.cafe.exception.DAOException;
+import by.javatr.cafe.util.Cache;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,7 +18,7 @@ import java.sql.*;
 import java.util.*;
 
 @Component
-public final class MySqlUserRepository extends AbstractRepositoryTest<User> implements IUserRepository {
+public final class MySqlUserRepository extends AbstractRepository<User> implements IUserRepository {
 
     private static final String FIND_ALL_USERS = "select * from user left join role on role.role_id = user.roles_role_id";
     private static final String CREATE_USER = "INSERT INTO user (user_name, user_surname, user_phone, user_email, user_password) VALUES ( ?, ?, ?, ?, ?);";
@@ -32,10 +34,15 @@ public final class MySqlUserRepository extends AbstractRepositoryTest<User> impl
     private static final String CREATE = "INSERT INTO user (user_name, user_surname, user_phone, user_email, user_password) VALUES ( ?, ?, ?, ?, ?);";
     private static final String GET_ALL_ADDRESSES = "SELECT * FROM ADDRESS";
 
-    Logger logger = LogManager.getLogger(MySqlUserRepository.class);
+    @Autowired
+    Cache cache;
 
     @Override
     public List<User> getAllUser() throws DAOException {
+
+        if (!cache.getListUser().isEmpty()) {
+            return cache.getListUser();
+        }
 
         ArrayList<User> userList = new ArrayList<>();
 
@@ -62,6 +69,7 @@ public final class MySqlUserRepository extends AbstractRepositoryTest<User> impl
                 user.setMoney(resultSet.getBigDecimal(BD_Columns.USER_MONEY));
                 user.setLoyalty_point(resultSet.getInt(BD_Columns.USER_LOYALTY));
                 user.setRole(Role.getRoleByName(resultSet.getString(BD_Columns.ROLE_NAME)));
+                System.out.println("BAAAAAAAAN------------------------- " + resultSet.getBoolean(BD_Columns.USER_IS_BAN));
                 user.setBan(resultSet.getBoolean(BD_Columns.USER_IS_BAN));
 
                 userList.add(user);
@@ -70,43 +78,40 @@ public final class MySqlUserRepository extends AbstractRepositoryTest<User> impl
         } catch (SQLException e) {
             throw new DAOException("an error occurred in a method getAllUser", e);
         }
-
+        System.out.println(userList);
         return userList;
     }
 
     @Override
     public User findUser(User user) throws DAOException {
 
-        ResultSet resultSet = null;
+        if (cache.getUser(user.getId())!=null) {
+            return cache.getUser(user.getId());
+        }
 
         try (Connection connection = ConnectionPool.CONNECTION_POOL.retrieve();
              PreparedStatement statement = connection.prepareStatement(GET_USR);
         ) {
             statement.setInt(1, user.getId());
-            resultSet = statement.executeQuery();
+            try(ResultSet resultSet = statement.executeQuery();) {
 
-            while (resultSet.next()) {
-                connection.setAutoCommit(false);
-                user.setId(resultSet.getInt(BD_Columns.USER_ID));
-                user.setName(resultSet.getString(BD_Columns.USER_NAME));
-                user.setSurname(resultSet.getString(BD_Columns.USER_SURNAME));
-                user.setPhone(resultSet.getString(BD_Columns.USER_PHONE));
-                user.setMail(resultSet.getString(BD_Columns.USER_EMAIL));
-                user.setPassword(resultSet.getString(BD_Columns.USER_PASSWORD));
-                user.setMoney(resultSet.getBigDecimal(BD_Columns.USER_MONEY));
-                user.setLoyalty_point(resultSet.getInt(BD_Columns.USER_LOYALTY));
-                user.setRole(Role.getRoleByName(resultSet.getString(BD_Columns.ROLE_NAME)));
-                user.setBan(resultSet.getBoolean(BD_Columns.USER_IS_BAN));
-                connection.commit();
+                while (resultSet.next()) {
+                    connection.setAutoCommit(false);
+                    user.setId(resultSet.getInt(BD_Columns.USER_ID));
+                    user.setName(resultSet.getString(BD_Columns.USER_NAME));
+                    user.setSurname(resultSet.getString(BD_Columns.USER_SURNAME));
+                    user.setPhone(resultSet.getString(BD_Columns.USER_PHONE));
+                    user.setMail(resultSet.getString(BD_Columns.USER_EMAIL));
+                    user.setPassword(resultSet.getString(BD_Columns.USER_PASSWORD));
+                    user.setMoney(resultSet.getBigDecimal(BD_Columns.USER_MONEY));
+                    user.setLoyalty_point(resultSet.getInt(BD_Columns.USER_LOYALTY));
+                    user.setRole(Role.getRoleByName(resultSet.getString(BD_Columns.ROLE_NAME)));
+                    user.setBan(resultSet.getBoolean(BD_Columns.USER_IS_BAN));
+                    connection.commit();
+                }
             }
         } catch (SQLException e) {
             throw new DAOException("an error occurred in findUser ", e);
-        } finally {
-            try {
-                resultSet.close();
-            } catch (SQLException throwables) {
-                throw new DAOException("ResultSet is null ", throwables);
-            }
         }
 
         return user;
@@ -156,10 +161,12 @@ public final class MySqlUserRepository extends AbstractRepositoryTest<User> impl
 
     @Override
     public boolean delete(User user) throws DAOException {
-        final Connection connection = getConnection();
-        super.delete(connection, user);
-        try {
-            connection.close();
+
+        try(Connection connection = getConnection();) {
+            connection.setAutoCommit(false);
+            super.delete(connection, user);
+            connection.commit();
+            cache.deleteUser(user);
         } catch (SQLException throwables) {
             throw new DAOException(throwables);
         }
@@ -167,55 +174,77 @@ public final class MySqlUserRepository extends AbstractRepositoryTest<User> impl
     }
 
 
-//            try(Connection connection = getConnection();
-//                PreparedStatement statement = connection.prepareStatement(DBQuery.DELETE_USER_ID)){
-//                connection.setAutoCommit(false);
-//                statement.setInt(1, id);
-//                statement.executeUpdate();
-//                connection.commit();
-//                return true;
-//            } catch (SQLException e) {
-//            throw new DAOException("an error occurred in delete user", e);
-//        }
-//}
-
 
     @Override
     public User create(User user) throws DAOException {
+//        try (            final Connection connection = getConnection();
+//                         PreparedStatement statement = connection.prepareStatement(CREATE_USER);
+//        ){
+//            connection.setAutoCommit(false);
+//            statement.setString(4, user.getMail());
+//            statement.setString(5, user.getPassword());
+//            statement.setString(3, user.getPhone());
+//            statement.setString(1, user.getName());
+//            statement.setString(2, user.getSurname());
+//            statement.executeUpdate();
+//            try(PreparedStatement statement1 = connection.prepareStatement(GET_LAST_ID);
+//                ResultSet resultSet = statement1.executeQuery()
+//            ){
+//                resultSet.next();
+//                user.setId(resultSet.getInt("last_insert_id()"));
+//            }
+//            connection.commit();
+//        }catch (SQLException e) {
+//            throw new DAOException("an occurred in createUser", e);
+//        }
+//        return user;
 
-        try (            final Connection connection = getConnection();
-                         PreparedStatement statement = connection.prepareStatement(CREATE_USER);
-        ){
-            connection.setAutoCommit(false);
-            statement.setString(4, user.getMail());
-            statement.setString(5, user.getPassword());
-            statement.setString(3, user.getPhone());
-            statement.setString(1, user.getName());
-            statement.setString(2, user.getSurname());
-            statement.executeUpdate();
-            try(PreparedStatement statement1 = connection.prepareStatement(GET_LAST_ID);
-                ResultSet resultSet = statement1.executeQuery()
-            ){
-                resultSet.next();
-                user.setId(resultSet.getInt("last_insert_id()"));
-            }
-            connection.commit();
-        }catch (SQLException e) {
-            throw new DAOException("an occurred in createUser", e);
-        }
+    try(Connection connection = getConnection()){
+        connection.setAutoCommit(false);
+        user = super.create(connection, user);
+        connection.commit();
+        cache.addUser(user);
+    } catch (SQLException throwables) {
+        throw new DAOException(throwables);
+    }
         return user;
     }
 
     @Override
     public User update(User user) throws DAOException {
+        Connection connection = getConnection();
         try {
-            super.update(getConnection(), user);
-        } catch (DAOException e) {
-            throw new DAOException(e);
+            connection.setAutoCommit(false);
+            user = super.update(connection, user);
+            connection.commit();
+            cache.updateUser(user);
+        } catch (SQLException throwables) {
+            throw new DAOException(throwables);
         }
+
         return user;
+
+//        try(Connection connection = getConnection();
+//            final PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_USER_BY_ID);
+//        ){
+//            connection.setAutoCommit(false);
+//            preparedStatement.setInt(1, user.getId());
+//            preparedStatement.setString(2, user.getName());
+//            preparedStatement.setString(3, user.getSurname());
+//            preparedStatement.setString(4, user.getMail());
+//            preparedStatement.setString(5, user.getPhone());
+//            preparedStatement.setString(6, user.getPassword());
+//            preparedStatement.setBigDecimal(7, user.getMoney());
+//            preparedStatement.setInt(8, user.getLoyalty_point());
+//            preparedStatement.setInt(9, user.getRole().getId());
+//            preparedStatement.setInt(10, user.getId());
+//            preparedStatement.executeUpdate();
+//            connection.commit();
+//        } catch (SQLException throwables) {
+//                throw new DAOException(throwables);
+//        }
+//    return user;
+//    }
     }
-
-
     private MySqlUserRepository() {}
 }

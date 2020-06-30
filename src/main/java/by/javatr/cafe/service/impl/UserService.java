@@ -14,6 +14,8 @@ import by.javatr.cafe.dao.repository.IUserRepository;
 import by.javatr.cafe.service.IUserService;
 import by.javatr.cafe.util.HashPassword;
 
+import java.math.BigDecimal;
+
 @Component
 public class UserService implements IUserService {
 
@@ -21,8 +23,6 @@ public class UserService implements IUserService {
     IUserRepository userRepository;
     @Autowired
     IAddressRepository addressRepository;
-    @Autowired
-    Cache cache;
 
     private UserService() {}
 
@@ -42,23 +42,10 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public boolean replenishBalance(User user) throws ServiceException {
-
-        try {
-            userRepository.update(user);
-        } catch (DAOException e) {
-            throw new ServiceException(e);
-        }
-
-        return true;
-    }
-
-    @Override
     public User update(User user) throws ServiceException {
 
         try {
             userRepository.update(user);
-            cache.updateUser(user);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -105,7 +92,6 @@ public class UserService implements IUserService {
         try {
             user = userRepository.create(user);
             user.setRole(Role.USER);
-            cache.addUser(user);
         } catch (DAOException e) {
             throw new ServiceException(" Create User Exception", e);
         }
@@ -113,9 +99,104 @@ public class UserService implements IUserService {
         return user;
     }
 
+
+    @Override
+    public User addMoney(BigDecimal amount, int user_id) throws ServiceException {
+        User user = null;
+        try {
+            user = find(user_id);
+            user.setMoney(user.getMoney().add(amount));
+            userRepository.update(user);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+
+        return user;
+    }
+
+    @Override
+    public User addPoints(int point, int user_id) throws ServiceException {
+        User user = null;
+        try {
+            user = find(user_id);
+            user.setLoyalty_point(user.getLoyalty_point() + point);
+            userRepository.update(user);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+
+        return user;
+    }
+
+    @Override
+    public User subtractMoney(BigDecimal amount, int user_id) throws ServiceException {
+        User user = null;
+        final BigDecimal zero = new BigDecimal(0);
+        try {
+            user = find(user_id);
+            user.setMoney(user.getMoney().subtract(amount));
+            if (user.getMoney().compareTo(zero) < 0) {
+                user.setMoney(zero);
+            }
+            userRepository.update(user);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+
+        return user;
+    }
+
+    @Override
+    public User subtractPoints(int amount, int user_id) throws ServiceException {
+        User user = null;
+        try {
+            user = find(user_id);
+            user.setLoyalty_point(user.getLoyalty_point() - amount);
+            if(user.getLoyalty_point() < 0){
+                user.setLoyalty_point(0);
+            }
+            userRepository.update(user);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+
+        return user;
+    }
+
+    @Override
+    public User banUser(int id) throws ServiceException {
+
+        try {
+            User user = new User(id);
+            user = userRepository.findUser(user);
+
+            user.setBan(true);
+
+            user = userRepository.update(user);
+            return user ;
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public User unbanUser(int id) throws ServiceException {
+
+        try {
+            User user = new User(id);
+            user = userRepository.findUser(user);
+
+            user.setBan(false);
+
+            user = userRepository.update(user);
+            return user ;
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
     private String hashPassword(String password){
         return HashPassword.hashPass(password);
     }
-
 
 }

@@ -1,11 +1,13 @@
 package by.javatr.cafe.dao.repository.impl;
 
+import by.javatr.cafe.container.annotation.Autowired;
 import by.javatr.cafe.container.annotation.Component;
-import by.javatr.cafe.dao.AbstractRepositoryTest;
+import by.javatr.cafe.dao.repository.AbstractRepository;
 import by.javatr.cafe.dao.connection.impl.ConnectionPool;
 import by.javatr.cafe.dao.repository.IDishRepository;
 import by.javatr.cafe.entity.Dish;
 import by.javatr.cafe.exception.DAOException;
+import by.javatr.cafe.util.Cache;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,15 +21,22 @@ import java.util.List;
 import static by.javatr.cafe.constant.BD_Columns.*;
 
 @Component
-public class MySqlDishRepository extends AbstractRepositoryTest<Dish> implements IDishRepository {
+public class MySqlDishRepository extends AbstractRepository<Dish> implements IDishRepository {
 
     Logger logger = LogManager.getLogger(MySqlDishRepository.class);
 
     private static final String GET_ALL = "select * from dish";
     private static final String GET_DISH = "select * from dish where dish_id = ?";
 
+    @Autowired
+    Cache cache;
+
     @Override
     public List<Dish> getAll() throws DAOException {
+        if(!cache.getDishes().isEmpty()){
+            return cache.getDishes();
+        }
+
         List<Dish> list = new ArrayList<>();
 
         try (
@@ -62,12 +71,16 @@ public class MySqlDishRepository extends AbstractRepositoryTest<Dish> implements
 
     @Override
     public Dish getById(int id) throws DAOException {
-        Dish dish = new Dish();
+        Dish dish = cache.getDish(new Dish(id));
+
+        if (dish!=null) {
+            return cache.getDish(new Dish(id));
+        }
+
+        dish = new Dish();
 
        try(           Connection connection = ConnectionPool.CONNECTION_POOL.retrieve();
                       PreparedStatement preparedStatement = connection.prepareStatement(GET_DISH)) {
-
-
             preparedStatement.setInt(1, id);
 
             try(ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -81,7 +94,6 @@ public class MySqlDishRepository extends AbstractRepositoryTest<Dish> implements
                 dish.setCategory_id(resultSet.getInt(DISH_CATEGORY_ID));
                 dish.setWeight(resultSet.getInt(DISH_WEIGHT));
                 dish.setPicture_path(resultSet.getString(DISH_PICTURE_PATH));
-
                 connection.commit();
             }
        }catch (SQLException e){
@@ -93,31 +105,40 @@ public class MySqlDishRepository extends AbstractRepositoryTest<Dish> implements
 
     @Override
     public boolean delete(int id) throws DAOException {
-        try {
-            super.delete(getConnection(), new Dish(id));
-        } catch (DAOException e) {
-            throw new DAOException(e);
+
+        try (Connection connection = getConnection()){
+            connection.setAutoCommit(false);
+            super.delete(connection, new Dish(id));
+            connection.commit();
+            cache.deleteDish(new Dish(id));
+        }catch (SQLException throwables) {
+            throw new DAOException(throwables);
         }
         return true;
     }
 
     @Override
     public Dish create(Dish dish) throws DAOException {
-
-        try {
-            super.create(getConnection(), dish);
-        } catch (DAOException e) {
-            throw new DAOException(e);
+        try (Connection connection = getConnection();){
+            connection.setAutoCommit(false);
+            dish = super.create(connection, dish);
+            connection.commit();
+            cache.addDish(dish);
+        }catch (SQLException throwables) {
+            throw new DAOException(throwables);
         }
         return dish;
     }
 
     @Override
     public Dish update(Dish dish) throws DAOException {
-        try {
-            super.update(getConnection(), dish);
-        } catch (DAOException e) {
-            throw new DAOException(e);
+        try (Connection connection = getConnection()){
+            connection.setAutoCommit(false);
+            dish = super.update(connection, dish);
+            connection.commit();
+            cache.updateDish(dish);
+        }catch (SQLException throwables) {
+            throw new DAOException(throwables);
         }
         return dish;
     }

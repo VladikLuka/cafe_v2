@@ -32,13 +32,12 @@ public class User extends Entity<User> implements Serializable {
     private BigDecimal money = new BigDecimal(0);
     @Field(name="user_loyaltyPoints")
     private int loyalty_point = 0;
-    @Join(fieldColumn =  "roles_role_id")
+    @Field(name = "user_isBan")
+    private boolean isBan;    @Join(fieldColumn =  "roles_role_id")
 //    @ManyToOne(joinName = "role_id",field = ,type = Role.class)
     private Role role = Role.GUEST;
-    @Field(name = "user_isBan")
-    private boolean isBan;
     @Join(fieldColumn = "user_id")
-//    @OneToMany(joinName = "address_user_id",  ,type = Address.class)
+    @OneToMany(joinName = "address_user_id", field = "",type = Address.class)
     private List<Address> address = new ArrayList<>();
 
     public User(){
@@ -146,6 +145,7 @@ public class User extends Entity<User> implements Serializable {
         User user = (User) o;
         return id == user.id &&
                 loyalty_point == user.loyalty_point &&
+                isBan == user.isBan &&
                 Objects.equals(name, user.name) &&
                 Objects.equals(surname, user.surname) &&
                 Objects.equals(phone, user.phone) &&
@@ -158,12 +158,12 @@ public class User extends Entity<User> implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, surname, phone, mail, password, money, loyalty_point, role, address);
+        return Objects.hash(id, name, surname, phone, mail, password, money, loyalty_point, role, isBan, address);
     }
 
     @Override
     public String toString() {
-        return getClass().getName() + "{" +
+        return "User{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
@@ -173,6 +173,7 @@ public class User extends Entity<User> implements Serializable {
                 ", money=" + money +
                 ", loyalty_point=" + loyalty_point +
                 ", role=" + role +
+                ", isBan=" + isBan +
                 ", address=" + address +
                 '}';
     }

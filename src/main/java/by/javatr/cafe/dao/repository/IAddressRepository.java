@@ -12,7 +12,7 @@ public interface IAddressRepository {
     List<Address> getAll() throws DAOException;
     List<Address> getAllId(int id) throws DAOException;
     Address create(Address address) throws DAOException;
-    Address read(Address address) throws DAOException;
+    Address get(Address address) throws DAOException;
     Address update(Address address) throws DAOException, SQLException, ServiceException;
     boolean delete(Address address) throws DAOException;
 

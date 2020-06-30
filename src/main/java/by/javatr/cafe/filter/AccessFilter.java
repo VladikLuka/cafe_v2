@@ -3,6 +3,7 @@ package by.javatr.cafe.filter;
 import by.javatr.cafe.constant.AccessLevel;
 import by.javatr.cafe.constant.SessionAttributes;
 import by.javatr.cafe.container.BeanFactory;
+import by.javatr.cafe.entity.User;
 import by.javatr.cafe.util.Cache;
 import by.javatr.cafe.entity.Role;
 
@@ -17,6 +18,7 @@ public class AccessFilter implements Filter {
 
     public static final String SERVLET = "/controller";
     public static final String ACCESS_LEVEL = SessionAttributes.ACCESS_LEVEL;
+    public static final String ERROR = "/WEB-INF/jsp/error.jsp";
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -39,18 +41,20 @@ public class AccessFilter implements Filter {
             int id = (Integer) logged;
 
             if(cache.getUser(id).isBan()){
-                request.getRequestDispatcher("WEB-INF/jsp/error.jsp").forward(request,response);
+                request.getRequestDispatcher("/WEB-INF/jsp/ban.jsp").forward(request,response);
+                return;
             }
             final Role role = cache.getUser(id).getRole();
             if (role.ordinal() > Role.getRoleByName(page_access_level).ordinal()) {
-                request.getRequestDispatcher("WEB-INF/jsp/error.jsp").forward(request,response);
+                request.getRequestDispatcher(ERROR).forward(request,response);
             }else{
                 filterChain.doFilter(request,response);
             }
         }else if(Role.getRoleByName(AccessLevel.GUEST).ordinal() <= Role.getRoleByName(page_access_level).ordinal()){
             filterChain.doFilter(request,response);
-        }else request.getRequestDispatcher("WEB-INF/jsp/error.jsp").forward(request,response);
-
+        }else {
+            request.getRequestDispatcher(ERROR).forward(request, response);
+        }
     }
 
 

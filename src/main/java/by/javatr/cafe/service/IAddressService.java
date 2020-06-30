@@ -16,4 +16,6 @@ public interface IAddressService {
     Address update(Address address) throws ServiceException;
 
     boolean delete(Address address) throws ServiceException;
+
+    Address find(Address address) throws ServiceException;
 }

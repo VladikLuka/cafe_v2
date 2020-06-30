@@ -21,16 +21,13 @@ public class ChangePass implements Command {
     @Autowired
     IUserService userService;
 
-    @Autowired
-    Cache cache;
-
     @Override
     public RequestResult execute(RequestContent content) throws ServiceException {
 
         String old_pass = HashPassword.hashPass(content.getRequestParam("old_pass"));
         String new_pass = HashPassword.hashPass(content.getRequestParam("new_pass"));
 
-        User user = cache.getUser((int)content.getSessionAttr(SessionAttributes.USER_ID));
+        User user = userService.find((int)content.getSessionAttr(SessionAttributes.USER_ID));
 
         user.setPassword(new_pass);
 

@@ -18,10 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class SignUp implements Command {
 
-    Logger logger = LogManager.getLogger(SignUp.class);
-
     @Autowired
-    IUserService service;
+    private IUserService service;
 
     @Override
     public RequestResult execute(RequestContent content) throws ServiceException {
@@ -33,8 +31,6 @@ public class SignUp implements Command {
         if(user1 == null){
             return  new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }   
-
-
 
         return new RequestResult(Navigation.REDIRECT, Path.PIZZA, HttpServletResponse.SC_OK);
     }
