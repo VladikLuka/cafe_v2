@@ -39,7 +39,6 @@ public class GetPage implements Command {
                 }
             }
             if (content.getRequestAttr("order") == null) return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
-            System.out.println(orders);
         }
 
         RequestResult result =new RequestResult(Navigation.FORWARD, "WEB-INF/jsp/" + path[0] + ".jsp", HttpServletResponse.SC_OK);

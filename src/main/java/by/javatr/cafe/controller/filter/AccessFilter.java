@@ -1,9 +1,8 @@
-package by.javatr.cafe.filter;
+package by.javatr.cafe.controller.filter;
 
 import by.javatr.cafe.constant.AccessLevel;
 import by.javatr.cafe.constant.SessionAttributes;
 import by.javatr.cafe.container.BeanFactory;
-import by.javatr.cafe.entity.User;
 import by.javatr.cafe.util.Cache;
 import by.javatr.cafe.entity.Role;
 

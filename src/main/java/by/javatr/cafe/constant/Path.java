@@ -10,27 +10,38 @@ public class Path {
     /**
      * URI
      */
-    public static final String SIGNUP = "/signup";
-    public static final String ERROR = "/error";
-    public static final String CART = "/cart";
-    public static final String DRINK = "/drink";
-    public static final String GARNISH = "/garnish";
-    public static final String MEAT = "/meat";
-    public static final String PIZZA = "/pizza";
-    public static final String SALAD = "/salad";
-    public static final String SUSHI = "/sushi";
-    public static final String USER = "/user";
-    public static final String ORDER = "/order";
-    public static final String MAIN = "";
-    public static final String PAY = "/pay";
-    public static final String SUCCESS = "/success";
-    public static final String ADMIN = "/admin";
-    public static final String CHECKOUT = "/checkout";
+    public static final String URL_SIGNUP = "/signup";
+    public static final String URL_ERROR = "/error";
+    public static final String URL_CART = "/cart";
+    public static final String URL_DRINK = "/drink";
+    public static final String URL_GARNISH = "/garnish";
+    public static final String URL_MEAT = "/meat";
+    public static final String URL_PIZZA = "/pizza";
+    public static final String URL_SALAD = "/salad";
+    public static final String URL_SUSHI = "/sushi";
+    public static final String URL_USER = "/user";
+    public static final String URL_ORDER = "/order";
+    public static final String URL_MAIN = "";
+    public static final String URL_PAY = "/pay";
+    public static final String URL_SUCCESS = "/success";
+    public static final String URL_ADMIN = "/admin";
+    public static final String URL_CHECKOUT = "/checkout";
 
 
 
-    public static final String FRW_ERROR = "/WEB-INF/jsp/error.jsp";
-
+    public static final String ERROR = "/WEB-INF/jsp/error.jsp";
+    public static final String ORDER = "/WEB-INF/jsp/order.jsp";
+    public static final String ADMIN = "/WEB-INF/jsp/admin.jsp";
+    public static final String CHECKOUT = "/WEB-INF/jsp/checkout.jsp";
+    public static final String MAP = "/WEB-INF/jsp/map.jsp";
+    public static final String USER = "/WEB-INF/jsp/user.jsp";
+    public static final String PIZZA = "/WEB-INF/jsp/pizza.jsp";
+    public static final String SALAD = "/WEB-INF/jsp/salad.jsp";
+    public static final String DRINK = "/WEB-INF/jsp/drink.jsp";
+    public static final String MEAT = "/WEB-INF/jsp/meat.jsp";
+    public static final String GARNISH = "/WEB-INF/jsp/garnish.jsp";
+    public static final String SUSHI = "/WEB-INF/jsp/sushi.jsp";
+    public static final String BAN = "/WEB-INF/jsp/ban.jsp";
 
     private Path() {}
 }

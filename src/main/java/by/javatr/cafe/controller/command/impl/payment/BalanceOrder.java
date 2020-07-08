@@ -44,18 +44,14 @@ public class BalanceOrder implements Command {
     public RequestResult execute(RequestContent content) throws ServiceException   {
 
         String delivery_time = content.getRequestParam("delivery_time");
-        System.out.println(delivery_time);
         String address_id_str = content.getRequestParam("address");
         int address_id = Integer.parseInt(address_id_str);
 
-        if(!delivery_time.matches("^(\\d{4})-(\\d{2})-(\\d{2}) (\\d{2}):(\\d{2}):(\\d{2})")){
-            return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
-        }
         long del_time;
+
         try {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             del_time = simpleDateFormat.parse(delivery_time).getTime();
-//            del_time = SimpleDateFormat.getInstance().parse(delivery_time).getTime();
         } catch (ParseException e) {
             throw new ServiceException(e);
         }
@@ -74,10 +70,6 @@ public class BalanceOrder implements Command {
                 user_address = addr;
                 break;
             }
-        }
-
-        if(cart.getCart() == null){
-            return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
         if(user_address == null){

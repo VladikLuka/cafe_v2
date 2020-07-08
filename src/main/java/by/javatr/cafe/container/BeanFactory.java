@@ -9,6 +9,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -76,6 +77,15 @@ public class BeanFactory {
             String[] split = tempPackage.split("/");
 
             String filePackage = "";
+
+            System.out.println("HZHZHZHZHZH" + java.nio.file.FileSystems.getDefault().getPath("").toAbsolutePath().toString());
+            System.out.println("HZHZHZHZHZH" + java.nio.file.FileSystems.getDefault().getPath("").toAbsolutePath().toString());
+            System.out.println("HZHZHZHZHZH" + java.nio.file.FileSystems.getDefault().getPath("").toAbsolutePath().toString());
+            System.out.println("HZHZHZHZHZH" + java.nio.file.FileSystems.getDefault().getPath("").toAbsolutePath().toString());
+
+            System.out.println(" ABSOLUTE PATH " + absolutePath);
+
+            System.out.println(pat);
 
             for (int i = 0; i < split.length-1; i++) {
                 filePackage += split[i] + ".";

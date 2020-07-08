@@ -14,7 +14,7 @@ public interface IDishService {
 
     Dish update(Dish dish) throws ServiceException;
 
-    Dish create(Dish dish) throws DAOException, ServiceException;
+    Dish create(Dish dish) throws ServiceException;
 
     boolean delete(Dish dish) throws ServiceException;
 

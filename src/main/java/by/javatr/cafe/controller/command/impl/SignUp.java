@@ -32,7 +32,7 @@ public class SignUp implements Command {
             return  new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }   
 
-        return new RequestResult(Navigation.REDIRECT, Path.PIZZA, HttpServletResponse.SC_OK);
+        return new RequestResult(Navigation.REDIRECT, Path.URL_PIZZA, HttpServletResponse.SC_OK);
     }
 
 }

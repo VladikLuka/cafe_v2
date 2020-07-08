@@ -34,9 +34,9 @@ import java.util.Set;
 @WebServlet("/controller")
 public class Controller extends HttpServlet {
 
-    public static Logger logger = LogManager.getLogger(Controller.class);
+    private final static Logger logger = LogManager.getLogger(Controller.class);
 
-    private CommandProvider provider = new CommandProvider();
+    private final CommandProvider provider = new CommandProvider();
 
     public void init(){
         try {
@@ -106,11 +106,9 @@ public class Controller extends HttpServlet {
         content.setContent(req);
         Command command;
 
-        if(req.getParameter("command") != null) {
-            command = provider.getCommand(req.getParameter("command"));
-        } else {
-            command = provider.getCommand((String)req.getAttribute("command"));
-        }
+
+        command = provider.getCommand(req.getParameter("command"));
+
         RequestResult result = null;
 
         try {

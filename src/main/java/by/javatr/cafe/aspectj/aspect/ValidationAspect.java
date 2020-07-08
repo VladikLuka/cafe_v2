@@ -63,7 +63,39 @@ public class ValidationAspect {
     @Pointcut("execution(public * by.javatr.cafe.controller.command.impl.SignUp.execute(..))")
     public void signUp(){}
 
+    @Pointcut("execution(public * by.javatr.cafe.controller.command.impl.payment.BalanceOrder.execute(..))")
+    public void balanceOrderValid(){}
 
+    @Around(value = "balanceOrderValid()", argNames = "pjp,point")
+    public Object balanceOrder(ProceedingJoinPoint pjp, JoinPoint point) throws ServiceException {
+        Object[] args = point.getArgs();
+        RequestContent content = (RequestContent) args[0];
+
+        String delivery_time = content.getRequestParam("delivery_time");
+        String address_id_str = content.getRequestParam("address");
+
+        if(delivery_time == null || address_id_str == null){
+            return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
+        }
+
+        if(!delivery_time.matches("^(\\d{4})-(\\d{2})-(\\d{2}) (\\d{2}):(\\d{2}):(\\d{2})")){
+            return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
+        }
+
+        Cart cart = (Cart) content.getSessionAttr(SessionAttributes.CART);
+
+        if(cart.getCart() == null){
+            return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
+        }
+
+        try {
+            return pjp.proceed();
+        } catch (Throwable throwable) {
+            logger.error(throwable);
+            throw new ServiceException(throwable);
+        }
+
+    }
 
     @Around(value = "signUp()", argNames = "pjp,point")
     public Object signup(ProceedingJoinPoint pjp, JoinPoint point) throws ServiceException {
@@ -290,10 +322,10 @@ public class ValidationAspect {
                 return proceed;
             } catch (Throwable e) {
                 logger.error(e);
-                return new RequestResult(Navigation.FORWARD, Path.FRW_ERROR, HttpServletResponse.SC_BAD_REQUEST);
+                return new RequestResult(Navigation.FORWARD, Path.ERROR, HttpServletResponse.SC_BAD_REQUEST);
             }
         }
-        return new RequestResult(Navigation.FORWARD, Path.FRW_ERROR, HttpServletResponse.SC_BAD_REQUEST);
+        return new RequestResult(Navigation.FORWARD, Path.ERROR, HttpServletResponse.SC_BAD_REQUEST);
     }
 
 
@@ -302,7 +334,7 @@ public class ValidationAspect {
         IUserService userService = (IUserService) BeanFactory.getInstance().getBean("userService");
         Object[] args = point.getArgs();
         RequestContent content = (RequestContent) args[0];
-        RequestResult result = new RequestResult(Navigation.FORWARD, Path.FRW_ERROR, HttpServletResponse.SC_BAD_REQUEST);
+        RequestResult result = new RequestResult(Navigation.FORWARD, Path.ERROR, HttpServletResponse.SC_BAD_REQUEST);
 
         Integer user_id = (Integer) content.getSessionAttr(SessionAttributes.USER_ID);
 
@@ -334,13 +366,13 @@ public class ValidationAspect {
                         throw new ServiceException(throwable);
                     }
                 }else {
-                    return new RequestResult(Navigation.FORWARD, Path.FRW_ERROR, HttpServletResponse.SC_BAD_REQUEST);
+                    return new RequestResult(Navigation.FORWARD, Path.ERROR, HttpServletResponse.SC_BAD_REQUEST);
                 }
             }else {
-                return new RequestResult(Navigation.FORWARD, Path.FRW_ERROR, HttpServletResponse.SC_BAD_REQUEST);
+                return new RequestResult(Navigation.FORWARD, Path.ERROR, HttpServletResponse.SC_BAD_REQUEST);
             }
         }else{
-            return new RequestResult(Navigation.FORWARD, Path.FRW_ERROR, HttpServletResponse.SC_BAD_REQUEST);
+            return new RequestResult(Navigation.FORWARD, Path.ERROR, HttpServletResponse.SC_BAD_REQUEST);
         }
 
     }

@@ -98,10 +98,12 @@
         <h2 style="padding-left: 20px">Order</h2>
 
         <c:forEach items="${sessionScope.cart.cart}" var="dish">
-            <div style="background-color: #767676; max-width: 500px; max-height: 300px; margin-top: 20px; border-radius: 15px; margin-left: 50px">
-                <div><img src="${dish.picture_path}" alt="" style="max-width: 100px;"></div>
-                <div>${dish.price}</div>
-                <div>${dish.description}</div>
+            <div style="color:white;background-color: #767676; max-width: 500px; max-height: 300px; margin-top: 20px; border-radius: 15px; margin-left: 50px; display: inline-block">
+                <div><img src="${dish.picture_path}" alt="" style="max-width: 100px; margin-left: 10px; display: inline-block"></div>
+                <div>
+                    <div style="margin-left: 10px; display: inline-block">${dish.description}</div>
+                    <div style="margin-left: 10px; display: inline-block">${dish.price}</div>
+                </div>
             </div>
         </c:forEach>
 

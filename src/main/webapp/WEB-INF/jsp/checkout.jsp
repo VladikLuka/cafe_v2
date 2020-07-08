@@ -42,7 +42,7 @@
                                 </c:if>
                                 <c:if test="${requestScope.order.status eq 'CLOSED'}">
 <%--                                    <form action="${pageContext.request.contextPath}/controller" method="post">--%>
-                                        <textarea name="feedback" id="" cols="70" rows="3" required></textarea>
+                                        <textarea name="feedback" id="feedback_text" cols="70" rows="3" required></textarea>
                                             <div id="reviewStars-input" style="margin-right: 180px;">
                                                 <input id="star-4" type="radio" name="stars" value="5"/>
                                                 <label title="gorgeous" for="star-4"></label>
@@ -118,7 +118,7 @@
                 <tbody>
                 <tr>
                     <td>id</td>
-                    <td id="order_id">${requestScope.order.order_id}</td>
+                    <td id="order_id" data-id ="${requestScope.order.order_id}">${requestScope.order.order_id}</td>
                 </tr>
                 <tr>
                     <td>type</td>
@@ -196,4 +196,6 @@
 
 <jsp:include page="part/footer.jsp"/>
 </body>
+<script src="../../static/js/sweetalert2.all.js"></script>
+
 </html>

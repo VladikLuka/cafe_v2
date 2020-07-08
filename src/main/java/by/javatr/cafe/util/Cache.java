@@ -31,6 +31,7 @@ public final class Cache {
 
 
     public List<Order> getOrders(int user_id) {
+        mapOrders.computeIfAbsent(user_id, k -> new ArrayList<>());
         return mapOrders.get(user_id);
     }
 

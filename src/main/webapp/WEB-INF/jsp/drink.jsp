@@ -25,33 +25,60 @@
 
 <div class="container" id="catalog">
 
-    <c:forEach items="${applicationScope.cache.dishes}" var="dish">
-        <c:if test="${dish.category_id == 1 and dish.available == true}">
-            <div id="product">
-                <div id="product_wrapper">
-                    <div>
-                        <img src="${dish.picture_path}"  class="css-adaptive" alt="" style="max-width: 300px; max-height: 300px">
-                    </div>
+    <c:forEach items="${requestScope.drinks}" var="dish">
+            <c:choose>
+                <c:when test="${dish.available eq false}">
+                    <div id="product" style="background-color:#aaaaaa;">
+                </c:when>
+                <c:otherwise>
+                    <div id="product">
+                </c:otherwise>
+            </c:choose>
+            <div id="product_wrapper">
+                <div>
+                    <img src="${dish.picture_path}"  class="css-adaptive" alt="" style="max-width: 300px; max-height: 300px">
+                </div>
 
-                    <div id="product_title">${dish.name}</div>
-                    <div id="product_description">${dish.description}</div>
-                    <div id="product_modification">
-                        <div id="product_info">
-                            <div id="test-line">
-                                <div id="product_price">${dish.price}</div>
-                                <div id="product_weight">${dish.weight}</div>
-                            </div>
-                            <div id="product_action">
-                                    <%--                            <input type="hidden" name="dish" value="${dish.id}">--%>
-                                <button class="btn btn-success" type="button" id="${dish.id}" onClick="getdetails(this)">Add to cart</button>
-                            </div>
+                <div id="product_title">${dish.name}</div>
+                <div id="product_description">${dish.description}</div>
+                <div id="product_modification">
+                    <div id="product_info">
+                        <div id="test-line">
+                            <div id="product_price">${dish.price} BYN</div>
+                            <div id="product_weight">${dish.weight} gr</div>
+                        </div>
+                        <div id="product_action">
+                            <button class="btn btn-success" type="button" id="${dish.id}" onClick="getdetails(this)">Add to cart</button>
+                            <c:if test="${applicationScope.cache.getUser(sessionScope.user_id).role eq 'ADMIN'}">
+                                <c:if test="${dish.available eq true}">
+                                    <button class="btn btn-success hide2" type="submit" data-id="${dish.id}" id="${dish.id}">hide</button>
+                                </c:if>
+                                <c:if test="${dish.available eq false}">
+                                    <button class="btn btn-success show2" type="submit" data-id="${dish.id}" id="${dish.id}">show</button>
+                                </c:if>
+                            </c:if>
                         </div>
                     </div>
                 </div>
             </div>
-        </c:if>
+        </div>
     </c:forEach>
+
+    <c:set var="pages" value="${requestScope.pages}"/>
+    <div style="font-size: 18px; text-align: center; padding-bottom: 40px">
+        <c:forEach var="page" begin="1" end="${pages}">
+            <c:choose>
+                <c:when test="${requestScope.current_page eq page}">
+                    ${page}
+                </c:when>
+                <c:otherwise>
+                    <a href="/drink/${page}">${page}</a>
+                </c:otherwise>
+            </c:choose>
+        </c:forEach>
+    </div>
 </div>
+
 
 
 

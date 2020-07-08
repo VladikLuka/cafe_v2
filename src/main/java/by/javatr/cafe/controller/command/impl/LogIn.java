@@ -46,7 +46,7 @@ public class LogIn implements Command {
 //            content.addSessionAttr(ACCESS_LEVEL, user.getRole().name());
 //            content.addSessionAttr(USER_MONEY, user.getMoney());
 //            content.addSessionAttr(USER_IS_BAN, user.isBan());
-             return new RequestResult(Navigation.REDIRECT, Path.PIZZA);
+             return new RequestResult(Navigation.REDIRECT, Path.URL_PIZZA);
         }
     }
 }

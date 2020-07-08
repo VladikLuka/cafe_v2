@@ -79,17 +79,41 @@ $(document).ready(function(){
 
 	$("#feedback_submit").click(function () {
 
-
-
-		alert("ok")
 		let doc = isCheck("stars");
-		alert(doc.value);
 
-		// $.ajax({
-		//
-		//
-		//
-		// })
+		if(doc === null){
+			swal("Something went wrong", "fill feedback", "error");
+			return;
+		}
+
+		if($("#feedback_text").val() === ""){
+			swal("Something went wrong", "fill feedback", "error");
+			return;
+		}
+
+		let data = {
+			"command":"feedback",
+			"feedback":$("#feedback_text").val(),
+			"stars":doc.value,
+			"order_id":document.getElementById("order_id").dataset.id
+		}
+
+		$.ajax({
+
+			type:"POST",
+			url:"/controller",
+			data:data,
+			success:function () {
+				document.location.href = location.href;
+			},
+			statusCode:{
+				400:function () {
+					swal("Something went wrong", "chose address", "error");
+				}
+			}
+
+
+		})
 
 	})
 
@@ -108,7 +132,7 @@ $(document).ready(function(){
 				url:"/controller",
 				data: data,
 				success:function(serverData){
-					document.location.href = "pizza";
+					document.location.href = "/pizza";
 				},
 				statusCode:{
 					400: function () {
@@ -272,7 +296,7 @@ $(document).ready(function(){
 			data: {"command" : "logout",
 			},
 			success:function () {
-				document.location.href = "pizza";
+				document.location.href = "/pizza";
 			}
 
 		})
@@ -300,7 +324,7 @@ $(document).ready(function(){
 				url:"/controller",
 				data: data,
 				success:function(){
-					document.location.href = "pizza";
+					document.location.href = "/pizza";
 				},
 				statusCode:{
 					400: function () {
@@ -333,7 +357,7 @@ $("#submit_address").click(function () {
 		data:data,
 		success:function (response) {
 			var statusCode = response["statusCode"];
-			document.location.href="user";
+			document.location.href="/user";
 		},
 		statusCode:{
 			400: function () {
@@ -773,7 +797,7 @@ function delete_addr(id){
 		data:id,
 		url:"/controller",
 		success:function () {
-			document.location.href = "user";
+			document.location.href = "/user";
 		}
 
 	})

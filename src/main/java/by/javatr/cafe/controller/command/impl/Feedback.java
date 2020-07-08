@@ -8,11 +8,9 @@ import by.javatr.cafe.controller.content.Navigation;
 import by.javatr.cafe.controller.content.RequestContent;
 import by.javatr.cafe.controller.content.RequestResult;
 import by.javatr.cafe.entity.Order;
-import by.javatr.cafe.exception.DAOException;
 import by.javatr.cafe.exception.ServiceException;
 import by.javatr.cafe.service.IOrderService;
 
-import javax.servlet.http.HttpServletResponse;
 
 @Component
 public class Feedback implements Command {

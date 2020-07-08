@@ -5,34 +5,23 @@
          version="4.0">
 
 
-
-<!--    <servlet>-->
-<!--        <servlet-name>ControllerPaypal</servlet-name>-->
-<!--        <servlet-class>by.javatr.cafe.controller.ControllerPaypal</servlet-class>-->
-<!--    </servlet>-->
-
-<!--    <servlet-mapping>-->
-<!--        <servlet-name>ControllerPaypal</servlet-name>-->
-<!--        <url-pattern>/success</url-pattern>-->
-<!--    </servlet-mapping>-->
-
-<!--    <servlet>-->
-<!--        <servlet-name>Controller</servlet-name>-->
-<!--        <servlet-class>by.javatr.cafe.controller.Controller</servlet-class>-->
-<!--    </servlet>-->
-
-<!--    <servlet-mapping>-->
-<!--        <servlet-name>Controller</servlet-name>-->
-<!--        <url-pattern>/controller</url-pattern>-->
-<!--    </servlet-mapping>-->
-
     <session-config>
         <session-timeout>60</session-timeout>
     </session-config>
 
     <filter>
+        <filter-name>BanFilter</filter-name>
+        <filter-class>by.javatr.cafe.controller.filter.BanFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>BanFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
         <filter-name>ContentFilter</filter-name>
-        <filter-class>by.javatr.cafe.filter.ContentFilter</filter-class>
+        <filter-class>by.javatr.cafe.controller.filter.ContentFilter</filter-class>
     </filter>
 
     <filter-mapping>
@@ -41,35 +30,37 @@
     </filter-mapping>
 
     <filter>
-        <filter-name>URLFilter</filter-name>
-        <filter-class>by.javatr.cafe.filter.URLFilter</filter-class>
-    </filter>
-
-    <filter-mapping>
-        <filter-name>URLFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-
-
-    <filter>
-        <filter-name>AccessFilter</filter-name>
-        <filter-class>by.javatr.cafe.filter.AccessFilter</filter-class>
-    </filter>
-
-    <filter-mapping>
-        <filter-name>AccessFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-
-    <filter>
         <filter-name>LocaleFilter</filter-name>
-        <filter-class>by.javatr.cafe.filter.LocaleFilter</filter-class>
+        <filter-class>by.javatr.cafe.controller.filter.LocaleFilter</filter-class>
     </filter>
 
     <filter-mapping>
         <filter-name>LocaleFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+
+
+    <filter>
+        <filter-name>URLFilter</filter-name>
+        <filter-class>by.javatr.cafe.controller.filter.URLFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>URLFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
+<!--    <filter>-->
+<!--        <filter-name>AccessFilter</filter-name>-->
+<!--        <filter-class>by.javatr.cafe.controller.filter.AccessFilter</filter-class>-->
+<!--    </filter>-->
+
+<!--    <filter-mapping>-->
+<!--        <filter-name>AccessFilter</filter-name>-->
+<!--        <url-pattern>/*</url-pattern>-->
+<!--    </filter-mapping>-->
+
 
     <jsp-config>
     <taglib>

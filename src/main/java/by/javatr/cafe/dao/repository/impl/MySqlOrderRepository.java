@@ -56,18 +56,8 @@ public class MySqlOrderRepository extends AbstractRepository<Order> implements I
                 Order order = new Order();
                 Dish dish = new Dish();
                 map = new HashMap<>();
-                dish.setId(resultSet.getInt(DISH_ID));
-                dish.setName(resultSet.getString(DISH_NAME));
-                dish.setDescription(resultSet.getString(DISH_DESCRIPTION));
-                dish.setPrice(resultSet.getBigDecimal(DISH_PRICE));
-                dish.setAvailable(resultSet.getBoolean(DISH_IS_AVAILABLE));
-                dish.setCategory_id(resultSet.getInt(CATEGORY_ID));
-                dish.setWeight(resultSet.getInt(DISH_WEIGHT));
-                dish.setPicture_path(resultSet.getString(DISH_PICTURE_PATH));
 
-                map.put(dish, resultSet.getInt(ORDERS_DISHES_QUANTITY));
-
-                order.setOrder_id(resultSet.getInt(ORDERS_ORDER_ID));
+                order.setOrder_id(resultSet.getInt(ORDER_ID));
                 order.setStatus(PaymentStatus.valueOf(resultSet.getString(ORDER_STATUS)));
                 order.setTime(resultSet.getString(ORDER_RECEIPT_TIME));
                 order.setDelivery_time(resultSet.getString(ORDER_DELIVERY_TIME));
@@ -80,6 +70,19 @@ public class MySqlOrderRepository extends AbstractRepository<Order> implements I
                 order.setUser_id(resultSet.getInt(USER_OWNER_ID));
                 order.setDishes(map);
                 order.setAddress(new Address(resultSet.getInt(ADDRESS_ID),resultSet.getString(ADDRESS_CITY), resultSet.getString(ADDRESS_STREET), resultSet.getString(ADDRESS_HOUSE), resultSet.getString(ADDRESS_FLAT), order.getUser_id()));
+
+
+                dish.setId(resultSet.getInt(DISH_ID));
+                dish.setName(resultSet.getString(DISH_NAME));
+                dish.setDescription(resultSet.getString(DISH_DESCRIPTION));
+                dish.setPrice(resultSet.getBigDecimal(DISH_PRICE));
+                dish.setAvailable(resultSet.getBoolean(DISH_IS_AVAILABLE));
+                dish.setCategory_id(resultSet.getInt(CATEGORY_ID));
+                dish.setWeight(resultSet.getInt(DISH_WEIGHT));
+                dish.setPicture_path(resultSet.getString(DISH_PICTURE_PATH));
+
+                map.put(dish, resultSet.getInt(ORDERS_DISHES_QUANTITY));
+
                 list.add(order);
             }
 
@@ -207,39 +210,42 @@ public class MySqlOrderRepository extends AbstractRepository<Order> implements I
         try (
                 Connection connection = getConnection();
                 final PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_ORDER);
-                final ResultSet resultSet = preparedStatement.executeQuery();
         ){
-            while(resultSet.next()){
-                Order order = new Order();
-                Dish dish = new Dish();
-                map = new HashMap<>();
-                dish.setId(resultSet.getInt(DISH_ID));
-                dish.setName(resultSet.getString(DISH_NAME));
-                dish.setDescription(resultSet.getString(DISH_DESCRIPTION));
-                dish.setPrice(resultSet.getBigDecimal(DISH_PRICE));
-                dish.setAvailable(resultSet.getBoolean(DISH_IS_AVAILABLE));
-                dish.setCategory_id(resultSet.getInt(CATEGORY_ID));
-                dish.setWeight(resultSet.getInt(DISH_WEIGHT));
-                dish.setPicture_path(resultSet.getString(DISH_PICTURE_PATH));
 
-                map.put(dish, resultSet.getInt(ORDERS_DISHES_QUANTITY));
+            preparedStatement.setInt(1, user.getId());
+            try (final ResultSet resultSet = preparedStatement.executeQuery();){
 
-                order.setOrder_id(resultSet.getInt(ORDERS_ORDER_ID));
-                order.setStatus(PaymentStatus.valueOf(resultSet.getString(ORDER_STATUS)));
-                order.setTime(resultSet.getString(ORDER_RECEIPT_TIME));
-                order.setDelivery_time(resultSet.getString(ORDER_DELIVERY_TIME));
-                order.setMethod(PaymentMethod.valueOf(resultSet.getString(ORDER_PAYMENT_METHOD)));
-                order.setOrder_rating(resultSet.getInt(ORDER_RATING));
-                order.setOrder_review(resultSet.getString(ORDER_REVIEW));
-                if(resultSet.getBigDecimal(DISH_PRICE)!=null){
-                    order.setAmount(resultSet.getBigDecimal(DISH_PRICE).multiply(resultSet.getBigDecimal(ORDERS_DISHES_QUANTITY)));
+                while(resultSet.next()){
+                    Order order = new Order();
+                    Dish dish = new Dish();
+                    map = new HashMap<>();
+                    dish.setId(resultSet.getInt(DISH_ID));
+                    dish.setName(resultSet.getString(DISH_NAME));
+                    dish.setDescription(resultSet.getString(DISH_DESCRIPTION));
+                    dish.setPrice(resultSet.getBigDecimal(DISH_PRICE));
+                    dish.setAvailable(resultSet.getBoolean(DISH_IS_AVAILABLE));
+                    dish.setCategory_id(resultSet.getInt(CATEGORY_ID));
+                    dish.setWeight(resultSet.getInt(DISH_WEIGHT));
+                    dish.setPicture_path(resultSet.getString(DISH_PICTURE_PATH));
+
+                    map.put(dish, resultSet.getInt(ORDERS_DISHES_QUANTITY));
+
+                    order.setOrder_id(resultSet.getInt(ORDERS_ORDER_ID));
+                    order.setStatus(PaymentStatus.valueOf(resultSet.getString(ORDER_STATUS)));
+                    order.setTime(resultSet.getString(ORDER_RECEIPT_TIME));
+                    order.setDelivery_time(resultSet.getString(ORDER_DELIVERY_TIME));
+                    order.setMethod(PaymentMethod.valueOf(resultSet.getString(ORDER_PAYMENT_METHOD)));
+                    order.setOrder_rating(resultSet.getInt(ORDER_RATING));
+                    order.setOrder_review(resultSet.getString(ORDER_REVIEW));
+                    if(resultSet.getBigDecimal(DISH_PRICE)!=null){
+                        order.setAmount(resultSet.getBigDecimal(DISH_PRICE).multiply(resultSet.getBigDecimal(ORDERS_DISHES_QUANTITY)));
+                    }
+                    order.setUser_id(resultSet.getInt(USER_OWNER_ID));
+                    order.setDishes(map);
+                    order.setAddress(new Address(resultSet.getString(ADDRESS_CITY), resultSet.getString(ADDRESS_STREET), resultSet.getString(ADDRESS_HOUSE), resultSet.getString(ADDRESS_FLAT), order.getUser_id()));
+                    list.add(order);
                 }
-                order.setUser_id(resultSet.getInt(USER_OWNER_ID));
-                order.setDishes(map);
-                order.setAddress(new Address(resultSet.getString(ADDRESS_CITY), resultSet.getString(ADDRESS_STREET), resultSet.getString(ADDRESS_HOUSE), resultSet.getString(ADDRESS_FLAT), order.getUser_id()));
-                list.add(order);
             }
-
 
         } catch (SQLException throwables) {
             throw new DAOException(throwables);

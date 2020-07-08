@@ -1,4 +1,4 @@
-package by.javatr.cafe.filter;
+package by.javatr.cafe.controller.filter;
 
 import by.javatr.cafe.constant.SessionAttributes;
 
@@ -28,20 +28,22 @@ public class LocaleFilter implements Filter {
 
         if(session.getAttribute(SessionAttributes.LOCALE) == null) {
             session.setAttribute(SessionAttributes.LOCALE, "en");
-            //filterChain.doFilter(request, response);
-            request.getRequestDispatcher(SERVLET).forward(request,response);
+            filterChain.doFilter(request, response);
+//            request.getRequestDispatcher(SERVLET).forward(request,response);
             return;
         }
 
 
         if(request.getParameter("command_locale") != null){
             session.setAttribute(SessionAttributes.LOCALE, request.getParameter("command_locale"));
-            request.getRequestDispatcher(SERVLET).forward(request,response);
+//            request.getRequestDispatcher(SERVLET).forward(request,response);
+            filterChain.doFilter(request,response);
             return;
         }
 
         if(session.getAttribute(SessionAttributes.LOCALE) != null ){
-            request.getRequestDispatcher(SERVLET).forward(request,response);
+//            request.getRequestDispatcher(SERVLET).forward(request,response);
+            filterChain.doFilter(request,response);
             return;
         }
 

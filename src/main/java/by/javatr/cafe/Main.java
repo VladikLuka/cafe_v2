@@ -41,8 +41,9 @@ public class Main  extends AbstractRepository<User> {
 
     public static void main(String[] args) throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, DAOException, ServiceException, NoSuchFieldException, FileNotFoundException {
 
-        String str = "+375333044914";
-        System.out.println(str.matches("^\\+\\d{12}$"));
+        String str = "53.945957,27.665385 53.947992,27.667359 53.954313,27.688739 53.941514,27.700488 53.936321,27.703430 53.935286,27.700231 53.934938,27.699631 53.934395,27.699298 53.929262,27.700139 53.928111,27.699817 53.927112,27.699177 53.925691,27.697503 53.925047,27.695990 53.924273,27.680091 ";
+        B b = new B();
+        b.coord(str);
 
     }
 
@@ -138,7 +139,7 @@ class B{
 
     }
 
-    private String coord(String str){
+    public String coord(String str){
 
         str = str.replaceAll(" ", "\n");
         System.out.println(str);

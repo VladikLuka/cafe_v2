@@ -12,7 +12,7 @@ import by.javatr.cafe.service.IDishService;
 import java.util.List;
 
 @Component
-public final class DishService implements IDishService {
+public final class  DishService implements IDishService {
 
     @Autowired
     IDishRepository dishRepository;

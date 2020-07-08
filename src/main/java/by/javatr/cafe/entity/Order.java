@@ -129,6 +129,24 @@ public class Order  extends Entity<Order> implements Serializable {
         return Objects.hash(order_id, dishes, order_rating, order_review, method, time, delivery_time, user_id, status, amount, address, isAvailable);
     }
 
+    @Override
+    public String toString() {
+        return "Order{" +
+                "order_id=" + order_id +
+                ", dishes=" + dishes +
+                ", order_rating=" + order_rating +
+                ", order_review='" + order_review + '\'' +
+                ", method=" + method +
+                ", time='" + time + '\'' +
+                ", delivery_time='" + delivery_time + '\'' +
+                ", user_id=" + user_id +
+                ", status=" + status +
+                ", amount=" + amount +
+                ", address=" + address +
+                ", isAvailable=" + isAvailable +
+                '}';
+    }
+
     public int getOrder_id() {
         return order_id;
     }

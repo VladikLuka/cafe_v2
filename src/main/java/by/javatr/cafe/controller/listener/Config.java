@@ -1,4 +1,4 @@
-package by.javatr.cafe.listener;
+package by.javatr.cafe.controller.listener;
 
 import by.javatr.cafe.container.BeanFactory;
 import by.javatr.cafe.config.ApplicationConfiguration;

@@ -25,8 +25,8 @@
 <nav class="navbar navbar-default "   role="navigation" >
     <div class="container-fluid" id="header_container">
         <div class="container" id="first-header">
-            <div>
-                <img src="../../static/img/epam_logo.svg" alt="" id="logo">
+            <div style="z-index: 9999">
+                <img src="../../../static/img/epam_logo.svg" alt="" id="logo" style="z-index: 9999">
             </div>
         </div>
 
@@ -44,17 +44,17 @@
                 <div id="test_menu">
 
                     <ul class="row" id="menu">
-                        <li class="col-xl-1"><a href="${pageContext.request.contextPath}/drink"><local:Localization message="header.menu.drinks"/></a></li>
+                        <li class="col-xl-1"><a href="${pageContext.request.contextPath}/drink/1"><local:Localization message="header.menu.drinks"/></a></li>
                         <li class="clearfix hidden-xs hidden-sm"></li>
-                        <li class="col-xl-1"><a href="${pageContext.request.contextPath}/garnish"><local:Localization message="header.menu.garnish"/></a></li>
+                        <li class="col-xl-1"><a href="${pageContext.request.contextPath}/garnish/1"><local:Localization message="header.menu.garnish"/></a></li>
                         <li class="clearfix hidden-xs hidden-sm"></li>
-                        <li class="col-xl-1"><a href="${pageContext.request.contextPath}/meat"><local:Localization message="header.menu.meat.dishes"/></a></li>
+                        <li class="col-xl-1"><a href="${pageContext.request.contextPath}/meat/1"><local:Localization message="header.menu.meat.dishes"/></a></li>
                         <li class="clearfix hidden-xs hidden-sm"></li>
-                        <li class="col-xl-1"><a href="${pageContext.request.contextPath}/pizza"><local:Localization message="header.menu.pizzas"/></a></li>
+                        <li class="col-xl-1"><a href="${pageContext.request.contextPath}/pizza/1"><local:Localization message="header.menu.pizzas"/></a></li>
                         <li class="clearfix hidden-xs hidden-sm"></li>
-                        <li class="col-xl-1"><a href="${pageContext.request.contextPath}/salad"><local:Localization message="header.menu.salads"/></a></li>
+                        <li class="col-xl-1"><a href="${pageContext.request.contextPath}/salad/1"><local:Localization message="header.menu.salads"/></a></li>
                         <li class="clearfix hidden-xs hidden-sm"></li>
-                        <li class="col-xl-1"><a href="${pageContext.request.contextPath}/sushi"><local:Localization message="header.menu.sushi"/></a></li>
+                        <li class="col-xl-1"><a href="${pageContext.request.contextPath}/sushi/1"><local:Localization message="header.menu.sushi"/></a></li>
                     </ul>
 
                 </div>
@@ -168,7 +168,7 @@
 </nav>
 
 <c:choose>
-<c:when test="${empty sessionScope.access eq 'GUEST'}">
+<c:when test="${empty sessionScope.user_id}">
 <div class="overlay js-overlay-campaign-signup">
     <div class="popup js-popup-campaign-signup">
         <h3>Register Epam-cafe's account</h3>

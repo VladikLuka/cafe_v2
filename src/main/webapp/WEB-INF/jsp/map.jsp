@@ -16,13 +16,10 @@
             defer
     ></script>
     <style type="text/css">
-        /* Always set the map height explicitly to define the size of the div
-         * element that contains the map. */
         #map {
             height: 100%;
         }
 
-        /* Optional: Makes the sample page fill the window. */
         html,
         body {
             height: 100%;
@@ -46,16 +43,47 @@
 
                 let marker = new google.maps.Marker({
                     map:map,
-                    position:new google.maps.LatLng(53.942348, 27.567071),
+                    position:new google.maps.LatLng(53.907064, 27.483938),
                     title:'epam-cafe',
                 });
+
+                let marker2 = new google.maps.Marker({
+                    map:map,
+                    position:new google.maps.LatLng(53.884930, 27.504924),
+                    title:'epam-cafe',
+                });
+
+                let marker3 = new google.maps.Marker({
+                    map:map,
+                    position:new google.maps.LatLng(53.916982, 27.634687),
+                    title:'epam-cafe',
+                });
+
+                let marker4 = new google.maps.Marker({
+                    map:map,
+                    position:new google.maps.LatLng(53.926940, 27.681621),
+                    title:'epam-cafe',
+                });
+
 
                 var MinskDelimiters =[
                     { lng: 27.474579,  lat: 53.966737 },
                     { lng: 27.584080,  lat: 53.971340 },
                     { lng: 27.592717,  lat: 53.970732 },
-                    { lng: 27.669570,  lat: 53.944468 },
-                    { lng: 27.671483,  lat: 53.943719 },
+                    { lng: 27.665385,  lat: 53.945957 },
+                    { lng: 27.667359,  lat: 53.947992 },
+                    { lng: 27.688739,  lat: 53.954313 },
+                    { lng: 27.700488,  lat: 53.941514 },
+                    { lng: 27.703430,  lat: 53.936321 },
+                    { lng: 27.700231,  lat: 53.935286 },
+                    { lng: 27.699631,  lat: 53.934938 },
+                    { lng: 27.699298,  lat: 53.934395 },
+                    { lng: 27.700139,  lat: 53.929262 },
+                    { lng: 27.699817,  lat: 53.928111 },
+                    { lng: 27.699177,  lat: 53.927112 },
+                    { lng: 27.697503,  lat: 53.925691 },
+                    { lng: 27.695990,  lat: 53.925047 },
+                    { lng: 27.680091,  lat: 53.924273 },
                     { lng: 27.696157,  lat: 53.884069 },
                     { lng: 27.696733,  lat: 53.881158 },
                     { lng: 27.696580,  lat: 53.878991 },

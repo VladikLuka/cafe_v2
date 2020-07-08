@@ -32,7 +32,7 @@ public class DeleteAddress implements Command {
         boolean delete = service.delete(address);
 
         if (delete){
-            return  new RequestResult(Navigation.REDIRECT, Path.USER, HttpServletResponse.SC_OK);
+            return  new RequestResult(Navigation.REDIRECT, Path.URL_USER, HttpServletResponse.SC_OK);
         } else {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
