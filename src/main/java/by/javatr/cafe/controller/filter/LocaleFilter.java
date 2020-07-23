@@ -8,6 +8,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+/**
+ * Set locale
+ */
+
 public class LocaleFilter implements Filter {
 
     public static final String SERVLET = "/controller";
@@ -23,26 +27,21 @@ public class LocaleFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         HttpSession session = request.getSession();
 
-//        request.setAttribute("uri", request.getRequestURI());
-
 
         if(session.getAttribute(SessionAttributes.LOCALE) == null) {
             session.setAttribute(SessionAttributes.LOCALE, "en");
             filterChain.doFilter(request, response);
-//            request.getRequestDispatcher(SERVLET).forward(request,response);
             return;
         }
 
-
         if(request.getParameter("command_locale") != null){
             session.setAttribute(SessionAttributes.LOCALE, request.getParameter("command_locale"));
-//            request.getRequestDispatcher(SERVLET).forward(request,response);
-            filterChain.doFilter(request,response);
+            System.out.println(request.getAttribute("URL"));
+            response.sendRedirect(request.getRequestURI());
             return;
         }
 
         if(session.getAttribute(SessionAttributes.LOCALE) != null ){
-//            request.getRequestDispatcher(SERVLET).forward(request,response);
             filterChain.doFilter(request,response);
             return;
         }

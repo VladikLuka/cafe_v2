@@ -6,12 +6,15 @@ import by.javatr.cafe.controller.command.Command;
 import by.javatr.cafe.controller.content.RequestContent;
 import by.javatr.cafe.controller.content.RequestResult;
 import by.javatr.cafe.entity.Dish;
-import by.javatr.cafe.exception.DAOException;
 import by.javatr.cafe.exception.ServiceException;
 import by.javatr.cafe.service.IDishService;
 
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * Class for processing admin request.
+ * Make dish unavailable
+ */
 @Component
 public class HideDish implements Command {
 

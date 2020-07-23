@@ -9,6 +9,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Field {
 
+    /**
+     * Name of database column
+     */
     String name();
 
 }

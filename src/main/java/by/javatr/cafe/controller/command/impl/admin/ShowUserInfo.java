@@ -12,6 +12,10 @@ import com.google.gson.Gson;
 
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * Class for processing admin request.
+ * Show information about chosen user
+ */
 @Component
 public class ShowUserInfo implements Command {
 
@@ -27,8 +31,8 @@ public class ShowUserInfo implements Command {
 
         User user = userService.find(id);
 
-        String json_user = gson.toJson(user);
-        RequestResult result = new RequestResult(json_user, HttpServletResponse.SC_OK);
+        String jsonUser = gson.toJson(user);
+        RequestResult result = new RequestResult(jsonUser, HttpServletResponse.SC_OK);
         result.setHeaders("content-type", "application/json;charset=UTF-8");
         return new RequestResult(gson.toJson(user), HttpServletResponse.SC_OK);
     }

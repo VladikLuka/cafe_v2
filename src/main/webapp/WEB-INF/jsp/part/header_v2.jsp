@@ -1,6 +1,5 @@
 <%@ taglib prefix="local" uri="/tld/localization.tld" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page errorPage="../error.jsp" %>
 
 
 <!DOCTYPE html>
@@ -12,7 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="../../static/css/style_header_v2.css">
-    <link rel="stylesheet" href="../../static/css/main2.css">
+    <link rel="stylesheet" href="../../static/css/main.css">
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
@@ -24,9 +23,12 @@
 
 <nav class="navbar navbar-default "   role="navigation" >
     <div class="container-fluid" id="header_container">
+        <div class="col-md-1">
+            <img src="../../../static/img/java_icon.svg" alt="" id="logo_icon">
+        </div>
         <div class="container" id="first-header">
-            <div style="z-index: 9999">
-                <img src="../../../static/img/epam_logo.svg" alt="" id="logo" style="z-index: 9999">
+            <div>
+                <img src="../../../static/img/epam_logo_test_v3.svg" alt="" id="logo">
             </div>
         </div>
 
@@ -66,18 +68,8 @@
                                 <li>
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <form action="${pageContext.request.contextPath}${pageContext.request.getAttribute("uri")}" method="post">
-                                                <div class="form-group">
-                                                    <input type="hidden" name="command_locale" value="ru">
-                                                </div>
-                                                <button type="submit" value="ru" style="color: black">RU</button>
-                                            </form>
-                                            <form action="${pageContext.request.contextPath}${pageContext.request.getAttribute("uri")}" method="post">
-                                                <div>
-                                                    <input type="hidden" name="command_locale" value="en">
-                                                </div>
-                                                <button type="submit" value="en" style="color: black">EN</button>
-                                            </form>
+                                                <button type="submit" id="locale_ru" value="ru">RU</button>
+                                                <button type="submit" id="locale_en" value="en">EN</button>
                                         </div>
                                     </div>
                                 </li>
@@ -85,10 +77,10 @@
                         </li>
 
 
-                        <c:if test="${not empty sessionScope.user_id}">
-                            <c:if test="${applicationScope.cache.getUser(sessionScope.user_id).role eq 'ADMIN'}">
+                        <c:if test="${not empty sessionScope.userId}">
+                            <c:if test="${applicationScope.cache.getUser(sessionScope.userId).role eq 'ADMIN'}">
                             <li>
-                                <div class="button "><span><a href="${pageContext.request.contextPath}/admin"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="21" height="21" viewBox="0 0 16 16">
+                                <div class="button "><span><a href="${pageContext.request.contextPath}/admin"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="21" height="21" viewBox="0 0 16 16">
 <path fill="#ffffff" d="M15.2 6l-1.1-0.2c-0.1-0.2-0.1-0.4-0.2-0.6l0.6-0.9 0.5-0.7-2.6-2.6-0.7 0.5-0.9 0.6c-0.2-0.1-0.4-0.1-0.6-0.2l-0.2-1.1-0.2-0.8h-3.6l-0.2 0.8-0.2 1.1c-0.2 0.1-0.4 0.1-0.6 0.2l-0.9-0.6-0.7-0.4-2.5 2.5 0.5 0.7 0.6 0.9c-0.2 0.2-0.2 0.4-0.3 0.6l-1.1 0.2-0.8 0.2v3.6l0.8 0.2 1.1 0.2c0.1 0.2 0.1 0.4 0.2 0.6l-0.6 0.9-0.5 0.7 2.6 2.6 0.7-0.5 0.9-0.6c0.2 0.1 0.4 0.1 0.6 0.2l0.2 1.1 0.2 0.8h3.6l0.2-0.8 0.2-1.1c0.2-0.1 0.4-0.1 0.6-0.2l0.9 0.6 0.7 0.5 2.6-2.6-0.5-0.7-0.6-0.9c0.1-0.2 0.2-0.4 0.2-0.6l1.1-0.2 0.8-0.2v-3.6l-0.8-0.2zM15 9l-1.7 0.3c-0.1 0.5-0.3 1-0.6 1.5l0.9 1.4-1.4 1.4-1.4-0.9c-0.5 0.3-1 0.5-1.5 0.6l-0.3 1.7h-2l-0.3-1.7c-0.5-0.1-1-0.3-1.5-0.6l-1.4 0.9-1.4-1.4 0.9-1.4c-0.3-0.5-0.5-1-0.6-1.5l-1.7-0.3v-2l1.7-0.3c0.1-0.5 0.3-1 0.6-1.5l-1-1.4 1.4-1.4 1.4 0.9c0.5-0.3 1-0.5 1.5-0.6l0.4-1.7h2l0.3 1.7c0.5 0.1 1 0.3 1.5 0.6l1.4-0.9 1.4 1.4-0.9 1.4c0.3 0.5 0.5 1 0.6 1.5l1.7 0.3v2z"></path>
 <path fill="#ffffff" d="M8 4.5c-1.9 0-3.5 1.6-3.5 3.5s1.6 3.5 3.5 3.5 3.5-1.6 3.5-3.5c0-1.9-1.6-3.5-3.5-3.5zM8 10.5c-1.4 0-2.5-1.1-2.5-2.5s1.1-2.5 2.5-2.5 2.5 1.1 2.5 2.5c0 1.4-1.1 2.5-2.5 2.5z"></path>
 </svg></a></span></div>
@@ -96,7 +88,7 @@
                             </c:if>
                         </c:if>
                         <c:choose>
-                        <c:when test="${empty sessionScope.user_id}">
+                        <c:when test="${empty sessionScope.userId}">
                         <li>
                             <main>
                                 <div class="button js-button-campaign-signup"><span><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21" icon="account" class="default-header-account-icon"><path d="M10.5 0C6.82 0 3.82 3 3.82 6.68c0 2.29 1.16 4.31 2.92 5.52A9.534 9.534 0 00.95
@@ -106,7 +98,7 @@
                             </main>
                         </li>
                             </c:when>
-                            <c:when test="${not empty sessionScope.user_id}">
+                            <c:when test="${not empty sessionScope.userId}">
                             <li>
                                 <main>
                                     <a href="/user"><div class="button"><span><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21" icon="account" class="default-header-account-icon"><path d="M10.5 0C6.82 0 3.82 3 3.82 6.68c0 2.29 1.16 4.31 2.92 5.52A9.534 9.534 0 00.95
@@ -132,7 +124,7 @@
                                         <h2 id="total_price">Total 0</h2>
 
                                     <c:choose>
-                                        <c:when test="${not empty sessionScope.user_id}">
+                                        <c:when test="${not empty sessionScope.userId}">
                                             <a href="${pageContext.request.contextPath}/order"><button type="button"  class="btn button-warning" id="order-button" >Order</button></a>
                                         </c:when>
                                         <c:otherwise>
@@ -143,8 +135,8 @@
                             </div>
                         </li>
                         <c:choose>
-                            <c:when test="${not empty sessionScope.user_id}">
-                                <li class="col-xl-3" id="header_balance">${applicationScope.cache.getUser(sessionScope.user_id).money} BYN</li>
+                            <c:when test="${not empty sessionScope.userId}">
+                                <li class="col-xl-3" id="header_balance">${applicationScope.cache.getUser(sessionScope.userId).money} BYN</li>
                             </c:when>
                             <c:otherwise>
                                 <li class="col-xl-3" id="header_balance">0 BYN</li>
@@ -168,32 +160,32 @@
 </nav>
 
 <c:choose>
-<c:when test="${empty sessionScope.user_id}">
+<c:when test="${empty sessionScope.userId}">
 <div class="overlay js-overlay-campaign-signup">
     <div class="popup js-popup-campaign-signup">
         <h3>Register Epam-cafe's account</h3>
         <form action="${pageContext.request.contextPath}/controller" role="form" method="post" name="registration">
-            <div id="id_name" style="margin-top: 8px">
+            <div id="id_name">
                 <label for="name"><local:Localization message="signup.lable.name"/></label>
                 <input type="name" id="name" class="form-control" name="email" placeholder=<local:Localization message="signup.lable.name"/>>
             </div>
-            <div id="id_surname" style="margin-top: 8px">
+            <div id="id_surname">
                 <label for="email"><local:Localization message="signup.lable.surname"/></label>
                 <input type="email" id="surname" class="form-control" name="email" placeholder=<local:Localization message="signup.lable.surname"/>>
             </div>
-            <div id="id_email" style="margin-top: 8px">
+            <div id="id_email">
                 <label for="email"><local:Localization message="signup.lable.email"/></label>
                 <input type="email" id="email" class="form-control" name="email" placeholder=<local:Localization message="signup.lable.email"/>>
             </div>
-            <div id="id_password" style="margin-top: 8px">
+            <div id="id_password">
                 <label for="signUp_password"><local:Localization message="signup.lable.password"/></label>
                 <input type="password" id="signUp_password" class="form-control"  name="password" autocomplete="on" placeholder=<local:Localization message="signup.lable.password"/>>
             </div>
-            <div id="id_phone" style="margin-top: 8px">
+            <div id="id_phone">
                 <label for="signUp_phone"><local:Localization message="signup.lable.phone"/></label>
                 <input type="phone" id="signUp_phone" class="form-control" name="phone" autocomplete="on" placeholder=<local:Localization message="signup.lable.phone"/>>
             </div>
-            <button type="button" class="btn btn-success" id="registration_button" style="margin-top: 8px">Submit</button>
+            <button type="button" class="btn btn-success" id="registration_button">Submit</button>
         </form>
 
         <div class="close-popup js-close-campaign-signup"></div>
@@ -204,38 +196,23 @@
     <div class="overlay js-overlay-campaign-login">
         <div class="popup js-popup-campaign-login">
             <h3>Log in to Epam-cafe's account</h3>
-            <form action="${pageContext.request.contextPath}/controller" role="form" method="post" name="registration">
-                <div id="id_email_log" style="margin-top: 8px">
+            <form action="${pageContext.request.contextPath}/controller" role="form" method="post" aria-label="" >
+                <div id="id_email_log">
                     <label for="email"><local:Localization message="signup.lable.email"/></label>
                     <input type="email" id="email_log" class="form-control" name="email" placeholder=<local:Localization message="signup.lable.email"/>>
                 </div>
-                <div id="id_password_log" style="margin-top: 8px">
+                <div id="id_password_log">
                     <label for="signUp_password"><local:Localization message="signup.lable.password"/></label>
                     <input type="password" id="signUp_password_log" class="form-control"  name="password" autocomplete="on" placeholder=<local:Localization message="signup.lable.password"/>>
                 </div>
-                <button type="button" class="btn btn-success" id="login_button" style="margin-top: 8px">Submit</button>
+                <button type="button" class="btn btn-success" id="login_button">Submit</button>
             </form>
 
             <div class="close-popup js-close-campaign-login"></div>
             <button type="submit"  class="btn btn-link js-button-campaign-signup">Sign in</button>
         </div>
     </div>
-
 </c:when>
-
-<%--<c:when test="${ not empty sessionScope.user_email}">--%>
-
-<%--<div class="overlay js-overlay-campaign-signup">--%>
-<%--    <div class="popup js-popup-campaign-signup">--%>
-
-<%--        <h1>POSHOL NAHUY</h1>--%>
-<%--        <button type="submit"  class="btn btn-link js-button-logout">Log out</button>--%>
-
-
-<%--        <div class="close-popup js-close-campaign-signup"></div>--%>
-<%--    </div>--%>
-<%--</div>--%>
-<%--</c:when>--%>
 </c:choose>
 
 

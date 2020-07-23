@@ -12,6 +12,10 @@ import com.google.gson.Gson;
 
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * Class for processing admin request.
+ * Unban chosen user
+ */
 @Component
 public class UnbanUser implements Command {
 

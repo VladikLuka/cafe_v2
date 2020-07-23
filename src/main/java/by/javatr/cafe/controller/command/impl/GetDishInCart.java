@@ -15,35 +15,38 @@ import com.google.gson.Gson;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
+/**
+ * Class for processing user request.
+ * Return dish from cart
+ */
 @Component
 public class GetDishInCart implements Command {
 
     @Autowired
-    ICartService service;
-
-    Gson gson = new Gson();
+    private ICartService service;
 
     @Override
     public RequestResult execute(RequestContent content) throws ServiceException {
 
-        RequestResult result = new RequestResult();
         if(content.getSessionAttr(SessionAttributes.CART) != null){
             List<Dish> all = service.getAll((Cart) content.getSessionAttr(SessionAttributes.CART));
-            String str = gson.toJson(all);
-            result.setCommand(str);
-            result.setStatus(HttpServletResponse.SC_OK);
-            return result;
+            return returnDish(all);
         }else {
             Cart cart = new Cart();
             content.addSessionAttr(SessionAttributes.CART, cart);
-            String s = gson.toJson(cart.getCart());
-            result.setCommand(s);
-            result.setStatus(HttpServletResponse.SC_OK);
-            return result;
+            return returnDish(cart.getUserCart());
         }
         
     }
 
-    public GetDishInCart() {
+    private RequestResult returnDish(List<Dish> list){
+        Gson gson = new Gson();
+        RequestResult result = new RequestResult();
+        String s = gson.toJson(list);
+        result.setCommand(s);
+        result.setStatus(HttpServletResponse.SC_OK);
+        return result;
     }
+
+    private GetDishInCart() {}
 }

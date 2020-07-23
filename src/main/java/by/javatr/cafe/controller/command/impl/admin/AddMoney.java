@@ -6,7 +6,6 @@ import by.javatr.cafe.controller.command.Command;
 import by.javatr.cafe.controller.content.RequestContent;
 import by.javatr.cafe.controller.content.RequestResult;
 import by.javatr.cafe.entity.User;
-import by.javatr.cafe.exception.DAOException;
 import by.javatr.cafe.exception.ServiceException;
 import by.javatr.cafe.service.IUserService;
 import com.google.gson.Gson;
@@ -14,6 +13,10 @@ import com.google.gson.Gson;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 
+/**
+ * Class for processing admin request.
+ * Add money to chosen user
+ */
 @Component
 public class AddMoney implements Command {
 
@@ -24,11 +27,11 @@ public class AddMoney implements Command {
     public RequestResult execute(RequestContent content) throws ServiceException {
 
         final String amount = content.getRequestParam("amount");
-        final int user_id = Integer.parseInt(content.getRequestParam("user_id"));
+        final int userId = Integer.parseInt(content.getRequestParam("user_id"));
 
         BigDecimal addMoney = new BigDecimal(amount);
 
-        User user = userService.addMoney(addMoney, user_id);
+        User user = userService.addMoney(addMoney, userId);
         Gson gson = new Gson();
 
         RequestResult result = new RequestResult(gson.toJson(user), HttpServletResponse.SC_OK);

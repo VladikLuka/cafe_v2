@@ -3,6 +3,7 @@ package by.javatr.cafe.service;
 import by.javatr.cafe.entity.Cart;
 import by.javatr.cafe.entity.Order;
 import by.javatr.cafe.entity.User;
+import by.javatr.cafe.exception.DAOException;
 import by.javatr.cafe.exception.ServiceException;
 
 import java.math.BigDecimal;
@@ -12,15 +13,13 @@ import java.util.Map;
 
 public interface IOrderService {
 
-    Order makeOrder(Order order, User user) throws ServiceException;
+    Order makeOrderCashCard(Order order, User user) throws ServiceException;
 
     Order makeOrderBalance(Order order, User user) throws ServiceException;
 
-    BigDecimal amount(Cart cart);
+    Order creditOrder(Order order, User user) throws ServiceException;
 
     List<Order> getOrders(User user) throws ServiceException;
-
-    Map<Integer, ArrayList<Order>> getOrders() throws ServiceException;
 
     Order deposit(Order order) throws ServiceException;
 
@@ -31,4 +30,6 @@ public interface IOrderService {
     boolean cancelOrder(Order order) throws ServiceException;
 
     boolean violateOrder(Order order) throws ServiceException;
+
+    boolean closeCredit(Order order) throws DAOException, ServiceException;
 }

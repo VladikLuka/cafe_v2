@@ -14,9 +14,9 @@
 
 <%--${pageContext.response.sendRedirect("/pizza/1")}--%>
 
-<h1>HELLO</h1>
+<%--<h1>HELLO</h1>--%>
 
-<%--<% response.sendRedirect("/pizza"); %>--%>
+<% response.sendRedirect("/pizza"); %>
 
 </body>
 </html>

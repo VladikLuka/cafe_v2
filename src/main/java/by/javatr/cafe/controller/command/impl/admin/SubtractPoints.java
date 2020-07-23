@@ -11,8 +11,11 @@ import by.javatr.cafe.service.IUserService;
 import com.google.gson.Gson;
 
 import javax.servlet.http.HttpServletResponse;
-import java.math.BigDecimal;
 
+/**
+ * Class for processing admin request.
+ * Subtract points of chosen user
+ */
 @Component
 public class SubtractPoints implements Command {
 
@@ -21,11 +24,11 @@ public class SubtractPoints implements Command {
 
     @Override
     public RequestResult execute(RequestContent content) throws ServiceException {
-        final String subst_amount = content.getRequestParam("points");
-        final String user_id = content.getRequestParam("user_id");
+        final String substAmount = content.getRequestParam("points");
+        final String userId = content.getRequestParam("user_id");
 
-        final int points = Integer.parseInt(subst_amount);
-        int id = Integer.parseInt(user_id);
+        final int points = Integer.parseInt(substAmount);
+        int id = Integer.parseInt(userId);
 
         final User user = userService.subtractPoints(points, id);
 

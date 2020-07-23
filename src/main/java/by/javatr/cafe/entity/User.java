@@ -1,8 +1,6 @@
 package by.javatr.cafe.entity;
 
 import by.javatr.cafe.dao.annotation.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -31,7 +29,9 @@ public class User extends Entity<User> implements Serializable {
     @Field(name="user_money")
     private BigDecimal money = new BigDecimal(0);
     @Field(name="user_loyaltyPoints")
-    private int loyalty_point = 0;
+    private int loyaltyPoint = 0;
+    @Field(name="user_isCredit")
+    private boolean isCredit;
     @Field(name = "user_isBan")
     private boolean isBan;    @Join(fieldColumn =  "roles_role_id")
 //    @ManyToOne(joinName = "role_id",field = ,type = Role.class)
@@ -44,7 +44,7 @@ public class User extends Entity<User> implements Serializable {
 
     }
 
-    public User(int id, String name, String surname, String phone, String mail, String password, BigDecimal money, int loyalty_point, Role role, boolean isBan) {
+    public User(int id, String name, String surname, String phone, String mail, String password, BigDecimal money, int loyaltyPoint, Role role, boolean isBan, boolean isCredit) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -52,9 +52,10 @@ public class User extends Entity<User> implements Serializable {
         this.mail = mail;
         this.password = password;
         this.money = money;
-        this.loyalty_point = loyalty_point;
+        this.loyaltyPoint = loyaltyPoint;
         this.role = role;
         this.isBan = isBan;
+        this.isCredit = isCredit;
     }
 
     public User(String email, String password, String phone){
@@ -63,7 +64,7 @@ public class User extends Entity<User> implements Serializable {
         this.phone = phone;
     }
 
-    public User(int id, String name, String surname, String phone, String mail, String password, BigDecimal money, int loyalty_point, Role role, boolean isBan, List<Address> address) {
+    public User(int id, String name, String surname, String phone, String mail, String password, BigDecimal money, int loyaltyPoint, Role role, boolean isBan, List<Address> address) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -71,13 +72,13 @@ public class User extends Entity<User> implements Serializable {
         this.mail = mail;
         this.password = password;
         this.money = money;
-        this.loyalty_point = loyalty_point;
+        this.loyaltyPoint = loyaltyPoint;
         this.role = role;
         this.isBan = isBan;
         this.address = address;
     }
 
-    public User(int id, String name, String surname, String phone, String mail, String password, BigDecimal money, int loyalty_point, List<Address> address) {
+    public User(int id, String name, String surname, String phone, String mail, String password, BigDecimal money, int loyaltyPoint, List<Address> address) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -85,7 +86,7 @@ public class User extends Entity<User> implements Serializable {
         this.mail = mail;
         this.password = password;
         this.money = money;
-        this.loyalty_point = loyalty_point;
+        this.loyaltyPoint = loyaltyPoint;
         this.address = address;
     }
 
@@ -96,12 +97,25 @@ public class User extends Entity<User> implements Serializable {
         this.password = password;
         this.mail = mail;
         money = new BigDecimal(0);
-        loyalty_point = 0;
+        loyaltyPoint = 0;
         role = Role.USER;
         this.address = address;
     }
 
-    public User(int id, String name, String surname, String phone, String mail, String password, BigDecimal money, int loyalty_point, Role role) {
+    public User(int id, String name, String surname, String phone, String mail, String password, List<Address> address ){
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.phone = phone;
+        this.password = password;
+        this.mail = mail;
+        money = new BigDecimal(0);
+        loyaltyPoint = 0;
+        role = Role.USER;
+        this.address = address;
+    }
+
+    public User(int id, String name, String surname, String phone, String mail, String password, BigDecimal money, int loyaltyPoint, Role role) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -109,26 +123,26 @@ public class User extends Entity<User> implements Serializable {
         this.mail = mail;
         this.password = password;
         this.money = money;
-        this.loyalty_point = loyalty_point;
+        this.loyaltyPoint = loyaltyPoint;
         this.role = role;
     }
 
 
-    public User(String name, String surname, String phone, String mail, String password, BigDecimal money, int loyalty_point, Role role, List<Address> address ){
+    public User(String name, String surname, String phone, String mail, String password, BigDecimal money, int loyaltyPoint, Role role, List<Address> address ){
         this.name = name;
         this.surname = surname;
         this.phone = phone;
         this.password = password;
         this.mail = mail;
         this.money = money;
-        this.loyalty_point = loyalty_point;
+        this.loyaltyPoint = loyaltyPoint;
         this.role = role;
         this.address = address;
     }
 
     public User(String name, String surname, String email, String password, String phone) {
         this.name = name;
-        this.surname = name;
+        this.surname = surname;
         this.mail = email;
         this.password = password;
         this.phone = phone;
@@ -144,7 +158,7 @@ public class User extends Entity<User> implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
         return id == user.id &&
-                loyalty_point == user.loyalty_point &&
+                loyaltyPoint == user.loyaltyPoint &&
                 isBan == user.isBan &&
                 Objects.equals(name, user.name) &&
                 Objects.equals(surname, user.surname) &&
@@ -158,7 +172,7 @@ public class User extends Entity<User> implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, surname, phone, mail, password, money, loyalty_point, role, isBan, address);
+        return Objects.hash(id, name, surname, phone, mail, password, money, loyaltyPoint, role, isBan, address);
     }
 
     @Override
@@ -171,7 +185,7 @@ public class User extends Entity<User> implements Serializable {
                 ", mail='" + mail + '\'' +
                 ", password='" + password + '\'' +
                 ", money=" + money +
-                ", loyalty_point=" + loyalty_point +
+                ", loyalty_point=" + loyaltyPoint +
                 ", role=" + role +
                 ", isBan=" + isBan +
                 ", address=" + address +
@@ -234,12 +248,12 @@ public class User extends Entity<User> implements Serializable {
         this.money = money;
     }
 
-    public int getLoyalty_point() {
-        return loyalty_point;
+    public int getLoyaltyPoint() {
+        return loyaltyPoint;
     }
 
-    public void setLoyalty_point(int loyalty_point) {
-        this.loyalty_point = loyalty_point;
+    public void setLoyaltyPoint(int loyalty_point) {
+        this.loyaltyPoint = loyalty_point;
     }
 
     public Role getRole() {
@@ -264,5 +278,13 @@ public class User extends Entity<User> implements Serializable {
 
     public void setBan(boolean ban) {
         isBan = ban;
+    }
+
+    public boolean isCredit() {
+        return isCredit;
+    }
+
+    public void setCredit(boolean hasCredit) {
+        this.isCredit = hasCredit;
     }
 }

@@ -2,20 +2,22 @@ package by.javatr.cafe.controller.command.impl.payment;
 
 import by.javatr.cafe.constant.PaymentMethod;
 import by.javatr.cafe.constant.PaymentStatus;
+import by.javatr.cafe.constant.RequestParameters;
+import by.javatr.cafe.constant.SessionAttributes;
 import by.javatr.cafe.container.annotation.Autowired;
 import by.javatr.cafe.container.annotation.Component;
-import by.javatr.cafe.constant.SessionAttributes;
 import by.javatr.cafe.controller.command.Command;
 import by.javatr.cafe.controller.content.Navigation;
 import by.javatr.cafe.controller.content.RequestContent;
 import by.javatr.cafe.controller.content.RequestResult;
 import by.javatr.cafe.entity.Order;
-import by.javatr.cafe.service.IOrderService;
-import by.javatr.cafe.util.Cache;
 import by.javatr.cafe.entity.User;
 import by.javatr.cafe.exception.ServiceException;
+import by.javatr.cafe.service.IOrderService;
 import by.javatr.cafe.service.IUserService;
-import com.braintreegateway.*;
+import com.braintreegateway.Result;
+import com.braintreegateway.Transaction;
+import com.braintreegateway.TransactionRequest;
 
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
@@ -23,8 +25,11 @@ import java.math.RoundingMode;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.List;
 
+/**
+ * Class for processing payment request.
+ * Make deposit to user account
+ */
 @Component
 public class Deposit implements Command {
 
@@ -36,11 +41,11 @@ public class Deposit implements Command {
     @Override
     public RequestResult execute(RequestContent content) throws ServiceException {
 
-        String pay_method = content.getRequestParam("payment_method_nonce");
-        String request_amount = content.getRequestParam("amount");
+        String pay_method = content.getRequestParam(RequestParameters.PAYMENT_NONCE);
+        String request_amount = content.getRequestParam(RequestParameters.AMOUNT);
 
-        int user_id = (int) content.getSessionAttr(SessionAttributes.USER_ID);
-        final User user = service.find(user_id);
+        int userId = (int) content.getSessionAttr(SessionAttributes.USER_ID);
+        final User user = service.find(userId);
 
         BigDecimal amount = new BigDecimal(request_amount).setScale(2, RoundingMode.HALF_UP);
 
@@ -50,6 +55,7 @@ public class Deposit implements Command {
                 .options()
                 .submitForSettlement(true)
                 .done();
+
 
 
         Result<Transaction> result = Gateway.getGateway().transaction().sale(transactionRequest);
@@ -63,27 +69,9 @@ public class Deposit implements Command {
             Order order = new Order(PaymentMethod.CARD, PaymentStatus.CLOSED, time,time,amount, user.getId());
 
             orderService.deposit(order);
-            displayTransactionInfo(target);
-            return new RequestResult(Navigation.REDIRECT, "/checkout/" + order.getOrder_id(), HttpServletResponse.SC_OK);
+            return new RequestResult(Navigation.REDIRECT, "/checkout/" + order.getOrderId(), HttpServletResponse.SC_OK);
         }else{
-            ValidationErrors errors = result.getErrors();
-            validationError(errors);
-            System.out.println(result.getMessage());
-            return new RequestResult(Navigation.REDIRECT, "/payment_error" , HttpServletResponse.SC_BAD_REQUEST);
-        }
-    }
-
-    private static void displayTransactionInfo(Transaction transaction) {
-        System.out.println(" ------ Transaction Info ------ ");
-        System.out.println(" Transaction Id  : " +transaction.getId());
-        System.out.println(" Processor Response Text : " +transaction.getProcessorResponseText());
-    }
-
-    private static void validationError(ValidationErrors errors) {
-        List<ValidationError> error = errors.getAllDeepValidationErrors();
-        for (ValidationError er : error) {
-            System.out.println(" error code : " + er.getCode());
-            System.out.println(" error message  : " + er.getMessage());
+            return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
     }
 }

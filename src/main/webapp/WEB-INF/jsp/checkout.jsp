@@ -1,19 +1,29 @@
+<%@ taglib prefix="local" uri="/tld/localization.tld" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <!DOCTYPE HTML>
 <html>
 <head>
     <title>Transaction</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="shortcut icon" href="../../static/img/favico.svg" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="../../static/css/checkout.css"/>
 
 </head>
 <body>
+
+<fmt:setLocale value="${sessionScope.locale}"/>
+<fmt:setBundle basename="locale" var="lang"/>
+
 <header class="main">
     <div class="container wide">
         <div class="content slim">
             <div class="set">
                 <div class="fill">
-                    <a class="pseudoshop" href="/">PSEUDO<strong>SHOP</strong></a>
+                    <a class="pseudoshop" href="/">EPAM<strong>CAFE</strong></a>
                 </div>
 
                 <div class="fit">
@@ -34,16 +44,16 @@
                         <img src="../../static/img/success.svg"/>
                     </div>
                     <div>
-                        <h1>Sweet Success!</h1>
-                        <section>Your test transaction has been successfully processed.
-                            <c:if test="${empty requestScope.order.order_review}">
+                        <h1><fmt:message key="sweet.success" bundle="${lang}"/></h1>
+                        <section><fmt:message key="checkout.description" bundle="${lang}"/>
+                            <c:if test="${empty requestScope.order.orderReview}">
                                 <c:if test="${requestScope.order.status eq 'CLOSED'}">
-                                    <br> Here you can leave feedback</section>
+                                    <br><fmt:message key="checkout.leave.feedback" bundle="${lang}"/></section>
                                 </c:if>
                                 <c:if test="${requestScope.order.status eq 'CLOSED'}">
 <%--                                    <form action="${pageContext.request.contextPath}/controller" method="post">--%>
                                         <textarea name="feedback" id="feedback_text" cols="70" rows="3" required></textarea>
-                                            <div id="reviewStars-input" style="margin-right: 180px;">
+                                            <div id="reviewStars-input">
                                                 <input id="star-4" type="radio" name="stars" value="5"/>
                                                 <label title="gorgeous" for="star-4"></label>
 
@@ -61,9 +71,9 @@
                                             </div>
                                         <section>
                                             <input type="hidden" name="command" value="feedback">
-                                            <input type="hidden" name="order_id" value="${requestScope.order.order_id}">
+                                            <input type="hidden" name="order_id" value="${requestScope.order.orderId}">
                                             <button type="submit" class="button primary back" id="feedback_submit">
-                                                <span style="width: 350px">leave feedback</span>
+                                                <span id="leave_feedback"><fmt:message key="checkout.button.feedback" bundle="${lang}"/></span>
                                             </button>
                                         </section>
 <%--                                    </form>--%>
@@ -73,17 +83,17 @@
                                 <section>
                                     <form action="${pageContext.request.contextPath}/controller" method="post">
                                         <input type="hidden" name="command" value="cancel_order">
-                                        <input type="hidden" name="order_id" value="${requestScope.order.order_id}">
-                                        <button type="submit" class="button primary back" id="cancel_order" style="background-color:#dd571c">
-                                            <span style="width: 350px">cancel order</span>
+                                        <input type="hidden" name="order_id" value="${requestScope.order.orderId}">
+                                        <button type="submit" class="button primary back" id="cancel_order">
+                                            <span id="cnac_older">cancel order</span>
                                         </button>
                                     </form>
                                 </section>
                             </c:if>
                         </c:if>
-                        <c:if test="${not empty requestScope.order.order_review}">
-                            <section>Your feedback</section>
-                            <section>${requestScope.order.order_review}</section>
+                        <c:if test="${not empty requestScope.order.orderReview}">
+                            <section><fmt:message key="checkout.your.order" bundle="${lang}"/></section>
+                            <section>${requestScope.order.orderReview}</section>
                         </c:if>
 
                     </div>
@@ -94,7 +104,7 @@
                     </div>
                     <section>
                         <div>
-                            <br>Order cancelled
+                            <br><fmt:message key="checkout.cancel.order" bundle="${lang}"/>
                         </div>
                     </section>
                 </c:otherwise>
@@ -104,66 +114,72 @@
 </div>
 
 <aside class="drawer dark">
-    <header>
-        <div class="content compact">
-            <a href="https://developers.braintreepayments.com" class="braintree" target="_blank">Braintree</a>
-            <h3>API Response</h3>
-        </div>
-    </header>
+<%--    <header>--%>
+<%--        <div class="content compact">--%>
+<%--            <a href="https://developers.braintreepayments.com" class="braintree" target="_blank">Braintree</a>--%>
+<%--            <h3>API Response</h3>--%>
+<%--        </div>--%>
+<%--    </header>--%>
 
     <article class="content compact">
         <section>
-            <h5>Transaction</h5>
+            <h5><fmt:message key="checkout.transaction" bundle="${lang}"/></h5>
             <table cellpadding="0" cellspacing="0">
                 <tbody>
                 <tr>
                     <td>id</td>
-                    <td id="order_id" data-id ="${requestScope.order.order_id}">${requestScope.order.order_id}</td>
+                    <td id="order_id" data-id ="${requestScope.order.orderId}">${requestScope.order.orderId}</td>
                 </tr>
                 <tr>
-                    <td>type</td>
+                    <td><fmt:message key="checkout.status" bundle="${lang}"/></td>
                     <td>${requestScope.order.method}</td>
                 </tr>
                 <tr>
-                    <td>amount</td>
+                    <td><fmt:message key="checkout.amount" bundle="${lang}"/></td>
                     <td>${requestScope.order.amount}</td>
                 </tr>
                 <tr>
-                    <td>status</td>
+                    <td><fmt:message key="checkout.status" bundle="${lang}"/></td>
                     <td>${requestScope.order.status}</td>
                 </tr>
                 <tr>
-                    <td>created at</td>
+                    <td><fmt:message key="checkout.created" bundle="${lang}"/></td>
                     <td>${requestScope.order.time}</td>
                 </tr>
                 <tr>
-                    <td>delivery time</td>
-                    <td>${requestScope.order.delivery_time}</td>
+                    <td><fmt:message key="checkout.delivery" bundle="${lang}"/></td>
+                    <td>${requestScope.order.deliveryTime}</td>
                 </tr>
+                <c:if test="${not empty requestScope.order.creditTime}">
+                <tr>
+                    <td><fmt:message key="checkout.credit" bundle="${lang}"/></td>
+                    <td>${requestScope.order.creditTime}</td>
+                </tr>
+                </c:if>
                 </tbody>
             </table>
         </section>
 
         <section>
             <c:if test="${not empty requestScope.order.address}">
-                <h5>Address</h5>
+                <h5><fmt:message key="order.address" bundle="${lang}"/></h5>
 
                 <table cellpadding="0" cellspacing="0">
                     <tbody>
                     <tr>
-                        <td>City</td>
+                        <td><fmt:message key="user.city" bundle="${lang}"/></td>
                         <td>${requestScope.order.address.city}</td>
                     </tr>
                     <tr>
-                        <td>Street</td>
+                        <td><fmt:message key="user.street" bundle="${lang}"/></td>
                         <td>${requestScope.order.address.street}</td>
                     </tr>
                     <tr>
-                        <td>House</td>
+                        <td><fmt:message key="user.house" bundle="${lang}"/></td>
                         <td>${requestScope.order.address.house}</td>
                     </tr>
                     <tr>
-                        <td>Flat</td>
+                        <td><fmt:message key="user.flat" bundle="${lang}"/></td>
                         <td>${requestScope.order.address.flat}</td>
                     </tr>
                     </tbody>
@@ -174,16 +190,16 @@
 
         <c:if test="${not empty requestScope.order.dishes}">
             <section>
-                <h5>Dishes</h5>
+                <h5><fmt:message key="checkout.dishes" bundle="${lang}"/></h5>
                 <table cellpadding="0" cellspacing="0">
                     <tbody>
                     <c:forEach items="${requestScope.order.dishes}" var="dish">
                         <tr>
-                            <td>dish name</td>
+                            <td><fmt:message key="checkout.dish.name" bundle="${lang}"/></td>
                             <td>${dish.key.name}</td>
                         </tr>
                         <tr>
-                            <td>quantity</td>
+                            <td><fmt:message key="checkout.dish.quantity" bundle="${lang}"/></td>
                             <td>${dish.value}</td>
                         </tr>
                     </c:forEach>

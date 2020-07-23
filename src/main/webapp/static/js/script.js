@@ -193,6 +193,12 @@ $(document).ready(function(){
 
 	$("#add_money").click(function () {
 
+		let check = isDecimal2($("#add_user_money").val());
+
+		if(!check){
+			$("#div_add_money").addClass("has-error");
+		}
+
 		let data = {
 			"command":"add_money",
 			"amount":$("#add_user_money").val(),
@@ -206,8 +212,12 @@ $(document).ready(function(){
 			data:data,
 			datatype:"json",
 			success:function (response) {
+				$("#div_add_money").removeClass("has-error")
 				let element = document.getElementById("user_money")
 				element.value = JSON.parse(response)["money"]
+			},
+			statusCode:{
+				400: $("#div_add_money").addClass("has-error")
 			}
 
 		})
@@ -229,8 +239,12 @@ $(document).ready(function(){
 			data:data,
 			datatype:"json",
 			success:function (response) {
+				$("#div_add_point").removeClass("has-error");
 				let element = document.getElementById("user_point")
-				element.value = JSON.parse(response)["loyalty_point"]
+				element.value = JSON.parse(response)["loyaltyPoint"]
+			},
+			statusCode:{
+				400: $("#div_add_point").addClass("has-error")
 			}
 
 		})
@@ -238,6 +252,13 @@ $(document).ready(function(){
 	})
 
 	$("#subtract_money").click(function () {
+
+		let check = isDecimal2($("#substr_user_money").val());
+
+		if(!check){
+			$("#div_add_money").addClass("has-error");
+		}
+
 
 		let data = {
 			"command":"SUBTRACT_MONEY",
@@ -252,8 +273,12 @@ $(document).ready(function(){
 			data:data,
 			datatype:"json",
 			success:function (response) {
+				$("#div_grab_money").removeClass("has-error")
 				let element = document.getElementById("user_money")
 				element.value = JSON.parse(response)["money"]
+			},
+			statusCode:{
+				400: $("#div_grab_money").addClass("has-error")
 			}
 
 		})
@@ -275,17 +300,48 @@ $(document).ready(function(){
 			data:data,
 			datatype:"json",
 			success:function (response) {
+				$("#div_grab_points").removeClass("has-error")
 				let element = document.getElementById("user_point")
-				element.value = JSON.parse(response)["loyalty_point"]
+				element.value = JSON.parse(response)["loyaltyPoint"]
+			},
+			statusCode:{
+				400: $("#div_grab_points").addClass("has-error")
 			}
 
 		})
 
 	})
 
-	// document.querySelector("#add_money").addEventListener('click', function(){
-	// 	swal("Our First Alert", "With some body text and success icon!", "success");
-	// });
+	$("#locale_ru").click(function(){
+
+		$.ajax({
+
+			type:"POST",
+			url:document.location,
+			data:{"command_locale":"ru"},
+			success:function(){
+				document.location.href = document.location;
+			}
+
+		})
+
+	})
+
+	$("#locale_en").click(function(){
+
+		$.ajax({
+
+			type:"POST",
+			url:document.location,
+			data:{"command_locale":"en"},
+			success:function(){
+				document.location.href = document.location;
+			}
+
+		})
+
+	})
+
 
 	$(".js-button-logout").click(function () {
 
@@ -498,6 +554,76 @@ $("#submit_address").click(function () {
 		}
 	})
 
+	$("#pay4").click(function () {
+
+
+		if (address[1] === undefined) {
+			swal("Something went wrong", "chose address", "error");
+		}else{
+
+			let data =
+				{"address" : address[1],
+					"command" : "CREDIT_ORDER",
+				}
+
+			$.ajax({
+				type:"POST",
+				url:"/controller",
+				data:data,
+				success:function (data, error, jqXHR) {
+					localStorage.clear();
+					document.location.href = jqXHR.getResponseHeader("Location");
+				},
+				statusCode:{
+					400:function () {
+						swal("Something went wrong", "check balance", "error");
+					}
+				}
+
+			})
+		}
+	})
+
+
+	$("#closeCredit").click(function () {
+
+		alert("ok");
+
+		let elementById = document.getElementById("closeCredit");
+
+			let data = {
+				"user_id": elementById.dataset.userid,
+				"order_id": elementById.dataset.orderid,
+				"command" : "close_credit",
+				}
+
+			$.ajax({
+				type:"POST",
+				url:"/controller",
+				data:data,
+				success:function (data, error, jqXHR) {
+					alert(jqXHR.getResponseHeader("Location"));
+					document.location.href = jqXHR.getResponseHeader("Location");
+				},
+				statusCode:{
+					400:function () {
+						swal("Something went wrong", "check balance", "error");
+					}
+				}
+
+			})
+	})
+
+
+
+	$("#submit_deposit").click(function () {
+
+
+
+
+
+	})
+
 	// var form = document.querySelector('#payment-form');
 	var form = document.getElementById("pay");
 
@@ -513,40 +639,106 @@ $("#submit_address").click(function () {
 				braintree.dropin.create({
 					authorization: response,
 					container: '#bt-dropin',
-
-				}, function (createErr, instance) {
-					form.addEventListener('click', function (event) {
-						event.preventDefault();
-
-						instance.requestPaymentMethod(function (err, payload) {
-							if (err) {
-								console.log('Error', err);
-								return;
-							}
-
-							let data = {
-								"command":"make_order",
-								"payment_method_nonce":payload.nonce,
-								"delivery_time" : document.getElementById("delivery_time").value,
-								"address" : address[1]
-							}
-
-							$.ajax({
-								type:"POST",
-								url:"/controller",
-								data:data,
-								success:function (data, error, jqXHR) {
-									localStorage.clear();
-									document.location.href = jqXHR.getResponseHeader("Location");
+					card: {
+						overrides: {
+							styles: {
+								input: {
+									color: 'blue',
+									'font-size': '16px'
 								},
-								statusCode:{
-									400:function () {
-										swal("Something went wrong", "check balance", "error");
-									}
+								'.number': {
+									'font-family': 'monospace'
+									// Custom web fonts are not supported. Only use system installed fonts.
+								},
+								'.invalid': {
+									color: 'red'
 								}
-							})
+							}
+						}
+					}
+				}, function (createErr, instance) {
+
+					var submit_deposit = document.getElementById("submit_deposit");
+
+					if(submit_deposit !== null) {
+						submit_deposit.addEventListener('click', function (event) {
+
+							instance.requestPaymentMethod(function (err, payload) {
+								event.preventDefault();
+
+								if (err) {
+									console.log('Error', err);
+									return;
+								}
+
+
+								let data = {
+									"command":"pay",
+									"payment_method_nonce":payload.nonce,
+									"amount":$("#amount").val()
+								}
+
+
+								$.ajax({
+									type:"POST",
+									url:"/controller",
+									data:data,
+									success:function (data, error, jqXHR) {
+										localStorage.clear();
+										document.location.href = jqXHR.getResponseHeader("Location");
+									},
+									statusCode:{
+										400:function () {
+											swal("Something went wrong", "check balance", "error");
+										}
+									}
+								})
+							});
+						})
+					}
+
+
+					if(form !== null){
+
+						form.addEventListener('click', function (event) {
+
+
+							event.preventDefault();
+
+							instance.requestPaymentMethod(function (err, payload) {
+								if (err) {
+									console.log('Error', err);
+									return;
+								}
+
+
+
+								let data = {
+									"command":"make_order",
+									"payment_method_nonce":payload.nonce,
+									"delivery_time" : document.getElementById("delivery_time").value,
+									"address" : address[1]
+								}
+
+								$.ajax({
+									type:"POST",
+									url:"/controller",
+									data:data,
+									success:function (data, error, jqXHR) {
+										localStorage.clear();
+										document.location.href = jqXHR.getResponseHeader("Location");
+									},
+									statusCode:{
+										400:function () {
+											swal("Something went wrong", "check balance", "error");
+										}
+									}
+								})
+							});
 						});
-					});
+
+					}
+
 				});
 			}
 		}
@@ -968,7 +1160,9 @@ function checkCorrect(){
 
 
 
-
+function  isDecimal2(decimal) {
+	return /\d+\.\d{0,2}/.test(decimal) || /\d/.test(decimal) ;
+}
 
 function isValidMail(email){
 	return /^([a-zA-Z0-9_-]+\.)*[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)*\.[a-zA-Z]{2,6}$/.test(email);

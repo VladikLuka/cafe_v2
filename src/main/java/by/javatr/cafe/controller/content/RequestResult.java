@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Contains useful information after processing the request
+ */
 public class RequestResult {
 
     Navigation nav;
@@ -12,7 +15,7 @@ public class RequestResult {
     String command;
     int status;
     Map<String, String> headers = new HashMap<>();
-    String URL;
+    String url;
 
 
     public RequestResult(Navigation nav, String page, int status){
@@ -36,9 +39,6 @@ public class RequestResult {
                 ", status=" + status +
                 '}';
     }
-
-
-
 
     public RequestResult(int status) {
         this.status = status;
@@ -119,11 +119,11 @@ public class RequestResult {
         this.command = command;
     }
 
-    public String getURL() {
-        return URL;
+    public String getUrl() {
+        return url;
     }
 
-    public void setURL(String URL) {
-        this.URL = URL;
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

@@ -13,6 +13,10 @@ import com.google.gson.Gson;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 
+/**
+ * Class for processing admin request.
+ * Subtract money of chosen user
+ */
 @Component
 public class SubtractMoney implements Command {
 
@@ -22,11 +26,11 @@ public class SubtractMoney implements Command {
     @Override
     public RequestResult execute(RequestContent content) throws ServiceException {
 
-        final String subst_amount = content.getRequestParam("amount");
-        final String user_id = content.getRequestParam("user_id");
+        final String substAmount = content.getRequestParam("amount");
+        final String userId = content.getRequestParam("user_id");
 
-        BigDecimal amount = new BigDecimal(subst_amount);
-        final int id = Integer.parseInt(user_id);
+        BigDecimal amount = new BigDecimal(substAmount);
+        final int id = Integer.parseInt(userId);
 
         final User user = userService.subtractMoney(amount, id);
 

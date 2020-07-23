@@ -1,5 +1,6 @@
 package by.javatr.cafe.controller.command.impl;
 
+import by.javatr.cafe.constant.RequestParameters;
 import by.javatr.cafe.container.annotation.Autowired;
 import by.javatr.cafe.container.annotation.Component;
 import by.javatr.cafe.constant.SessionAttributes;
@@ -14,21 +15,26 @@ import by.javatr.cafe.service.IAddressService;
 
 import javax.servlet.http.HttpServletResponse;
 
+
+/**
+ * Class for processing user request.
+ * Add address to user
+ */
 @Component
 public class AddAddress implements Command {
     @Autowired
-    IAddressService service;
+    private IAddressService service;
 
     @Override
     public RequestResult execute(RequestContent content) throws ServiceException {
 
-        String city = content.getRequestParam("city");
-        String street = content.getRequestParam("street");
-        String house = content.getRequestParam("house");
-        String flat = content.getRequestParam("flat");
-        int user_id = (int) content.getSessionAttr(SessionAttributes.USER_ID);
+        String city = content.getRequestParam(RequestParameters.ADDRESS_CITY);
+        String street = content.getRequestParam(RequestParameters.ADDRESS_STREET);
+        String house = content.getRequestParam(RequestParameters.ADDRESS_HOUSE);
+        String flat = content.getRequestParam(RequestParameters.ADDRESS_FLAT);
+        int userId = (int) content.getSessionAttr(SessionAttributes.USER_ID);
 
-        Address address = new Address(city, street, house, flat, user_id);
+        Address address = new Address(city, street, house, flat, userId, true);
 
         service.create(address);
 

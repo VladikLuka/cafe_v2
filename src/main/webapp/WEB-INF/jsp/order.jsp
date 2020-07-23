@@ -1,20 +1,20 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="local" uri="/tld/localization.tld" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page errorPage="error.jsp"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html>
 <head>
     <title>Order</title>
+    <link rel="shortcut icon" href="../../static/img/favico.svg" type="image/x-icon">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../static/css/user.css">
+
+    <script src="../../static/js/moment.js"></script>
+
 </head>
-
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
-<link rel="stylesheet" href="../../static/css/user.css">
-<script src="https://code.jquery.com/jquery-3.5.0.js" integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc=" crossorigin="anonymous"></script>
-<script src="../../static/js/moment.js"></script>
-
-
 <body>
 
 <jsp:include page="part/header_v2.jsp"/>
@@ -23,12 +23,12 @@
 
     <div class="user_info container_left" style="background-color:#fff; box-shadow: 0 0 5px rgba(0,0,0,0.5); margin-bottom: 100px; padding-left: 20px;">
 
-        <h2>Checkout</h2>
+        <h2><local:Localization message="order.checkout"/></h2>
 
         <div class="personal_address">
-            <h2>Address</h2>
+            <h2><local:Localization message="order.address"/></h2>
             <div class="addresses" style="padding: 20px">
-                <c:forEach items="${applicationScope.cache.getAddresses(sessionScope.user_id)}" var="address">
+                <c:forEach items="${applicationScope.cache.getAddresses(sessionScope.userId)}" var="address">
                     <div class="address_wrapper" data-id=${address.id}>
                         <div class="user_address" >
                             <div class="user_city_street">
@@ -51,11 +51,7 @@
                     </div>
                 </c:forEach>
             </div>
-            <h3>Payment</h3>
-
-<%--            <label>--%>
-<%--                <input type="datetime-local" placeholder="yyyy-MM-dd hh-mm" lang="en_Us" value="2020-06-19T12:05">--%>
-<%--            </label>--%>
+            <h3><local:Localization message="order.payment"/></h3>
 
             <div class="form-group">
                 <div class='input-group date' id='datetimepicker1'>
@@ -79,9 +75,10 @@
 
         <div>
 
-            <h4>Pay from balance</h4>
-                <button id="pay2" class="btn btn-success make_order" type="submit"><span>Balance</span></button>
-                <button id="pay3" class="btn btn-success make_order" type="submit"><span>Cash</span></button>
+            <h4><local:Localization message="order.type"/></h4>
+                <button id="pay2" class="btn btn-success make_order" type="submit"><span><local:Localization message="order.balance"/></span></button>
+                <button id="pay3" class="btn btn-success make_order" type="submit"><span><local:Localization message="order.cash"/></span></button>
+                <button id="pay4" class="btn btn-success make_order" type="submit"><span><local:Localization message="order.credit"/></span></button>
 
         </div>
         <div>
@@ -90,16 +87,16 @@
                         <div id="bt-dropin"></div>
                     </div>
                 </section>
-                <button id="pay" class="button make_order" type="submit"><span>Test Transaction</span></button>
+                <button id="pay" class="button make_order" type="submit"><span><local:Localization message="order.card"/></span></button>
         </div>
 
     </div>
     <div class="container_right">
-        <h2 style="padding-left: 20px">Order</h2>
+        <h2 style="padding-left: 20px"><local:Localization message="order.order"/></h2>
 
-        <c:forEach items="${sessionScope.cart.cart}" var="dish">
-            <div style="color:white;background-color: #767676; max-width: 500px; max-height: 300px; margin-top: 20px; border-radius: 15px; margin-left: 50px; display: inline-block">
-                <div><img src="${dish.picture_path}" alt="" style="max-width: 100px; margin-left: 10px; display: inline-block"></div>
+        <c:forEach items="${sessionScope.cart.userCart}" var="dish">
+            <div style="color:white;background-color: #767676; max-width: 500px; max-height: 300px; margin-top: 20px; border-radius: 15px; margin-left: 50px; display: inline-block">`
+                <div><img src="${dish.picturePath}" alt="" style="max-width: 100px; margin-left: 10px; display: inline-block"></div>
                 <div>
                     <div style="margin-left: 10px; display: inline-block">${dish.description}</div>
                     <div style="margin-left: 10px; display: inline-block">${dish.price}</div>
@@ -126,7 +123,6 @@
 
 <script src="https://js.braintreegateway.com/js/braintree-2.32.1.min.js"></script>
 
-<script src="../../static/js/pay.js"></script>
 <script src="https://js.braintreegateway.com/web/dropin/1.22.1/js/dropin.min.js"></script>
 <script src="../../static/js/sweetalert2.all.js"></script>
 

@@ -1,16 +1,18 @@
 package by.javatr.cafe.controller.command.impl;
 
-import by.javatr.cafe.container.annotation.Component;
-import by.javatr.cafe.constant.SessionAttributes;
 import by.javatr.cafe.constant.Path;
+import by.javatr.cafe.constant.SessionAttributes;
+import by.javatr.cafe.container.annotation.Component;
 import by.javatr.cafe.controller.command.Command;
 import by.javatr.cafe.controller.content.Navigation;
 import by.javatr.cafe.controller.content.RequestContent;
 import by.javatr.cafe.controller.content.RequestResult;
 import by.javatr.cafe.exception.ServiceException;
 
-import javax.servlet.http.HttpServletResponse;
-
+/**
+ * Class for processing user request.
+ * Logout user
+ */
 @Component
 public class LogOut implements Command {
     @Override

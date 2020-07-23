@@ -18,19 +18,27 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static by.javatr.cafe.constant.BD_Columns.*;
+import static by.javatr.cafe.constant.DbColumns.*;
 
+/**
+ * Contains methods for working with the database.
+ * Dish table
+ */
 @Component
 public class MySqlDishRepository extends AbstractRepository<Dish> implements IDishRepository {
 
-    Logger logger = LogManager.getLogger(MySqlDishRepository.class);
+    private static final Logger logger = LogManager.getLogger(MySqlDishRepository.class);
 
     private static final String GET_ALL = "select * from dish";
     private static final String GET_DISH = "select * from dish where dish_id = ?";
 
     @Autowired
-    Cache cache;
+    private Cache cache;
 
+    /**
+     * Returns all dishes
+     * @return list of dishes
+     */
     @Override
     public List<Dish> getAll() throws DAOException {
         if(!cache.getDishes().isEmpty()){
@@ -55,9 +63,9 @@ public class MySqlDishRepository extends AbstractRepository<Dish> implements IDi
                 dish.setDescription(resultSet.getString(DISH_DESCRIPTION));
                 dish.setPrice(resultSet.getBigDecimal(DISH_PRICE));
                 dish.setAvailable(resultSet.getBoolean(DISH_IS_AVAILABLE));
-                dish.setCategory_id(resultSet.getInt(DISH_CATEGORY_ID));
+                dish.setCategoryId(resultSet.getInt(DISH_CATEGORY_ID));
                 dish.setWeight(resultSet.getInt(DISH_WEIGHT));
-                dish.setPicture_path(resultSet.getString(DISH_PICTURE_PATH));
+                dish.setPicturePath(resultSet.getString(DISH_PICTURE_PATH));
                 list.add(dish);
                 connection.commit();
             }
@@ -68,34 +76,38 @@ public class MySqlDishRepository extends AbstractRepository<Dish> implements IDi
         return list;
     }
 
-
+    /**
+     * Return dish by id
+     * @param dishId dish id
+     * @return dish
+     */
     @Override
-    public Dish getById(int id) throws DAOException {
-        Dish dish = cache.getDish(new Dish(id));
+    public Dish getById(int dishId) throws DAOException {
+        Dish dish = cache.getDish(new Dish(dishId));
 
         if (dish!=null) {
-            return cache.getDish(new Dish(id));
+            return cache.getDish(new Dish(dishId));
         }
 
         dish = new Dish();
 
-       try(           Connection connection = ConnectionPool.CONNECTION_POOL.retrieve();
-                      PreparedStatement preparedStatement = connection.prepareStatement(GET_DISH)) {
-            preparedStatement.setInt(1, id);
+       try(Connection connection = ConnectionPool.CONNECTION_POOL.retrieve();
+           PreparedStatement preparedStatement = connection.prepareStatement(GET_DISH)) {
+           preparedStatement.setInt(1, dishId);
 
-            try(ResultSet resultSet = preparedStatement.executeQuery()) {
-                resultSet.next();
-                connection.setAutoCommit(false);
-                dish.setId(resultSet.getInt(DISH_ID));
-                dish.setName(resultSet.getString(DISH_NAME));
-                dish.setDescription(resultSet.getString(DISH_DESCRIPTION));
-                dish.setPrice(resultSet.getBigDecimal(DISH_PRICE));
-                dish.setAvailable(resultSet.getBoolean(DISH_IS_AVAILABLE));
-                dish.setCategory_id(resultSet.getInt(DISH_CATEGORY_ID));
-                dish.setWeight(resultSet.getInt(DISH_WEIGHT));
-                dish.setPicture_path(resultSet.getString(DISH_PICTURE_PATH));
-                connection.commit();
-            }
+           try(ResultSet resultSet = preparedStatement.executeQuery()) {
+               resultSet.next();
+               connection.setAutoCommit(false);
+               dish.setId(resultSet.getInt(DISH_ID));
+               dish.setName(resultSet.getString(DISH_NAME));
+               dish.setDescription(resultSet.getString(DISH_DESCRIPTION));
+               dish.setPrice(resultSet.getBigDecimal(DISH_PRICE));
+               dish.setAvailable(resultSet.getBoolean(DISH_IS_AVAILABLE));
+               dish.setCategoryId(resultSet.getInt(DISH_CATEGORY_ID));
+               dish.setWeight(resultSet.getInt(DISH_WEIGHT));
+               dish.setPicturePath(resultSet.getString(DISH_PICTURE_PATH));
+               connection.commit();
+           }
        }catch (SQLException e){
            logger.error("an error occurred in get by id");
            throw new DAOException("an error occurred in get by id",e);
@@ -103,26 +115,32 @@ public class MySqlDishRepository extends AbstractRepository<Dish> implements IDi
         return dish;
     }
 
+    /**
+     * Delete existing dish
+     * @param dishId dish id
+     * @return boolaen
+     */
     @Override
-    public boolean delete(int id) throws DAOException {
+    public boolean delete(int dishId) throws DAOException {
 
         try (Connection connection = getConnection()){
-            connection.setAutoCommit(false);
-            super.delete(connection, new Dish(id));
-            connection.commit();
-            cache.deleteDish(new Dish(id));
+            super.delete(connection, new Dish(dishId));
+            cache.deleteDish(new Dish(dishId));
         }catch (SQLException throwables) {
             throw new DAOException(throwables);
         }
         return true;
     }
 
+    /**
+     * Create dish
+     * @param dish dish being created
+     * @return created dish
+     */
     @Override
     public Dish create(Dish dish) throws DAOException {
         try (Connection connection = getConnection();){
-            connection.setAutoCommit(false);
             dish = super.create(connection, dish);
-            connection.commit();
             cache.addDish(dish);
         }catch (SQLException throwables) {
             throw new DAOException(throwables);
@@ -130,12 +148,15 @@ public class MySqlDishRepository extends AbstractRepository<Dish> implements IDi
         return dish;
     }
 
+    /**
+     * Update dish
+     * @param dish dish being updated
+     * @return updated dish
+     */
     @Override
     public Dish update(Dish dish) throws DAOException {
         try (Connection connection = getConnection()){
-            connection.setAutoCommit(false);
             dish = super.update(connection, dish);
-            connection.commit();
             cache.updateDish(dish);
         }catch (SQLException throwables) {
             throw new DAOException(throwables);

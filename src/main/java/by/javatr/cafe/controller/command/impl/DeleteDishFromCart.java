@@ -1,5 +1,6 @@
 package by.javatr.cafe.controller.command.impl;
 
+import by.javatr.cafe.constant.RequestParameters;
 import by.javatr.cafe.container.annotation.Autowired;
 import by.javatr.cafe.container.annotation.Component;
 import by.javatr.cafe.constant.SessionAttributes;
@@ -12,20 +13,24 @@ import by.javatr.cafe.service.ICartService;
 
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * Class for processing user request.
+ * Delete one dish from cart
+ */
 @Component
 public class DeleteDishFromCart implements Command {
 
     @Autowired
-    ICartService service;
+    private ICartService service;
 
     @Override
     public RequestResult execute(RequestContent content) throws ServiceException {
 
         Cart cart = (Cart) content.getSessionAttr(SessionAttributes.CART);
 
-        int dish_id = Integer.parseInt(content.getRequestParam("id"));
+        int dishId = Integer.parseInt(content.getRequestParam(RequestParameters.ID));
 
-        boolean b = service.deleteFromCart(cart, dish_id);
+        boolean b = service.deleteFromCart(cart, dishId);
 
         if(b){
             return new RequestResult(HttpServletResponse.SC_OK);

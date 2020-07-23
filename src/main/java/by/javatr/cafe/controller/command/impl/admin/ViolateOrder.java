@@ -9,10 +9,13 @@ import by.javatr.cafe.controller.content.RequestResult;
 import by.javatr.cafe.entity.Order;
 import by.javatr.cafe.exception.ServiceException;
 import by.javatr.cafe.service.IOrderService;
-import by.javatr.cafe.service.impl.OrderService;
 
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * Class for processing admin request.
+ * Violate order
+ */
 @Component
 public class ViolateOrder implements Command {
 
@@ -23,9 +26,9 @@ public class ViolateOrder implements Command {
     public RequestResult execute(RequestContent content) throws ServiceException {
 
         final String id = content.getRequestParam("id");
-        int order_id = Integer.parseInt(id);
+        int orderId = Integer.parseInt(id);
 
-        Order order = new Order(order_id);
+        Order order = new Order(orderId);
 
         orderService.violateOrder(order);
 

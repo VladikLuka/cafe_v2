@@ -2,26 +2,33 @@ package by.javatr.cafe.dao.repository;
 
 import by.javatr.cafe.dao.annotation.*;
 import by.javatr.cafe.dao.connection.impl.ConnectionPool;
-import by.javatr.cafe.entity.Address;
 import by.javatr.cafe.entity.Entity;
 import by.javatr.cafe.exception.DAOException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Type;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
+
+/**
+ * Contains
+ * @param <T>
+ */
 public class AbstractRepository<T extends Entity<T>> {
 
     private static final String GET_LAST_ID = "select LAST_INSERT_ID()";
 
-
+    /**
+     * Return connection
+     * @return Connection
+     */
     public static Connection getConnection() throws DAOException {
-
         try {
             return ConnectionPool.CONNECTION_POOL.retrieve();
         } catch (SQLException throwables) {
@@ -29,123 +36,12 @@ public class AbstractRepository<T extends Entity<T>> {
         }
     }
 
-
-//    public T read(Connection connection, Class<?> entity, int id){
-//        HashMap<String, Object> map = new HashMap<>();
-//        ArrayList<Type> list = new ArrayList<>();
-//        final String table;
-//        java.lang.reflect.Field joinField = null;
-//        String id_name = null;
-//        PreparedStatement statement = null;
-//        final java.lang.reflect.Field[] fields = entity.getClass().getDeclaredFields();
-//        try {
-//            if (entity.getClass().isAnnotationPresent(Table.class)) {
-//                table = entity.getClass().getDeclaredAnnotation(Table.class).table();
-//            } else {
-//                throw new IllegalArgumentException("NO TABLE");
-//            }
-//            for (java.lang.reflect.Field field : fields) {
-//                if(field.isAnnotationPresent(Field.class)){
-//                    final Field annotation = field.getAnnotation(Field.class);
-//                    final String name = annotation.name();
-//
-//                }
-//            }
-//
-//            String query;
-//
-//            if(map.size()>0){
-//                query = "select * from " + table + " join "
-//                        + list.get(0).getClass().getDeclaredAnnotation(Table.class).table() + " on "
-//                        +  joinField.getAnnotation(Join.class).table() + "."+ joinField.getAnnotation(Join.class).key()
-//                        + "=" + table + "." + joinField.getAnnotation(Join.class).thisKey();
-//                System.out.println(query);
-//            }
-//            else{
-//                query = "select * from " + table + " where " + id_name + " = ?";
-//            }statement = connection.prepareStatement(query);
-//            statement.setInt(1, id);
-//            final ResultSet resultSet = statement.executeQuery();
-//
-//            if(Objects.nonNull(resultSet)) {
-//                resultSet.next();
-//                final int columnCount = resultSet.getMetaData().getColumnCount();
-//                for (int i = 0; i < columnCount; i++) {
-//                    fields[i].setAccessible(true);
-//                    if(fields[i].isAnnotationPresent(Field.class)){
-//                        final String name = fields[i].getAnnotation(Field.class).name();
-//                        final Object object = resultSet.getObject(name);
-//                        fields[i].set(entity, object);
-//                    }
-//                    if(fields[i].isAnnotationPresent(Ignore.class)){
-//                        final String name = fields[i].getAnnotation(Ignore.class).name();
-//                        final Object object = resultSet.getObject(name);
-//                        fields[i].set(entity, object);
-//                    }
-//                    fields[i].setAccessible(false);
-//                }
-//            }
-//
-//            return (T) entity;
-//
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
-//
-//    public List<T> readAll(Connection connection, Class<T> entity) throws DAOException {
-//        List<T> list = new ArrayList<>();
-//
-//        List<Object> fie = new ArrayList<>();
-//        PreparedStatement statement = null;
-//        try {
-//            connection = ConnectionPool.CONNECTION_POOL.retrieve();
-//
-//        String query = "select * from " + entity.getDeclaredAnnotation(Table.class).table();
-//        statement = connection.prepareStatement(query);
-//        final ResultSet resultSet = statement.executeQuery();
-//            while (resultSet.next()){
-//                final java.lang.reflect.Field[] declaredFields = entity.getDeclaredFields();
-//                int counter = 0;
-//                for (java.lang.reflect.Field field: declaredFields) {
-//                    counter++;
-//                    if(field.isAnnotationPresent(Field.class) || field.isAnnotationPresent(Ignore.class)){
-//                        final Field annotation = field.getAnnotation(Field.class);
-//                        if(Objects.nonNull(annotation)){
-//                            final String name = annotation.name();
-//                            final Object object = resultSet.getObject(name);
-//                            fie.add(object);
-//                        }else {
-//                            final String name = field.getAnnotation(Ignore.class).name();
-//                            final Object object = resultSet.getObject(name);
-//                            fie.add(object);
-//                        }
-//
-//                    }
-//                }
-//
-//                final T t = entity.getDeclaredConstructor().newInstance();
-//                System.out.println(t);
-//
-//
-//                list.add(t);
-//            }
-//        }catch (SQLException | NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e){
-//            throw new DAOException(e);
-//        }finally {
-//            try {
-//                statement.close();
-//                connection.close();
-//            } catch (SQLException throwables) {
-//                throw new DAOException(throwables);
-//            }
-//        }
-////        return list;
-//    return null;
-//    }
-
-
+    /**
+     * Update entity
+     * @param connection connection
+     * @param entity to be updated
+     * @return updated entity
+     */
     public T update (Connection connection, Entity<T> entity) throws DAOException {
         String table = null;
         int id = 0;
@@ -195,12 +91,13 @@ public class AbstractRepository<T extends Entity<T>> {
                         if (declaredField.isAnnotationPresent(ManyToOne.class)) {
                             ManyToOne annotation = declaredField.getAnnotation(ManyToOne.class);
                             String field = annotation.field();
+                            final String fieldName = declaredField.getName();
                             Object o = declaredField.get(entity);
 
                             if (o != null) {
-                                field = field.substring(0, 1).toUpperCase() + field.substring(1);
-                                Method getter = o.getClass().getDeclaredMethod("get" + field);
-                                Object primaryKey = getter.invoke(o);
+                                field = fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
+                                Method getter = entity.getClass().getDeclaredMethod("get" + field);
+                                Object primaryKey = getter.invoke(entity);
                                 vars.put(joinField, primaryKey);
                             }
                         }
@@ -222,7 +119,6 @@ public class AbstractRepository<T extends Entity<T>> {
                 declaredField.setAccessible(false);
             }
 
-            System.out.println(vars);
             StringBuilder str = new StringBuilder();
 
             final Set<String> keys = vars.keySet();
@@ -254,16 +150,16 @@ public class AbstractRepository<T extends Entity<T>> {
             throw  new DAOException("can not invoke method", e);
         } catch (IllegalAccessException e) {
             throw new DAOException("Illegal modifier ",e);
-        }finally {
-            try {
-                connection.close();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
         }
     }
 
-        public T create(Connection connection, Entity<T> entity) throws DAOException {
+    /**
+     * Create entity
+     * @param connection connection
+     * @param entity entity being created
+     * @return created entity
+     */
+    public T create(Connection connection, Entity<T> entity) throws DAOException {
         Map<String, Object> fieldValues = new HashMap<>();
 
         String table = null;
@@ -371,7 +267,12 @@ public class AbstractRepository<T extends Entity<T>> {
             return (T) entity;
     }
 
-
+    /**
+     * Delete entity
+     * @param connection connection
+     * @param entity entity being deleted
+     * @return boolean
+     */
     public boolean delete(Connection connection, Entity<T> entity) throws DAOException {
         String table = null;
         int id = 0;

@@ -90,3 +90,212 @@ html {
 .user_house_flat{
 	color: #767676;
 }
+
+.admin_panel{
+	background-color: #ffffff;
+	min-height: 200px;
+	box-shadow: 0 0 5px rgba(0,0,0,0.5);
+	border-radius: 10px;
+}
+
+.del-div{
+	background-color: #767676;
+	min-height: 40px;
+	max-width: 500px;
+	max-height: 300px;
+	margin-top: 20px;
+	border-radius: 15px;
+	margin-left: 50px;
+}
+
+#wrap{
+	display:inline-block;
+	color: white;
+	margin-left: 30px;
+}
+
+#prod_wrap{
+	float: right;
+	display: inline-block;
+}
+
+.close_ord{
+	padding-bottom: 10px;
+	outline: none;
+	border: 0;
+	display: inline-block;
+	background: transparent;
+
+}
+
+.violate_ord{
+	outline: none;
+	border: 0;
+	display: inline-block;
+	background: transparent;
+}
+
+#ord{
+	display: inline-block;
+	outline: none;
+	border: 0;
+	background: transparent;
+}
+
+.admin_panel{
+	min-height: 500px;
+}
+
+.del{
+	background-color: #767676;
+	min-height: 40px;
+	max-width: 500px;
+	max-height: 300px;
+	margin-top: 20px;
+	border-radius: 15px;
+	margin-left: 50px;
+}
+
+.close_ord{
+
+	outline: none;
+	border: 0;
+	display: inline-block;
+	background: transparent;
+	height: 25px;
+	width: 25px;
+}
+
+#credit_order_time{
+	display:inline-block;
+	color: white;
+	margin-left: 30px;
+}
+
+#time_warp{
+	float: right;
+	display: inline-block;
+}
+
+.violate_ord{
+	outline: none;
+	border: 0;
+	display: inline-block;
+	background: transparent;
+}
+
+#checkout{
+	display: inline-block;
+	outline: none;
+	border: 0;
+	background: transparent;
+}
+
+#users{
+	background-color: #767676;
+	min-height: 40px;
+	max-width: 500px;
+	max-height: 300px;
+	margin-top: 20px;
+	border-radius: 15px;
+	margin-left: 50px;
+}
+
+#info{
+	display:inline-block;
+	color: white;
+	margin-left: 30px;
+}
+
+#info_wrap{
+	float: right;
+	display: inline-block;
+}
+
+#info_btn{
+	outline: none;
+	border: 0;
+	background: transparent;
+}
+
+.user_popup{
+	min-width: 900px;
+	height: 800px;
+}
+
+#popup_wrap{
+	width: 50%;
+}
+
+.usr_info{
+	width: 50%;
+}
+
+#add_money, #add_points, #grab_points, #subtract_money{
+	display: block;
+}
+
+#ban_user, #unban_user{
+	display: inline-block;
+}
+
+#close_btn{
+	height: 20px;
+}
+
+#ban_text{
+	color: red;
+}
+
+#account_label, #js-button-logout{
+	display: inline-block;
+}
+
+.inside_wrap{
+	margin-top: 20px;
+}
+
+#user_email_text{
+	color: #aaaaaa;
+}
+
+#usr_mail, #usr_points{
+	text-decoration-line: underline; width: 100%;
+}
+
+#credit_text{
+	text-decoration-line: underline; width: 100%; color: red;
+}
+
+#old_pass, #new_pass{
+	color:#aaaaaa;
+}
+
+#submit_change_pass{
+	background-color:#fbec5d; margin-top: 10px;
+}
+
+#ord_history{
+	background-color: #767676; min-height: 40px;max-width: 500px; max-height: 300px; margin-top: 20px; border-radius: 15px; margin-left: 50px;
+}
+
+#wrapp{
+	display:inline-block; color: white; margin-left: 30px;
+}
+
+#wrapp2{
+	float: right; display: inline-block;
+}
+
+.order_info{
+	outline: none; border: 0;  background: transparent;
+}
+
+#flat, #house, #city, #street {
+	margin-top: 8px;
+}
+
+.user_overlay{
+	width: 800px;
+	height: 800px;
+}

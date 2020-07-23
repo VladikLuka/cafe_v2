@@ -26,9 +26,9 @@ public class Dish extends Entity<Dish> implements Serializable {
     @Field(name="dish_weight")
     int weight;
     @Field(name="categories_category_id")
-    int category_id;
+    int categoryId;
     @Field(name="dish_picture_path")
-    String picture_path;
+    String picturePath;
 
     public Dish(int id) {
         this.id = id;
@@ -38,15 +38,15 @@ public class Dish extends Entity<Dish> implements Serializable {
 
     }
 
-    public Dish(int id, String name, String description, BigDecimal price, boolean isAvailable, int weight, int category_id, String picture_path) {
+    public Dish(int id, String name, String description, BigDecimal price, boolean isAvailable, int weight, int categoryId, String picturePath) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.isAvailable = isAvailable;
         this.weight = weight;
-        this.category_id = category_id;
-        this.picture_path = picture_path;
+        this.categoryId = categoryId;
+        this.picturePath = picturePath;
     }
 
     public Dish(int id, String name, BigDecimal price){
@@ -55,14 +55,14 @@ public class Dish extends Entity<Dish> implements Serializable {
         this.price = price;
     }
 
-    public Dish(String name, String description, BigDecimal price, boolean isAvailable, int weight, int category_id, String picture_path) {
+    public Dish(String name, String description, BigDecimal price, boolean isAvailable, int weight, int categoryId, String picturePath) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.isAvailable = isAvailable;
         this.weight = weight;
-        this.category_id = category_id;
-        this.picture_path = picture_path;
+        this.categoryId = categoryId;
+        this.picturePath = picturePath;
     }
 
     public int getId() {
@@ -113,20 +113,20 @@ public class Dish extends Entity<Dish> implements Serializable {
         this.weight = weight;
     }
 
-    public int getCategory_id() {
-        return category_id;
+    public int getCategoryId() {
+        return categoryId;
     }
 
-    public void setCategory_id(int category_id) {
-        this.category_id = category_id;
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
-    public String getPicture_path() {
-        return picture_path;
+    public String getPicturePath() {
+        return picturePath;
     }
 
-    public void setPicture_path(String picture_path) {
-        this.picture_path = picture_path;
+    public void setPicturePath(String picturePath) {
+        this.picturePath = picturePath;
     }
 
 
@@ -138,16 +138,16 @@ public class Dish extends Entity<Dish> implements Serializable {
         return id == dish.id &&
                 isAvailable == dish.isAvailable &&
                 weight == dish.weight &&
-                category_id == dish.category_id &&
+                categoryId == dish.categoryId &&
                 Objects.equals(name, dish.name) &&
                 Objects.equals(description, dish.description) &&
                 Objects.equals(price, dish.price) &&
-                Objects.equals(picture_path, dish.picture_path);
+                Objects.equals(picturePath, dish.picturePath);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, price, isAvailable, weight, category_id, picture_path);
+        return Objects.hash(id, name, description, price, isAvailable, weight, categoryId, picturePath);
     }
 
     @Override
@@ -159,8 +159,8 @@ public class Dish extends Entity<Dish> implements Serializable {
                 ", price=" + price +
                 ", isAvailable=" + isAvailable +
                 ", weight=" + weight +
-                ", category_id=" + category_id +
-                ", picture_path='" + picture_path + '\'' +
+                ", category_id=" + categoryId +
+                ", picture_path='" + picturePath + '\'' +
                 '}';
     }
 }

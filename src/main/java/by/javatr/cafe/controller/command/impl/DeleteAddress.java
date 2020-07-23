@@ -1,5 +1,6 @@
 package by.javatr.cafe.controller.command.impl;
 
+import by.javatr.cafe.constant.RequestParameters;
 import by.javatr.cafe.constant.SessionAttributes;
 import by.javatr.cafe.container.annotation.Autowired;
 import by.javatr.cafe.container.annotation.Component;
@@ -14,24 +15,32 @@ import by.javatr.cafe.service.IAddressService;
 
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * Class for processing user request.
+ * Delete user address
+ */
 @Component
 public class DeleteAddress implements Command {
     @Autowired
-    IAddressService service;
+    private IAddressService service;
 
     @Override
     public RequestResult execute(RequestContent content) throws ServiceException {
 
-        String id = content.getRequestParam("id");
-        int address_id =  Integer.parseInt(id);
+        String id = content.getRequestParam(RequestParameters.ID);
+        int addressId =  Integer.parseInt(id);
 
         Address address = new Address();
-        address.setId(address_id);
-        address.setUser_id((Integer) content.getSessionAttr(SessionAttributes.USER_ID));
+        address.setId(addressId);
+        address.setUserId((Integer) content.getSessionAttr(SessionAttributes.USER_ID));
 
-        boolean delete = service.delete(address);
+        address = service.find(address);
 
-        if (delete){
+        address.setAvailable(false);
+
+        address = service.update(address);
+
+        if (address != null){
             return  new RequestResult(Navigation.REDIRECT, Path.URL_USER, HttpServletResponse.SC_OK);
         } else {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);

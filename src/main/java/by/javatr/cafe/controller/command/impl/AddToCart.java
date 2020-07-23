@@ -1,5 +1,6 @@
 package by.javatr.cafe.controller.command.impl;
 
+import by.javatr.cafe.constant.RequestParameters;
 import by.javatr.cafe.container.annotation.Autowired;
 import by.javatr.cafe.container.annotation.Component;
 import by.javatr.cafe.constant.SessionAttributes;
@@ -15,21 +16,25 @@ import com.google.gson.Gson;
 
 import javax.servlet.http.HttpServletResponse;
 
-@Component
-public final class AddToCart implements Command {
-    @Autowired
-    IDishService service;
-    @Autowired
-    ICartService cartService;
 
-    Gson gson = new Gson();
+/**
+ * Class for processing user request.
+ * Add dish to user cart
+ */
+@Component
+public class AddToCart implements Command {
+    @Autowired
+    private IDishService service;
+    @Autowired
+    private ICartService cartService;
 
     @Override
     public RequestResult execute(RequestContent content) throws ServiceException {
-        String id = content.getRequestParam("id");
+        String id = content.getRequestParam(RequestParameters.ID);
 
         Dish dish = service.get(Integer.parseInt(id));
 
+        Gson gson = new Gson();
 
         if(content.getSessionAttr(SessionAttributes.CART) == null){
             Cart cart = new Cart();

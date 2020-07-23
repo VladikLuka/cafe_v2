@@ -8,14 +8,15 @@ import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.net.URISyntaxException;
-import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
-
+/**
+ * BeanFactory is a dependency container that provides access to classes
+ * that are annotated with Component
+ */
 public class BeanFactory {
 
     private static BeanFactory INSTANCE;
@@ -29,12 +30,23 @@ public class BeanFactory {
 
     private BeanFactory() {}
 
-    private final Map<String, Object> singletons = new HashMap();
+    private final Map<String, Object> container = new HashMap<>();
 
+    /**
+     * Returns bean by name
+     * @param beanName classname with first latter in lower case
+     * @return bean
+     */
     public Object getBean(String beanName){
-        return singletons.get(beanName);
+        return container.get(beanName);
     }
 
+
+    /**
+     * walks through directories and looks for compiled classes
+     * @param basePackage package in which to search classes
+     * @throws DIException if something went wrong
+     */
     public void instantiate(String basePackage) throws DIException {
 
         String fileName = null;
@@ -44,17 +56,21 @@ public class BeanFactory {
         String pack = "";
 
         int count = 0;
-        for (int i = 0; i < split1.length; i++) {
-            if(count == 1){
-                pack = pack + split1[i]+".";
+        for (String s : split1) {
+            if (count == 1) {
+                pack = pack + s + ".";
             }
-               if(split1[i].equals("classes")){
+            if (s.equals("classes")) {
                 count++;
             }
         }
 
-
-        String pat = basePackage.substring(1);
+        String pat = null;
+        if(basePackage.charAt(0) == '/'){
+            pat = basePackage.substring(1);
+        }else{
+            pat=basePackage;
+        }
 
         List<File> collect = null;
         try {
@@ -77,15 +93,6 @@ public class BeanFactory {
             String[] split = tempPackage.split("/");
 
             String filePackage = "";
-
-            System.out.println("HZHZHZHZHZH" + java.nio.file.FileSystems.getDefault().getPath("").toAbsolutePath().toString());
-            System.out.println("HZHZHZHZHZH" + java.nio.file.FileSystems.getDefault().getPath("").toAbsolutePath().toString());
-            System.out.println("HZHZHZHZHZH" + java.nio.file.FileSystems.getDefault().getPath("").toAbsolutePath().toString());
-            System.out.println("HZHZHZHZHZH" + java.nio.file.FileSystems.getDefault().getPath("").toAbsolutePath().toString());
-
-            System.out.println(" ABSOLUTE PATH " + absolutePath);
-
-            System.out.println(pat);
 
             for (int i = 0; i < split.length-1; i++) {
                 filePackage += split[i] + ".";
@@ -119,7 +126,7 @@ public class BeanFactory {
                 Object instance = declaredConstructor.newInstance();
                 declaredConstructor.setAccessible(false);
                 String beanName = className.substring(0,1).toLowerCase() + className.substring(1);
-                singletons.put(beanName, instance);
+                container.put(beanName, instance);
                 } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
                     throw new DIException(e);
                 }
@@ -129,18 +136,16 @@ public class BeanFactory {
 
     }
 
+    /**
+     * injects dependency to beans
+     * @throws DIException something went wrong
+     */
     public void populateProperties() throws DIException {
 
-        final Set<String> strings = singletons.keySet();
-
-        for (String str:strings) {
-            System.out.println(singletons.get(str));
-        }
-
-        for (Object object : singletons.values()) {
+        for (Object object : container.values()) {
             for (Field field : object.getClass().getDeclaredFields()) {
                 if (field.isAnnotationPresent(Autowired.class)) {
-                    for (Object dependency : singletons.values()) {
+                    for (Object dependency : container.values()) {
                         int counter = 0;
                         Class<?> aClass = dependency.getClass();
 
@@ -191,13 +196,17 @@ public class BeanFactory {
     }
 
 
-    public void run(String name) throws DIException {
-        instantiate(name);
+    /**
+     * init container
+     * @param packageName base package
+     * @throws DIException something went wrong
+     */
+    public void run(String packageName) throws DIException {
+        instantiate(packageName);
         populateProperties();
-
     }
 
-    public Map<String, Object> getSingletons() {
-        return singletons;
+    public Map<String, Object> getContainer() {
+        return container;
     }
 }

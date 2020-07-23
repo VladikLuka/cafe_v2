@@ -2,6 +2,7 @@ package by.javatr.cafe.controller.command.impl.payment;
 
 import by.javatr.cafe.constant.PaymentMethod;
 import by.javatr.cafe.constant.PaymentStatus;
+import by.javatr.cafe.constant.RequestParameters;
 import by.javatr.cafe.constant.SessionAttributes;
 import by.javatr.cafe.container.annotation.Autowired;
 import by.javatr.cafe.container.annotation.Component;
@@ -9,10 +10,8 @@ import by.javatr.cafe.controller.command.Command;
 import by.javatr.cafe.controller.content.Navigation;
 import by.javatr.cafe.controller.content.RequestContent;
 import by.javatr.cafe.controller.content.RequestResult;
-import by.javatr.cafe.util.Cache;
 import by.javatr.cafe.entity.*;
 import by.javatr.cafe.entity.Address;
-import by.javatr.cafe.exception.DAOException;
 import by.javatr.cafe.exception.ServiceException;
 import by.javatr.cafe.service.ICartService;
 import by.javatr.cafe.service.IOrderService;
@@ -26,8 +25,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static by.javatr.cafe.util.Utils.countSameDish;
+import static by.javatr.cafe.util.Utils.countSame;
 
+/**
+ * Class for processing payment request.
+ * Make an order from client account
+ */
 @Component
 public class BalanceOrder implements Command {
 
@@ -43,15 +46,15 @@ public class BalanceOrder implements Command {
     @Override
     public RequestResult execute(RequestContent content) throws ServiceException   {
 
-        String delivery_time = content.getRequestParam("delivery_time");
-        String address_id_str = content.getRequestParam("address");
-        int address_id = Integer.parseInt(address_id_str);
+        String deliveryTime = content.getRequestParam(RequestParameters.TIME_DELIVERY);
+        String addressIdStr = content.getRequestParam(RequestParameters.ADDRESS);
+        int addressId = Integer.parseInt(addressIdStr);
 
-        long del_time;
+        long delTime;
 
         try {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            del_time = simpleDateFormat.parse(delivery_time).getTime();
+            delTime = simpleDateFormat.parse(deliveryTime).getTime();
         } catch (ParseException e) {
             throw new ServiceException(e);
         }
@@ -63,50 +66,50 @@ public class BalanceOrder implements Command {
 
         List<Address> address1 = user.getAddress();
 
-        Address user_address = null;
+        Address userAddress = null;
 
         for (Address addr : address1) {
-            if (addr.getId() == address_id) {
-                user_address = addr;
+            if (addr.getId() == addressId) {
+                userAddress = addr;
                 break;
             }
         }
 
-        if(user_address == null){
+        if(userAddress == null){
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
-        BigDecimal amount = orderService.amount(cart);
-        amount.setScale(2, RoundingMode.HALF_UP);
+        BigDecimal amount = cartService.amount(cart);
+        amount = amount.setScale(2, RoundingMode.HALF_UP);
         BigDecimal money = user.getMoney();
-        money.setScale(2, RoundingMode.HALF_UP);
+        money = money.setScale(2, RoundingMode.HALF_UP);
 
         DateFormat instance = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String format = instance.format(Calendar.getInstance().getTime());
 
         long time = Calendar.getInstance().getTime().getTime();
 
-        if(time > del_time){
+        if(time > delTime){
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
-        if(del_time - time > 259_200_000){
+        if(delTime - time > 259_200_000){
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
-        final Map<Dish, Integer> dishes = countSameDish(cart.getCart());
-        Order order = new Order(PaymentMethod.BALANCE, dishes, user.getId(), format, delivery_time, user_address, amount,PaymentStatus.PAID);
+        final Map<Dish, Integer> dishes = countSame(cart.getUserCart());
+        Order order = new Order(PaymentMethod.BALANCE, dishes, user.getId(), format, deliveryTime, userAddress, amount,PaymentStatus.PAID);
 
         if (money.compareTo(amount) >= 0) {
                 order = orderService.makeOrderBalance(order, user);
                 if(order == null){
                     return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
                 }
-                cartService.clear(cart);
+                cartService.clean(cart);
             }
         else {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
-        return new RequestResult(Navigation.REDIRECT, "/checkout/" + order.getOrder_id(), HttpServletResponse.SC_FOUND);
+        return new RequestResult(Navigation.REDIRECT, "/checkout/" + order.getOrderId(), HttpServletResponse.SC_FOUND);
     }
 }

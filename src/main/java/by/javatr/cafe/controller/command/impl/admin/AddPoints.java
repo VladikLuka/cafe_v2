@@ -12,6 +12,10 @@ import com.google.gson.Gson;
 
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * Class for processing admin request.
+ * Add points to chosen user
+ */
 @Component
 public class AddPoints implements Command {
 
@@ -21,12 +25,12 @@ public class AddPoints implements Command {
     @Override
     public RequestResult execute(RequestContent content) throws ServiceException {
 
-        final String points_param = content.getRequestParam("points");
-        final int user_id = Integer.parseInt(content.getRequestParam("user_id"));
+        final String pointsParam = content.getRequestParam("points");
+        final int userId = Integer.parseInt(content.getRequestParam("user_id"));
 
-        int points = Integer.parseInt(points_param);
+        int points = Integer.parseInt(pointsParam);
 
-        User user = userService.addPoints(points, user_id);
+        User user = userService.addPoints(points, userId);
         Gson gson = new Gson();
 
         return new RequestResult(gson.toJson(user), HttpServletResponse.SC_OK);

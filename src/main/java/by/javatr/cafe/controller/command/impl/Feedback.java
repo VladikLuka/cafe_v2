@@ -1,5 +1,6 @@
 package by.javatr.cafe.controller.command.impl;
 
+import by.javatr.cafe.constant.RequestParameters;
 import by.javatr.cafe.constant.SessionAttributes;
 import by.javatr.cafe.container.annotation.Autowired;
 import by.javatr.cafe.container.annotation.Component;
@@ -12,29 +13,33 @@ import by.javatr.cafe.exception.ServiceException;
 import by.javatr.cafe.service.IOrderService;
 
 
+/**
+ * Class for processing user request.
+ * Add user feedback to order
+ */
 @Component
 public class Feedback implements Command {
 
     @Autowired
-    IOrderService orderService;
+    private IOrderService orderService;
 
     @Override
     public RequestResult execute(RequestContent content) throws ServiceException {
 
-        final int rating = Integer.parseInt(content.getRequestParam("stars"));
-        final String feedback = content.getRequestParam("feedback");
-        int order_id = Integer.parseInt(content.getRequestParam("order_id"));
-        int user_id = (int)content.getSessionAttr(SessionAttributes.USER_ID);
+        int rating = Integer.parseInt(content.getRequestParam(RequestParameters.ORDER_RATING));
+        String feedback = content.getRequestParam(RequestParameters.ORDER_FEEDBACK);
+        int orderId = Integer.parseInt(content.getRequestParam(RequestParameters.ORDER_ID));
+        int userId = (int)content.getSessionAttr(SessionAttributes.USER_ID);
 
-        Order order = new Order(order_id, user_id);
+        Order order = new Order(orderId, userId);
 
         order = orderService.getOrder(order);
 
-        order.setOrder_review(feedback);
-        order.setOrder_rating(rating);
+        order.setOrderReview(feedback);
+        order.setOrderRating(rating);
 
         orderService.updateOrder(order);
 
-        return new RequestResult(Navigation.REDIRECT, "/checkout/" + order_id);
+        return new RequestResult(Navigation.REDIRECT, "/checkout/" + orderId);
     }
 }

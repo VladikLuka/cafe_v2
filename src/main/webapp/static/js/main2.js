@@ -109,6 +109,11 @@ $(document).ready(function() {
 			data:data,
 			dataType:"json",
 			success:function (response) {
+				$("#div_add_money").removeClass("has-error")
+				$("#div_add_point").removeClass("has-error");
+				$("#div_grab_money").removeClass("has-error")
+				$("#div_grab_points").removeClass("has-error")
+
 				let user_id = document.getElementById("user_id");
 				user_id.value = response["id"];
 				let user_name = document.getElementById("user_name");
@@ -120,7 +125,7 @@ $(document).ready(function() {
 				let user_mail = document.getElementById("user_email");
 				user_mail.value = response["mail"];
 				let user_point = document.getElementById("user_point");
-				user_point.value = response["loyalty_point"];
+				user_point.value = response["loyaltyPoint"];
 				let user_money = document.getElementById("user_money");
 				user_money.value = response["money"];
 				let user_isBan = document.getElementById("isBanned");
@@ -141,3 +146,106 @@ $(document).ready(function() {
 		}
 	});
 });
+
+
+// открыть по кнопке
+$("#addProduct").click(function () {
+
+	let path = document.location.pathname;
+	let strings = path.split("/");
+	let page = strings[1];
+
+	let id = "submit_dish_" + page;
+
+	swal({
+		title: "An input!",
+		text: "Write something interesting:",
+		input: "text",
+		showCancelButton: true,
+		closeOnConfirm: false,
+		animation: "slide-from-top",
+		inputPlaceholder: "Write something",
+		html:"<input type='file' name='file' id='dish_picture' value='add_picture' multiple accept='image/*'> " +
+			"<input type='submit' id='send_picture' value='add picture'>" +
+			"<lable for='swal-input1'>dish name</lable>" +
+			"<input id=\"swal-input1\" class=\"swal2-input\" placeholder='Write smth'> \n" +
+			"<lable for='swal-input2'>dish description</lable>" +
+			"<input id=\"swal-input2\" class=\"swal2-input\" placeholder='Write smth'>" +
+			"<lable for='swal-input3'>dish weight</lable>" +
+			"<input id=\"swal-input3\" class=\"swal2-input\" placeholder='Write smth'> \n" +
+			"<lable for='swal-input4'>dish price</lable>" +
+			"<input id=\"swal-input4\" class=\"swal2-input\" placeholder='Write smth'> \n" +
+			"<input type='submit' id='submit_dish'  value='submit_dish'/>" +
+			" "
+	})
+
+	let picturePath;
+
+	$("#send_picture").click(function () {
+
+		let data = new FormData();
+		jQuery.each(jQuery('#dish_picture')[0].files, function(i, file) {
+			data.append('file-'+i, file);
+		});
+
+		$.ajax({
+			type:"POST",
+			url:"/upload",
+			data:data,
+			cache: false,
+			contentType: false,
+			processData: false,
+			success:function (response) {
+
+				picturePath = response;
+
+				if(document.getElementById("picture") !== null){
+					let elementById = document.getElementById("picture");
+					elementById.parentNode.removeChild(elementById);
+				}
+				let image = document.createElement("img");
+				image.setAttribute("style", "height: 200px; width 150px;");
+
+				image.id = "picture";
+				image.src = response;
+				document.getElementById("dish_picture").before(image);
+			}
+		})
+
+
+
+	})
+
+
+	$("#submit_dish").click(function(){
+
+		let data = {
+			"command":"create_dish",
+			"dishName":$("#swal-input1").val(),
+			"dishDescription":$("#swal-input2").val(),
+			"dishWeight":$("#swal-input3").val(),
+			"dishPrice":$("#swal-input4").val(),
+			"dishCategory":4,
+			"dishPicture": picturePath,
+
+		}
+
+		$.ajax({
+			url:"/controller",
+			type:"post",
+			data:data,
+			success:function () {
+				document.location.href = location.href;
+			}
+
+		})
+
+
+	})
+
+})
+
+
+
+
+

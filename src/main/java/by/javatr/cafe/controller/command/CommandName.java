@@ -1,5 +1,8 @@
 package by.javatr.cafe.controller.command;
 
+/**
+ * Contain commands of application
+ */
 public enum CommandName {
     SIGNUP,
     LOGOUT,
@@ -32,6 +35,9 @@ public enum CommandName {
     BAN_USER,
     UNBAN_USER,
     CASH_ORDER,
+    CREDIT_ORDER,
+    CLOSE_CREDIT,
+    CREATE_DISH
 
 
 

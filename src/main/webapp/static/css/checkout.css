@@ -2589,3 +2589,18 @@ aside.drawer ::selection {
 #reviewStars-input #star-5 {
   left: 265px;
 }
+
+#reviewStars-input{
+  margin-right: 180px;
+}
+
+#leave_feedback, #cnac_older{
+  width: 350px;
+}
+
+#cancel_order{
+  background-color:#dd571c;
+}
+
+
+

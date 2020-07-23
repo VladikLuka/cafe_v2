@@ -11,31 +11,34 @@ import java.sql.SQLException;
 import java.util.Objects;
 import java.util.concurrent.*;
 
+
+/**
+ * Contains open connections
+ */
 public enum ConnectionPool implements IConnectionPool {
 
-        CONNECTION_POOL;
+    CONNECTION_POOL;
 
-        private final Logger logger = LogManager.getLogger(ConnectionPool.class);
+    private final Logger logger = LogManager.getLogger(ConnectionPool.class);
+    private final ApplicationConfiguration properties;
+    private final BlockingQueue<Connection> freeConnections = new LinkedBlockingQueue<>();
+    private final BlockingQueue<Connection> busyConnections = new LinkedBlockingQueue<>();
 
+    ConnectionPool(){
+        properties = ApplicationConfiguration.INSTANCE;
+        initConnection();
+        logger.info("connectionPool init");
+    }
 
-        ApplicationConfiguration properties;
-
-        private final BlockingQueue<Connection> freeConnections = new LinkedBlockingQueue<>();
-        private final BlockingQueue<Connection> busyConnections = new LinkedBlockingQueue<>();
-
-        ConnectionPool(){
-            properties = ApplicationConfiguration.INSTANCE;
-            initConnection();
-            logger.info("connectionPool init");
-        }
-
-
-
+    /**
+     * Retrieve connection from pool
+     * @return Connection
+     * @throws SQLException some trouble with database
+     */
     @Override
     public Connection retrieve() throws SQLException {
-        System.out.println("freeConnection" + freeConnections.size());
-        System.out.println("busyConnection" + busyConnections.size());
-            Connection connection = null;
+
+        Connection connection = null;
         if(freeConnections.size() != 0){
             try {
                     connection = freeConnections.poll(properties.getTimeout(), TimeUnit.MILLISECONDS);
@@ -46,8 +49,8 @@ public enum ConnectionPool implements IConnectionPool {
             } catch (InterruptedException e) {
                 logger.error("Interrupted ex in connection pool retrieve", e);
             }
-        }else if(freeConnections.size() + busyConnections.size() < properties.getMax_Size()){
-                createConnections(properties.getStep_Size());
+        }else if(freeConnections.size() + busyConnections.size() < properties.getMaxSize()){
+                createConnections(properties.getStepSize());
         }
         if(Objects.nonNull(connection)){
             busyConnections.add(connection);
@@ -55,50 +58,63 @@ public enum ConnectionPool implements IConnectionPool {
         return connection;
     }
 
+    /**
+     * Returns connection to the pool
+     * @param connection connection to database
+     * @return boolean
+     */
     @Override
     public boolean release(Connection connection) {
-            if (connection == null){
-                return false;
-            }
+
+        if (connection == null){
+            return false;
+        }
         if (busyConnections.contains(connection)){
             freeConnections.add(connection);
-            busyConnections.remove(connection);
-            return true;
+            return busyConnections.remove(connection);
         }
-
-            return false;
+        return false;
     }
 
-
+    /**
+     * Initialize connection pool
+     */
     private void initConnection(){
-
-            checkPoolConfig(properties);
-        createConnections(properties.getInit_Size());
+        checkPoolConfig(properties);
+        createConnections(properties.getInitSize());
     }
 
+    /**
+     * Check connection pool configuration
+     * @param properties contains connection pool properties
+     */
     private void checkPoolConfig(ApplicationConfiguration properties){
 
-            if(properties.getInit_Size() < 1){
-                logger.warn("Init_size is smaller than 1, setting initSize to: " + properties.getDefault_init_Size());
-                properties.setInit_Size(properties.getDefault_init_Size());
+            if(properties.getInitSize() < 1){
+                logger.warn("Init_size is smaller than 1, setting initSize to: " + properties.getDefaultInitSize());
+                properties.setInitSize(properties.getDefaultInitSize());
             }
 
-            if (properties.getMax_Size() < properties.getInit_Size()){
-                logger.warn("initialSize is larger than maxSize, setting maxSize to: " + properties.getDefault_Max_Size());
-                properties.setMax_Size(properties.getDefault_Max_Size());
+            if (properties.getMaxSize() < properties.getInitSize()){
+                logger.warn("initialSize is larger than maxSize, setting maxSize to: " + properties.getDefaultMaxSize());
+                properties.setMaxSize(properties.getDefaultMaxSize());
             }
 
-            if (properties.getInit_Size() > properties.getMax_Size()){
-                logger.warn("initSize is larger than maxSize, setting minSize to: " + properties.getDefault_init_Size());
-                properties.setInit_Size(properties.getDefault_init_Size());
+            if (properties.getInitSize() > properties.getMaxSize()){
+                logger.warn("initSize is larger than maxSize, setting minSize to: " + properties.getDefaultInitSize());
+                properties.setInitSize(properties.getDefaultInitSize());
             }
 
             if(properties.getTimeout() < 0){
-                logger.warn("timeout is smaller than 0, setting timeout to: " + properties.getDefault_Timeout());
-                properties.setTimeout(properties.getDefault_Timeout());
+                logger.warn("timeout is smaller than 0, setting timeout to: " + properties.getDefaultTimeout());
+                properties.setTimeout(properties.getDefaultTimeout());
             }
     }
 
+    /**
+     * Fill connection pool with connections
+     * @param connectCount the number of connections to be created
+     */
     private void createConnections(int connectCount) {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -106,17 +122,17 @@ public enum ConnectionPool implements IConnectionPool {
             logger.error("DB DRIVER NOT FOUND");
         }
         String jdbcUrl;
-        if(System.getenv("RDS_DB_NAME") != null) {
-            String dbName = System.getenv("RDS_DB_NAME");
-            String userName = System.getenv("RDS_USERNAME");
-            String password = System.getenv("RDS_PASSWORD");
-            String hostname = System.getenv("RDS_HOSTNAME");
-            String port = System.getenv("RDS_PORT");
-             jdbcUrl = "jdbc:mysql://" + hostname + ":" + port + "/" + dbName + "?user=" + userName + "&password=" + password + "&useUnicode=true&serverTimezone=UTC";
-        }else {
-            jdbcUrl = properties.getDbUrl()+ "&user=" + properties.getDbUser() + "&password=" + properties.getDbPassword();
-//              jdbcUrl = "jdbc:mysql://database-1.cs3cgmjptspr.us-east-2.rds.amazonaws.com:3306/ebdb?user=admin&password=vladislav7890&useUnicode=true&serverTimezone=UTC";
-        }
+//        if(System.getenv("RDS_DB_NAME") != null) {
+//            String dbName = System.getenv("RDS_DB_NAME");
+//            String userName = System.getenv("RDS_USERNAME");
+//            String password = System.getenv("RDS_PASSWORD");
+//            String hostname = System.getenv("RDS_HOSTNAME");
+//            String port = System.getenv("RDS_PORT");
+//             jdbcUrl = "jdbc:mysql://" + hostname + ":" + port + "/" + dbName + "?user=" + userName + "&password=" + password + "&useUnicode=true&serverTimezone=UTC";
+//        }else {
+//            jdbcUrl = properties.getDbUrl()+ "&user=" + properties.getDbUser() + "&password=" + properties.getDbPassword();
+//        }
+        jdbcUrl = "jdbc:mysql://database-2.cs3cgmjptspr.us-east-2.rds.amazonaws.com:3306/rds?user=admin&password=vladislav7890&useUnicode=true&serverTimezone=UTC";
         for (int i = 0; i < connectCount; i++) {
             try {
                 ConnectionProxy connection = null;
@@ -130,6 +146,9 @@ public enum ConnectionPool implements IConnectionPool {
         }
     }
 
+    /**
+     * Terminate connection pool
+     */
     public void terminatePool(){
             try {
 
@@ -153,9 +172,5 @@ public enum ConnectionPool implements IConnectionPool {
 
     public int getFreeConnections() {
             return freeConnections.size();
-    }
-
-    public ApplicationConfiguration getProperties() {
-        return properties;
     }
 }

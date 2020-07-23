@@ -1,8 +1,3 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by Fernflower decompiler)
-//
-
 package by.javatr.cafe.dao.connection.impl;
 
 import java.sql.Array;
@@ -24,8 +19,13 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
+/**
+ * A wrap over the connection that allows return connection to connection pool
+ * Delegate connection methods.
+ * Added method shutDown
+ */
 public class ConnectionProxy implements Connection {
-    private Connection connection;
+    private final Connection connection;
 
     public ConnectionProxy(Connection connection) {
         this.connection = connection;

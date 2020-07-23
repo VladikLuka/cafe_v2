@@ -4,13 +4,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Cart extends Entity implements Serializable {
+public class Cart extends Entity<Cart> implements Serializable {
 
     private static final long serialVersionUID = -778037186749978446L;
 
-    int id;
+    private int id;
+    private List<Dish> userCart = new ArrayList<>();
 
-    List<Dish> cart = new ArrayList<>();
 
     public int getId() {
         return id;
@@ -20,12 +20,12 @@ public class Cart extends Entity implements Serializable {
         this.id = id;
     }
 
-    public List<Dish> getCart() {
-        return cart;
+    public List<Dish> getUserCart() {
+        return userCart;
     }
 
-    public void setCart(List<Dish> cart) {
-        this.cart = cart;
+    public void setUserCart(List<Dish> userCart) {
+        this.userCart = userCart;
     }
 }
 

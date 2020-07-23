@@ -9,6 +9,11 @@ import by.javatr.cafe.entity.Cart;
 
 import javax.servlet.http.HttpServletResponse;
 
+
+/**
+ * Class for processing user request.
+ * Delete all dishes from user cart
+ */
 @Component
 public class CleanCart implements Command {
     @Override
@@ -16,7 +21,7 @@ public class CleanCart implements Command {
 
         Cart sessionAttr = (Cart) content.getSessionAttr(SessionAttributes.CART);
 
-        sessionAttr.getCart().clear();
+        sessionAttr.getUserCart().clear();
 
         return new RequestResult(HttpServletResponse.SC_OK);
     }

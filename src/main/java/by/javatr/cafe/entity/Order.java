@@ -15,110 +15,119 @@ public class Order  extends Entity<Order> implements Serializable {
     private static final long serialVersionUID = -5305625013407239807L;
 
     @Id(name="order_id")
-    private int order_id;
+    private int orderId;
 //    @Join(fieldColumn = "order_id")
 //    @ManyToMany(table = "orders_dishes", joinName = "orders_order_id", type = Dish.class)
     private Map<Dish, Integer> dishes;
     @Field(name="order_rating")
-    private int order_rating;
+    private int orderRating;
     @Field(name="order_review")
-    private String order_review;
+    private String orderReview;
     @Field(name="order_payment_method")
     private PaymentMethod method;
     @Field(name="order_receipt_time")
     private String time;
     @Field(name = "order_delivery_time")
-    private String delivery_time;
+    private String deliveryTime;
+    @Field(name = "order_credit_time")
+    private String creditTime;
     @Field(name="users_ownerId")
-    private int user_id;
+    private int userId;
     @Field(name="order_status")
     private PaymentStatus status;
     private BigDecimal amount;
     @Join(fieldColumn = "address_address_id")
-    @ManyToOne(joinName = "address_id", field = "id",type = Address.class)
+    @OneToMany(joinName = "address_id", field = "id",type = Address.class)
     private Address address;
-    private boolean isAvailable;
 
     public Order() {
     }
 
-    public Order(PaymentMethod method, PaymentStatus status, String time,String delivery_time ,Map<Dish,Integer> dishes,BigDecimal amount,int user_id) {
+    public Order(PaymentMethod method, PaymentStatus status, String time,String deliveryTime ,Map<Dish,Integer> dishes,BigDecimal amount,int userId) {
         this.method = method;
-        this.user_id = user_id;
+        this.userId = userId;
         this.status = status;
         this.time = time;
-        this.delivery_time = delivery_time;
+        this.deliveryTime = deliveryTime;
         this.dishes = dishes;
         this.amount = amount;
     }
 
-    public Order(PaymentMethod method, PaymentStatus status, String time,String delivery_time ,Map<Dish,Integer> dishes, Address address, BigDecimal amount,int user_id) {
+    public Order(PaymentMethod method, PaymentStatus status, String time,String deliveryTime ,Map<Dish,Integer> dishes, Address address, BigDecimal amount,int userId) {
         this.method = method;
-        this.user_id = user_id;
+        this.userId = userId;
         this.status = status;
         this.time = time;
-        this.delivery_time = delivery_time;
+        this.deliveryTime = deliveryTime;
         this.dishes = dishes;
         this.address = address;
         this.amount = amount;
     }
 
-    public Order(PaymentMethod method, PaymentStatus status, String time, String delivery_time,Address address,BigDecimal amount, int user_id) {
+    public Order(PaymentMethod method, PaymentStatus status, String time, String deliveryTime,Address address,BigDecimal amount, int userId) {
         this.method = method;
         this.status = status;
         this.time = time;
-        this.delivery_time = delivery_time;
+        this.deliveryTime = deliveryTime;
         this.address = address;
         this.amount = amount;
-        this.user_id = user_id;
+        this.userId = userId;
 
     }
-    public Order(PaymentMethod method, PaymentStatus status, String time,String delivery_time , BigDecimal amount, int user_id) {
+    public Order(PaymentMethod method, PaymentStatus status, String time,String deliveryTime , BigDecimal amount, int userId) {
         this.method = method;
         this.status = status;
         this.time = time;
-        this.delivery_time = delivery_time;
+        this.deliveryTime = deliveryTime;
         this.amount = amount;
-        this.user_id = user_id;
+        this.userId = userId;
     }
 
-    public Order(int order_id) {
-        this.order_id = order_id;
+    public Order(int orderId) {
+        this.orderId = orderId;
     }
 
-    public Order(int order_id, int user_id) {
-        this.order_id = order_id;
-        this.user_id = user_id;
+    public Order(int orderId, int userId) {
+        this.orderId = orderId;
+        this.userId = userId;
     }
 
-    public Order(PaymentMethod method, Map<Dish, Integer> dishes, int user_id, String create_time, String delivery_time, Address user_address, BigDecimal amount, PaymentStatus status) {
+    public Order(PaymentMethod method, Map<Dish, Integer> dishes, int userId, String createTime, String deliveryTime, Address userAddress, BigDecimal amount, PaymentStatus status) {
         this.method = method;
         this.dishes = dishes;
-        this.user_id = user_id;
-        this.time = create_time;
-        this.delivery_time = delivery_time;
-        this.address = user_address;
+        this.userId = userId;
+        this.time = createTime;
+        this.deliveryTime = deliveryTime;
+        this.address = userAddress;
         this.amount = amount;
         this.status = status;
     }
 
-
-
+    public Order(PaymentMethod method, Map<Dish, Integer> dishes, String createTime, String creditTime, Address userAddress, BigDecimal amount, PaymentStatus status, int userId) {
+        this.method = method;
+        this.dishes = dishes;
+        this.userId = userId;
+        this.time = createTime;
+        this.creditTime = creditTime;
+        this.address = userAddress;
+        this.amount = amount;
+        this.status = status;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
-        return order_id == order.order_id &&
-                order_rating == order.order_rating &&
-                user_id == order.user_id &&
-                isAvailable == order.isAvailable &&
+        return orderId == order.orderId &&
+                orderRating == order.orderRating &&
+                userId == order.userId &&
                 Objects.equals(dishes, order.dishes) &&
-                Objects.equals(order_review, order.order_review) &&
+                Objects.equals(orderReview, order.orderReview) &&
                 method == order.method &&
                 Objects.equals(time, order.time) &&
-                Objects.equals(delivery_time, order.delivery_time) &&
+                Objects.equals(deliveryTime, order.deliveryTime) &&
+                Objects.equals(creditTime, order.creditTime) &&
                 status == order.status &&
                 Objects.equals(amount, order.amount) &&
                 Objects.equals(address, order.address);
@@ -126,33 +135,33 @@ public class Order  extends Entity<Order> implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(order_id, dishes, order_rating, order_review, method, time, delivery_time, user_id, status, amount, address, isAvailable);
+        return Objects.hash(orderId, dishes, orderRating, orderReview, method, time, deliveryTime, creditTime, userId, status, amount, address);
     }
 
     @Override
     public String toString() {
         return "Order{" +
-                "order_id=" + order_id +
+                "orderId=" + orderId +
                 ", dishes=" + dishes +
-                ", order_rating=" + order_rating +
-                ", order_review='" + order_review + '\'' +
+                ", orderRating=" + orderRating +
+                ", orderReview='" + orderReview + '\'' +
                 ", method=" + method +
                 ", time='" + time + '\'' +
-                ", delivery_time='" + delivery_time + '\'' +
-                ", user_id=" + user_id +
+                ", deliveryTime='" + deliveryTime + '\'' +
+                ", creditTime='" + creditTime + '\'' +
+                ", userId=" + userId +
                 ", status=" + status +
                 ", amount=" + amount +
                 ", address=" + address +
-                ", isAvailable=" + isAvailable +
                 '}';
     }
 
-    public int getOrder_id() {
-        return order_id;
+    public int getOrderId() {
+        return orderId;
     }
 
-    public void setOrder_id(int order_id) {
-        this.order_id = order_id;
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
     }
 
     public Map<Dish, Integer> getDishes() {
@@ -163,20 +172,20 @@ public class Order  extends Entity<Order> implements Serializable {
         this.dishes = dishes;
     }
 
-    public int getOrder_rating() {
-        return order_rating;
+    public int getOrderRating() {
+        return orderRating;
     }
 
-    public void setOrder_rating(int order_rating) {
-        this.order_rating = order_rating;
+    public void setOrderRating(int orderRating) {
+        this.orderRating = orderRating;
     }
 
-    public String getOrder_review() {
-        return order_review;
+    public String getOrderReview() {
+        return orderReview;
     }
 
-    public void setOrder_review(String order_review) {
-        this.order_review = order_review;
+    public void setOrderReview(String orderReview) {
+        this.orderReview = orderReview;
     }
 
     public PaymentMethod getMethod() {
@@ -187,22 +196,6 @@ public class Order  extends Entity<Order> implements Serializable {
         this.method = method;
     }
 
-    public int getUser_id() {
-        return user_id;
-    }
-
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
-    }
-
-    public PaymentStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(PaymentStatus status) {
-        this.status = status;
-    }
-
     public String getTime() {
         return time;
     }
@@ -211,12 +204,36 @@ public class Order  extends Entity<Order> implements Serializable {
         this.time = time;
     }
 
-    public boolean isAvailable() {
-        return isAvailable;
+    public String getDeliveryTime() {
+        return deliveryTime;
     }
 
-    public void setAvailable(boolean available) {
-        isAvailable = available;
+    public void setDeliveryTime(String deliveryTime) {
+        this.deliveryTime = deliveryTime;
+    }
+
+    public String getCreditTime() {
+        return creditTime;
+    }
+
+    public void setCreditTime(String creditTime) {
+        this.creditTime = creditTime;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public PaymentStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(PaymentStatus status) {
+        this.status = status;
     }
 
     public BigDecimal getAmount() {
@@ -233,13 +250,5 @@ public class Order  extends Entity<Order> implements Serializable {
 
     public void setAddress(Address address) {
         this.address = address;
-    }
-
-    public String getDelivery_time() {
-        return delivery_time;
-    }
-
-    public void setDelivery_time(String delivery_time) {
-        this.delivery_time = delivery_time;
     }
 }

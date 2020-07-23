@@ -10,8 +10,9 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+
 @Component
-public final class Cache {
+public class Cache {
 
     private final Map<Integer, ArrayList<Address>> mapAddress = new ConcurrentHashMap<>();
     private final CopyOnWriteArrayList<Dish> dishList = new CopyOnWriteArrayList<>();
@@ -20,26 +21,26 @@ public final class Cache {
 
     public void setOrders(List<Order> orders) {
         for (Order order: orders) {
-            if(mapOrders.containsKey(order.getUser_id())){
-                mapOrders.get(order.getUser_id()).add(order);
+            if(mapOrders.containsKey(order.getUserId())){
+                mapOrders.get(order.getUserId()).add(order);
             }else {
-                mapOrders.put(order.getUser_id(), new ArrayList<>());
-                mapOrders.get(order.getUser_id()).add(order);
+                mapOrders.put(order.getUserId(), new ArrayList<>());
+                mapOrders.get(order.getUserId()).add(order);
             }
         }
     }
 
 
-    public List<Order> getOrders(int user_id) {
-        mapOrders.computeIfAbsent(user_id, k -> new ArrayList<>());
-        return mapOrders.get(user_id);
+    public List<Order> getOrders(int userId) {
+        mapOrders.computeIfAbsent(userId, k -> new ArrayList<>());
+        return mapOrders.get(userId);
     }
 
     public Order addOrder(Order order){
-        ArrayList<Order> orders = mapOrders.get(order.getUser_id());
+        ArrayList<Order> orders = mapOrders.get(order.getUserId());
         if(orders == null){
             ArrayList<Order> list = new ArrayList<>();
-            mapOrders.put(order.getUser_id(), list);
+            mapOrders.put(order.getUserId(), list);
             list.add(order);
             return order;
         }
@@ -48,8 +49,8 @@ public final class Cache {
     }
 
     public Order updateOrder(Order order){
-        ArrayList<Order> orders = mapOrders.get(order.getUser_id());
-        orders.removeIf(user_order -> user_order.getOrder_id() == order.getOrder_id());
+        ArrayList<Order> orders = mapOrders.get(order.getUserId());
+        orders.removeIf(user_order -> user_order.getOrderId() == order.getOrderId());
         orders.add(order);
         return order;
     }
@@ -59,7 +60,7 @@ public final class Cache {
         for (Integer i :keySet) {
             final ArrayList<Order> orders = mapOrders.get(i);
             for (Order order1 :orders) {
-                if(order1.getOrder_id() == order.getOrder_id()){
+                if(order1.getOrderId() == order.getOrderId()){
                     return order1;
                 }
             }
@@ -78,7 +79,7 @@ public final class Cache {
     }
 
     public void deleteOrder(Order order){
-        ArrayList<Order> orders = mapOrders.get(order.getUser_id());
+        ArrayList<Order> orders = mapOrders.get(order.getUserId());
         orders.remove(order);
     }
 
@@ -126,52 +127,75 @@ public final class Cache {
     public void setAddresses(List<Address> list){
 
         for (Address address: list) {
-            if(mapAddress.containsKey(address.getUser_id())){
-                mapAddress.get(address.getUser_id()).add(address);
+            if(mapAddress.containsKey(address.getUserId())){
+                mapAddress.get(address.getUserId()).add(address);
             }else {
-                mapAddress.put(address.getUser_id(), new ArrayList<>());
-                mapAddress.get(address.getUser_id()).add(address);
+                mapAddress.put(address.getUserId(), new ArrayList<>());
+                mapAddress.get(address.getUserId()).add(address);
             }
         }
     }
 
     public Address getAddress(Address address) {
-        ArrayList<Address> addresses = mapAddress.get(address.getUser_id());
-        for (Address address1 :addresses) {
-            if(address.getId() == address1.getId()){
-                return address1;
+
+        if(address.getId() == 0){
+            throw new IllegalArgumentException("No id");
+        }
+
+        if(address.getUserId() != 0){
+            ArrayList<Address> addresses = mapAddress.get(address.getUserId());
+            for (Address address1 :addresses) {
+                if(address.getId() == address1.getId()){
+                    return address1;
+                }
+            }
+        }else {
+            final Set<Integer> keySet = mapAddress.keySet();
+            for (int i :keySet) {
+                final ArrayList<Address> addresses = mapAddress.get(i);
+                for (Address user_address :addresses) {
+                    if(user_address.getId() == address.getId()){
+                        return user_address;
+                    }
+                }
             }
         }
+
+
         return null;
 
     }
 
-    public List<Address> getAddresses(int user_id) {
-        return mapAddress.get(user_id);
+    public List<Address> getAddresses(int userId) {
+        return mapAddress.get(userId);
     }
 
     public Address addAddress(Address address){
-        if(mapAddress.get(address.getUser_id()) == null){
-            mapAddress.put(address.getUser_id(), new ArrayList<>());
-            mapAddress.get(address.getUser_id()).add(address);
+        if(mapAddress.get(address.getUserId()) == null){
+            mapAddress.put(address.getUserId(), new ArrayList<>());
+            mapAddress.get(address.getUserId()).add(address);
         }else {
-            mapAddress.get(address.getUser_id()).add(address);
+            mapAddress.get(address.getUserId()).add(address);
         }return address;
     }
 
     public void deleteAddress(Address address) {
 
-        final ArrayList<Address> addresses = mapAddress.get(address.getUser_id());
+        final ArrayList<Address> addresses = mapAddress.get(address.getUserId());
 
         addresses.removeIf(next -> next.getId() == address.getId());
     }
 
-    public List<Address> getUserAddresses(int user_id) {
-        return mapAddress.get(user_id);
+    public List<Address> getUserAddresses(int userId) {
+        return mapAddress.get(userId);
     }
 
     public Address updateAddress(Address address){
-        final ArrayList<Address> addresses = mapAddress.get(address.getUser_id());
+        ArrayList<Address> addresses = mapAddress.get(address.getUserId());
+
+        if(addresses == null){
+            addresses = new ArrayList<>();
+        }
 
         for (Address address1 :addresses) {
             if(address.getId() == address1.getId()){
@@ -182,8 +206,8 @@ public final class Cache {
         return address;
     }
 
-    public User getUser(int user_id){
-        return mapUser.get(user_id);
+    public User getUser(int userId){
+        return mapUser.get(userId);
     }
 
     public void setUsers(List<User> users){
@@ -247,7 +271,6 @@ public final class Cache {
         for (int i:keySet)  {
             User user = mapUser.get(i);
             user.setAddress(mapAddress.get(i));
-            System.out.println(user);
         }
     }
 

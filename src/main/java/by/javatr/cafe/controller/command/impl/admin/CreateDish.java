@@ -1,17 +1,23 @@
 package by.javatr.cafe.controller.command.impl.admin;
 
 import by.javatr.cafe.container.annotation.Autowired;
+import by.javatr.cafe.container.annotation.Component;
 import by.javatr.cafe.controller.command.Command;
 import by.javatr.cafe.controller.content.RequestContent;
 import by.javatr.cafe.controller.content.RequestResult;
 import by.javatr.cafe.entity.Dish;
-import by.javatr.cafe.exception.DAOException;
 import by.javatr.cafe.exception.ServiceException;
 import by.javatr.cafe.service.IDishService;
 
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 
+/**
+ * Class for processing admin request.
+ * Create new dish
+ */
+
+@Component
 public class CreateDish implements Command {
 
     @Autowired
@@ -20,19 +26,21 @@ public class CreateDish implements Command {
     @Override
     public RequestResult execute(RequestContent content) throws ServiceException {
 
-        int dish_id = Integer.parseInt(content.getRequestParam("dish_id"));
-        String name = content.getRequestParam("name");
-        String description = content.getRequestParam("description");
-        BigDecimal price = new BigDecimal(content.getRequestParam("price"));
-        boolean available = Boolean.parseBoolean(content.getRequestParam("available"));
-        int weight = Integer.parseInt(content.getRequestParam("weight"));
-        int category_id = Integer.parseInt(content.getRequestParam("category_id"));
-        String picturePath = content.getRequestParam("picture_path");
+        String name = content.getRequestParam("dishName");
+        String description = content.getRequestParam("dishDescription");
+        BigDecimal price = new BigDecimal(content.getRequestParam("dishPrice"));
+        int weight = Integer.parseInt(content.getRequestParam("dishWeight"));
+        int category_id = Integer.parseInt(content.getRequestParam("dishCategory"));
+        String picturePath = content.getRequestParam("dishPicture");
 
-        Dish dish = new Dish(dish_id, name, description, price, available, weight, category_id, picturePath);
+        picturePath = picturePath.replaceAll("\\\\", "/");
 
-        dish = dishService.create(dish);
+        final Dish dish = dishService.create(new Dish(name, description, price, false, weight, category_id, picturePath));
 
-        return new RequestResult(HttpServletResponse.SC_OK);
+        if(dish != null){
+            return new RequestResult(HttpServletResponse.SC_OK);
+        }else{
+            return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
+        }
     }
 }

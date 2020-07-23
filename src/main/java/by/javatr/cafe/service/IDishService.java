@@ -1,7 +1,6 @@
 package by.javatr.cafe.service;
 
 import by.javatr.cafe.entity.Dish;
-import by.javatr.cafe.exception.DAOException;
 import by.javatr.cafe.exception.ServiceException;
 
 import java.util.List;

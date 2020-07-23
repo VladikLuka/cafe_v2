@@ -7,34 +7,79 @@ import org.apache.logging.log4j.Logger;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+/**
+ * Enumeration for configuration the application. Has property <b>INSTANCE</b>
+ */
 public enum ApplicationConfiguration {
-
+    /** Property - instance */
     INSTANCE;
 
     Logger logger = LogManager.getLogger(ApplicationConfiguration.class);
 
+    /**
+     * Url database
+     */
     private String dbUrl;
+    /**
+     * Username database
+     */
     private String dbUser;
+    /**
+     * Database password
+     */
     private String dbPassword;
-    private final int default_Max_Size = 32;
-    private final int default_init_Size = 12;
-    private final int default_Timeout = 16000;
-    private int max_Size;
-    private int init_Size;
-    private int step_Size;
+    /**
+     * Default max size of connections in pool
+     */
+    private final int defaultMaxSize = 32;
+    /**
+     * Default min size of connection in pool
+     */
+    private final int defaultInitSize = 12;
+    /**
+     * Default timeout of retrieving connection from connection pool in milliseconds
+     */
+    private final int defaultTimeout = 16000;
+    /**
+     * Default max size of connections in pool
+     */
+    private int maxSize;
+    /**
+     * Default min size of connections in pool
+     */
+    private int initSize;
+    /**
+     * Step of adding connections to base
+     */
+    private int stepSize;
+    /**
+     * Timeout of retrieving connection from connection pool in milliseconds
+     */
     private int timeout;
+    /**
+     * Type of db
+     */
     private String db;
+    /**
+     * Standard package of container
+     */
     private String diPackage;
 
+    /**
+     * Init properties of application
+     */
     ApplicationConfiguration() {
-        initProperties();
+        initDbProperties();
+        intiDiProperties();
         logger.info("properties has been initialized");
     }
 
 
-    private void initProperties() {
+    /**
+     * Initialize database properties
+     */
+    private void initDbProperties() {
         final ResourceBundle dbBundle = ResourceBundle.getBundle("db");
-        final ResourceBundle diBundle = ResourceBundle.getBundle("di");
 
 
         if (Objects.nonNull(dbBundle.getString("dbUrl"))) {
@@ -50,22 +95,32 @@ public enum ApplicationConfiguration {
             this.db = dbBundle.getString("db");
         }
         if (Objects.nonNull(dbBundle.getString("connectPool_Max_Size"))) {
-            max_Size = Integer.parseInt(dbBundle.getString("connectPool_Max_Size"));
+            maxSize = Integer.parseInt(dbBundle.getString("connectPool_Max_Size"));
         }
         if (Objects.nonNull(dbBundle.getString("connectPool_Init_Size"))) {
-            init_Size = Integer.parseInt(dbBundle.getString("connectPool_Init_Size"));
+            initSize = Integer.parseInt(dbBundle.getString("connectPool_Init_Size"));
         }
         if (Objects.nonNull(dbBundle.getString("connectPool_Step_Size"))) {
-            step_Size = Integer.parseInt(dbBundle.getString("connectPool_Step_Size"));
+            stepSize = Integer.parseInt(dbBundle.getString("connectPool_Step_Size"));
         }
 
         if (Objects.nonNull(dbBundle.getString("connectPool_Step_Size"))) {
             timeout = Integer.parseInt(dbBundle.getString("timeout"));
         }
 
+    }
+
+
+    /**
+     * Initialize dependency container properties
+     */
+    private void intiDiProperties(){
+        final ResourceBundle diBundle = ResourceBundle.getBundle("di");
+
         if(Objects.nonNull(diBundle.getString("diPackage"))){
             diPackage = diBundle.getString("diPackage");
         }
+
     }
 
 
@@ -93,40 +148,40 @@ public enum ApplicationConfiguration {
         this.dbPassword = dbPassword;
     }
 
-    public int getDefault_Max_Size() {
-        return default_Max_Size;
+    public int getDefaultMaxSize() {
+        return defaultMaxSize;
     }
 
-    public int getDefault_init_Size() {
-        return default_init_Size;
+    public int getDefaultInitSize() {
+        return defaultInitSize;
     }
 
-    public int getDefault_Timeout() {
-        return default_Timeout;
+    public int getDefaultTimeout() {
+        return defaultTimeout;
     }
 
-    public int getMax_Size() {
-        return max_Size;
+    public int getMaxSize() {
+        return maxSize;
     }
 
-    public void setMax_Size(int max_Size) {
-        this.max_Size = max_Size;
+    public void setMaxSize(int maxSize) {
+        this.maxSize = maxSize;
     }
 
-    public int getInit_Size() {
-        return init_Size;
+    public int getInitSize() {
+        return initSize;
     }
 
-    public void setInit_Size(int init_Size) {
-        this.init_Size = init_Size;
+    public void setInitSize(int initSize) {
+        this.initSize = initSize;
     }
 
-    public int getStep_Size() {
-        return step_Size;
+    public int getStepSize() {
+        return stepSize;
     }
 
-    public void setStep_Size(int step_Size) {
-        this.step_Size = step_Size;
+    public void setStepSize(int stepSize) {
+        this.stepSize = stepSize;
     }
 
     public int getTimeout() {

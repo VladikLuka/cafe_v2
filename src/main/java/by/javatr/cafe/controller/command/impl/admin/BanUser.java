@@ -6,13 +6,17 @@ import by.javatr.cafe.controller.command.Command;
 import by.javatr.cafe.controller.content.RequestContent;
 import by.javatr.cafe.controller.content.RequestResult;
 import by.javatr.cafe.entity.User;
-import by.javatr.cafe.exception.DAOException;
 import by.javatr.cafe.exception.ServiceException;
 import by.javatr.cafe.service.IUserService;
 import com.google.gson.Gson;
 
 import javax.servlet.http.HttpServletResponse;
 
+
+/**
+ * Class for processing admin request.
+ * Ban chosen user
+ */
 @Component
 public class BanUser implements Command {
 

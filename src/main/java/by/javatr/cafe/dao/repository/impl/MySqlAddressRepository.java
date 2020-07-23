@@ -14,17 +14,24 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
+/**
+ * Contains methods for working with the database.
+ * Address table
+ */
 @Component
 public class MySqlAddressRepository extends AbstractRepository<Address> implements IAddressRepository {
 
     private static final String GET_ALL_ADDRESSES = "select * from address";
     private static final String GET_ALL_ADDRESSES_ID = "select SQL_NO_CACHE * from address where address_user_id = ?";
     private static final String GET_ADDRESS_ID = "select * from address where id = ?";
-    private static final String GET_LAST_ID = "select LAST_INSERT_ID()";
 
     @Autowired
-    Cache cache;
+    private Cache cache;
 
+    /**
+     * Returns all addresses
+     * @return list of addresses
+     */
     @Override
     public List<Address> getAll() throws DAOException {
         if (!cache.getMapAddress().isEmpty()) {
@@ -44,11 +51,10 @@ public class MySqlAddressRepository extends AbstractRepository<Address> implemen
                 address.setStreet(resultSet.getString(3));
                 address.setHouse(resultSet.getString(4));
                 address.setFlat(resultSet.getString(5));
-                address.setUser_id(resultSet.getInt(6));
+                address.setUserId(resultSet.getInt(6));
+                address.setAvailable(resultSet.getBoolean(7));
                 list.add(address);
             }
-
-
         } catch (SQLException e) {
             throw new DAOException("get all dishes error", e);
         }
@@ -56,16 +62,22 @@ public class MySqlAddressRepository extends AbstractRepository<Address> implemen
         return list;
     }
 
+
+    /**
+     * Returns all user addresses
+     * @param userId user id
+     * @return list of addresses
+     */
     @Override
-    public List<Address> getAllId(int id) throws DAOException {
-        if(cache.getUserAddresses(id)!= null){
-            return cache.getUserAddresses(id);
+    public List<Address> getAllId(int userId) throws DAOException {
+        if(cache.getUserAddresses(userId)!= null){
+            return cache.getUserAddresses(userId);
         }
 
         List<Address> list = new ArrayList<>();
         try (final Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(GET_ALL_ADDRESSES_ID);) {
-            statement.setInt(1, id);
+            statement.setInt(1, userId);
             try(ResultSet resultSet = statement.executeQuery();){
                 while (resultSet.next()) {
                     Address address = new Address();
@@ -74,7 +86,8 @@ public class MySqlAddressRepository extends AbstractRepository<Address> implemen
                     address.setStreet(resultSet.getString(3));
                     address.setHouse(resultSet.getString(4));
                     address.setFlat(resultSet.getString(5));
-                    address.setUser_id(resultSet.getInt(6));
+                    address.setUserId(resultSet.getInt(6));
+                    address.setAvailable(resultSet.getBoolean(7));
                     list.add(address);
                 }
             }
@@ -87,7 +100,11 @@ public class MySqlAddressRepository extends AbstractRepository<Address> implemen
 
 }
 
-
+    /**
+     * Looking for an address by ID
+     * @param address should contain id
+     * @return address
+     */
     @Override
     public Address get(Address address) throws DAOException {
 
@@ -107,7 +124,8 @@ public class MySqlAddressRepository extends AbstractRepository<Address> implemen
                     address.setStreet(resultSet.getString(3));
                     address.setHouse(resultSet.getString(4));
                     address.setFlat(resultSet.getString(5));
-                    address.setUser_id(resultSet.getInt(6));
+                    address.setUserId(resultSet.getInt(6));
+                    address.setAvailable(resultSet.getBoolean(7));
                 }
             }
 
@@ -118,6 +136,11 @@ public class MySqlAddressRepository extends AbstractRepository<Address> implemen
         return address;
     }
 
+    /**
+     * Create address
+     * @param address address
+     * @return address
+     */
     @Override
     public Address create(Address address) throws DAOException {
 
@@ -130,6 +153,11 @@ public class MySqlAddressRepository extends AbstractRepository<Address> implemen
         return address;
     }
 
+    /**
+     * Update existing address
+     * @param address address
+     * @return address
+     */
     @Override
     public Address update(Address address) throws DAOException {
 
@@ -142,6 +170,11 @@ public class MySqlAddressRepository extends AbstractRepository<Address> implemen
         return address;
     }
 
+    /**
+     * Delete existing adderss
+     * @param address address
+     * @return boolean
+     */
     @Override
     public boolean delete(Address address) throws DAOException {
         try(Connection connection = getConnection()){

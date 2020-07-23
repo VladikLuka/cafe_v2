@@ -1,10 +1,8 @@
 package by.javatr.cafe.constant;
 
-import by.javatr.cafe.controller.content.RequestContent;
-
-import java.util.HashMap;
-import java.util.Map;
-
+/**
+ * Contains application paths
+ */
 public class Path {
 
     /**
@@ -28,7 +26,9 @@ public class Path {
     public static final String URL_CHECKOUT = "/checkout";
 
 
-
+    /**
+     * Paths to jsp of application
+     */
     public static final String ERROR = "/WEB-INF/jsp/error.jsp";
     public static final String ORDER = "/WEB-INF/jsp/order.jsp";
     public static final String ADMIN = "/WEB-INF/jsp/admin.jsp";

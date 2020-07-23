@@ -10,10 +10,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page isErrorPage="true" %>
 
+<link rel="stylesheet" href="../../static/css/main.css">
+
 <html>
 <head>
     <title>Title</title>
+    <link rel="shortcut icon" href="../../static/img/favico.svg" type="image/x-icon">
 </head>
-<body style="background-image: url(https://sun9-14.userapi.com/c857636/v857636702/1f91a5/nqkkG_lvgLw.jpg)">
+<body class="page_error">
 </body>
 </html>

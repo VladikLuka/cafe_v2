@@ -5,9 +5,14 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 
+/**
+ * Redirects a request to a static resource
+ */
 public class ContentFilter  implements Filter {
+
+
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) {
 
     }
 

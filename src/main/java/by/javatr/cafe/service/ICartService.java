@@ -3,6 +3,7 @@ package by.javatr.cafe.service;
 import by.javatr.cafe.entity.Cart;
 import by.javatr.cafe.entity.Dish;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface ICartService {
@@ -13,5 +14,7 @@ public interface ICartService {
 
     boolean deleteFromCart(Cart cart, int id);
 
-    boolean clear(Cart cart);
+    boolean clean(Cart cart);
+
+    BigDecimal amount(Cart cart);
 }
