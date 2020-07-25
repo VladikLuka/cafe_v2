@@ -40,6 +40,11 @@ public class BanFilter implements Filter {
             IUserService userService =(UserService) BeanFactory.getInstance().getBean("userService");
             final User user = userService.find(user_id);
             if(user.isBan()){
+                if(req.getParameter("command") != null) {
+                    if (req.getParameter("command").equalsIgnoreCase("LOGOUT")) {
+                        filterChain.doFilter(req, servletResponse);
+                    }
+                }
                 req.getRequestDispatcher(Path.BAN).forward(req, servletResponse);
                 return;
             }

@@ -47,6 +47,8 @@ public class MySqlOrderRepository extends AbstractRepository<Order> implements I
     @Override
     public List<Order> getAll() throws DAOException {
 
+        System.out.println("ORDER getAll");
+
         if (!cache.getListOrders().isEmpty()) {
             return cache.getListOrders();
         }
@@ -108,11 +110,13 @@ public class MySqlOrderRepository extends AbstractRepository<Order> implements I
      */
     @Override
     public Order createOrder(Order order) throws DAOException{
+
+        System.out.println("ORDER createOrder");
+
         try(Connection connection = getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(CREATE_ORDER);
             PreparedStatement preparedStatement2 = connection.prepareStatement(GET_LAST_ID);
         ){
-            connection.setAutoCommit(false);
             preparedStatement.setString(1, order.getStatus().name());
             preparedStatement.setString(2, order.getTime());
             preparedStatement.setString(3, order.getDeliveryTime());
@@ -130,7 +134,6 @@ public class MySqlOrderRepository extends AbstractRepository<Order> implements I
                 resultSet.next();
                 order.setOrderId(resultSet.getInt("last_insert_id()"));
             }
-            connection.commit();
         } catch (SQLException throwables) {
             throw new DAOException(throwables);
         }
@@ -145,10 +148,12 @@ public class MySqlOrderRepository extends AbstractRepository<Order> implements I
      */
     @Override
     public Order createOrderDish(Order order) throws DAOException{
+
+        System.out.println("ORDER createOrderDish");
+
         try(    Connection connection = getConnection();
                 PreparedStatement preparedStatement1 = connection.prepareStatement((CREATE_ORDER_DISH));
         ){
-            connection.setAutoCommit(false);
             if(order.getDishes() != null) {
                 for (Dish dish : order.getDishes().keySet()) {
                     preparedStatement1.setInt(1, order.getDishes().get(dish));
@@ -157,7 +162,6 @@ public class MySqlOrderRepository extends AbstractRepository<Order> implements I
                     preparedStatement1.addBatch();
                 }
                 preparedStatement1.executeBatch();
-                connection.commit();
             }else throw new IllegalArgumentException("Order has no dish");
         } catch (SQLException throwables) {
             throw new DAOException(throwables);
@@ -172,6 +176,9 @@ public class MySqlOrderRepository extends AbstractRepository<Order> implements I
      */
     @Override
     public List<Order> getAll(User user) throws DAOException {
+
+        System.out.println("ORDER getAllUser");
+
         if (!cache.getOrders(user.getId()).isEmpty()) {
             return cache.getOrders(user.getId());
         }
@@ -234,10 +241,11 @@ public class MySqlOrderRepository extends AbstractRepository<Order> implements I
      */
     @Override
     public Order updateOrder(Order order) throws DAOException {
+
+        System.out.println("ORDER update");
+
         try(Connection connection = getConnection()){
-            connection.setAutoCommit(false);
             super.update(connection, order);
-            connection.commit();
             cache.updateOrder(order);
         } catch (SQLException throwables) {
             throw new DAOException(throwables);
@@ -252,10 +260,11 @@ public class MySqlOrderRepository extends AbstractRepository<Order> implements I
      */
     @Override
     public boolean delete(Order order) throws DAOException {
+
+        System.out.println("ORDER dalete");
+
         try (Connection connection = getConnection()){
-            connection.setAutoCommit(false);
             super.delete(connection, order);
-            connection.commit();
             cache.deleteOrder(order);
         } catch (SQLException throwables) {
             throw new DAOException(throwables);

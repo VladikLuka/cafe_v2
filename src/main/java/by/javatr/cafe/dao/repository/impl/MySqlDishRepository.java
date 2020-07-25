@@ -41,6 +41,9 @@ public class MySqlDishRepository extends AbstractRepository<Dish> implements IDi
      */
     @Override
     public List<Dish> getAll() throws DAOException {
+
+        System.out.println("DISH getAll");
+
         if(!cache.getDishes().isEmpty()){
             return cache.getDishes();
         }
@@ -57,7 +60,6 @@ public class MySqlDishRepository extends AbstractRepository<Dish> implements IDi
 
             while (resultSet.next()) {
                 Dish dish = new Dish();
-                connection.setAutoCommit(false);
                 dish.setId(resultSet.getInt(DISH_ID));
                 dish.setName(resultSet.getString(DISH_NAME));
                 dish.setDescription(resultSet.getString(DISH_DESCRIPTION));
@@ -67,7 +69,6 @@ public class MySqlDishRepository extends AbstractRepository<Dish> implements IDi
                 dish.setWeight(resultSet.getInt(DISH_WEIGHT));
                 dish.setPicturePath(resultSet.getString(DISH_PICTURE_PATH));
                 list.add(dish);
-                connection.commit();
             }
         }catch (SQLException e){
             logger.error("an error occurred in get All dish");
@@ -83,6 +84,9 @@ public class MySqlDishRepository extends AbstractRepository<Dish> implements IDi
      */
     @Override
     public Dish getById(int dishId) throws DAOException {
+
+        System.out.println("DISH getById");
+
         Dish dish = cache.getDish(new Dish(dishId));
 
         if (dish!=null) {
@@ -97,7 +101,6 @@ public class MySqlDishRepository extends AbstractRepository<Dish> implements IDi
 
            try(ResultSet resultSet = preparedStatement.executeQuery()) {
                resultSet.next();
-               connection.setAutoCommit(false);
                dish.setId(resultSet.getInt(DISH_ID));
                dish.setName(resultSet.getString(DISH_NAME));
                dish.setDescription(resultSet.getString(DISH_DESCRIPTION));
@@ -106,7 +109,6 @@ public class MySqlDishRepository extends AbstractRepository<Dish> implements IDi
                dish.setCategoryId(resultSet.getInt(DISH_CATEGORY_ID));
                dish.setWeight(resultSet.getInt(DISH_WEIGHT));
                dish.setPicturePath(resultSet.getString(DISH_PICTURE_PATH));
-               connection.commit();
            }
        }catch (SQLException e){
            logger.error("an error occurred in get by id");
@@ -122,6 +124,7 @@ public class MySqlDishRepository extends AbstractRepository<Dish> implements IDi
      */
     @Override
     public boolean delete(int dishId) throws DAOException {
+        System.out.println("DISH delete");
 
         try (Connection connection = getConnection()){
             super.delete(connection, new Dish(dishId));
@@ -139,6 +142,9 @@ public class MySqlDishRepository extends AbstractRepository<Dish> implements IDi
      */
     @Override
     public Dish create(Dish dish) throws DAOException {
+
+        System.out.println("DISH create");
+
         try (Connection connection = getConnection();){
             dish = super.create(connection, dish);
             cache.addDish(dish);
@@ -155,6 +161,9 @@ public class MySqlDishRepository extends AbstractRepository<Dish> implements IDi
      */
     @Override
     public Dish update(Dish dish) throws DAOException {
+
+        System.out.println("DISH update");
+
         try (Connection connection = getConnection()){
             dish = super.update(connection, dish);
             cache.updateDish(dish);

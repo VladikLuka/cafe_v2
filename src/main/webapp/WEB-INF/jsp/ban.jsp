@@ -8,16 +8,20 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Ban</title>
+    <title>Pizza</title>
     <link rel="shortcut icon" href="../../static/img/favico.svg" type="image/x-icon">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../static/css/catalog.css">
+    <script src="../../static/js/sweetalert2.all.js"></script>
+
+
 </head>
-
-<script src="../../static/js/script.js"></script>
-<link rel="stylesheet" href="../../static/css/user.css">
-
 <body>
 
-    <h1 id="ban_text">Sorry, you have been banned</h1>
+<jsp:include page="part/header_v2.jsp"/>
+
+    <h1 id="ban_text" style="text-align: center">Sorry, you have been banned</h1>
     <button type="submit"  class="btn btn-link js-button-logout">Log out</button>
 
 

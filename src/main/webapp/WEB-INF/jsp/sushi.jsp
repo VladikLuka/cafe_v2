@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     <link rel="stylesheet" href="../../static/css/catalog.css">
+    <script src="../../static/js/sweetalert2.all.js"></script>
 
 </head>
 <body>
@@ -63,6 +64,16 @@
             </div>
         </div>
         </c:forEach>
+
+            <c:if test="${not empty sessionScope.userId}">
+                <c:if test="${applicationScope.cache.getUser(sessionScope.userId).role eq 'ADMIN'}">
+                    <div id="addProduct">
+                        <button type="submit" id="add_dish">
+                            <img src="https://img.icons8.com/pastel-glyph/256/000000/plus.png"/>
+                        </button>
+                    </div>
+                </c:if>
+            </c:if>
 
         <c:set var="pages" value="${requestScope.pages}"/>
         <div id="dishes">

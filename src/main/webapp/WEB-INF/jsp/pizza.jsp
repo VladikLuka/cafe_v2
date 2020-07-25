@@ -64,24 +64,30 @@
         </div>
     </div>
 </c:forEach>
-<div id="addProduct">
-    <button type="submit" id="add_dish">
-        <img src="https://img.icons8.com/pastel-glyph/256/000000/plus.png"/>
-    </button>
-</div><c:set var="pages" value="${requestScope.pages}"/>
-<div id="dishes">
-    <c:forEach var="page" begin="1" end="${pages}">
-        <c:choose>
-            <c:when test="${requestScope.current_page eq page}">
-                ${page}
-            </c:when>
-            <c:otherwise>
-                <a href="/pizza/${page}">${page}</a>
-            </c:otherwise>
-        </c:choose>
-    </c:forEach>
-</div>
-</div>
+
+<c:if test="${not empty sessionScope.userId}">
+    <c:if test="${applicationScope.cache.getUser(sessionScope.userId).role eq 'ADMIN'}">
+        <div id="addProduct">
+            <button type="submit" id="add_dish">
+                <img src="https://img.icons8.com/pastel-glyph/256/000000/plus.png"/>
+            </button>
+        </div>
+    </c:if>
+</c:if>
+
+<c:set var="pages" value="${requestScope.pages}"/>
+    <div id="dishes">
+        <c:forEach var="page" begin="1" end="${pages}">
+            <c:choose>
+                <c:when test="${requestScope.current_page eq page}">
+                    ${page}
+                </c:when>
+                <c:otherwise>
+                    <a href="/pizza/${page}">${page}</a>
+                </c:otherwise>
+            </c:choose>
+        </c:forEach>
+    </div>
 
 <jsp:include page="part/footer.jsp"/>
 

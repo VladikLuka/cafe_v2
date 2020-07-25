@@ -36,6 +36,9 @@ public class MySqlUserRepository extends AbstractRepository<User> implements IUs
     @Override
     public List<User> getAllUser() throws DAOException {
 
+        System.out.println("USE getAllUser");
+
+
         if (!cache.getListUser().isEmpty()) {
             return cache.getListUser();
         }
@@ -54,7 +57,6 @@ public class MySqlUserRepository extends AbstractRepository<User> implements IUs
 
             while (resultSet.next()) {
                 User user = new User();
-                connection.setAutoCommit(false);
                 user.setId(resultSet.getInt(DbColumns.USER_ID));
                 user.setName(resultSet.getString(DbColumns.USER_NAME));
                 user.setSurname(resultSet.getString(DbColumns.USER_SURNAME));
@@ -67,7 +69,6 @@ public class MySqlUserRepository extends AbstractRepository<User> implements IUs
                 user.setBan(resultSet.getBoolean(DbColumns.USER_IS_BAN));
                 user.setCredit(resultSet.getBoolean(DbColumns.USER_IS_CREDIT));
                 userList.add(user);
-                connection.commit();
             }
         } catch (SQLException e) {
             throw new DAOException("an error occurred in a method getAllUser", e);
@@ -84,6 +85,8 @@ public class MySqlUserRepository extends AbstractRepository<User> implements IUs
     @Override
     public User findUser(User user) throws DAOException {
 
+        System.out.println("USE findUser");
+
         if (cache.getUser(user.getId()) != null) {
             return cache.getUser(user.getId());
         }
@@ -95,7 +98,6 @@ public class MySqlUserRepository extends AbstractRepository<User> implements IUs
             try (ResultSet resultSet = statement.executeQuery();) {
 
                 while (resultSet.next()) {
-                    connection.setAutoCommit(false);
                     user.setId(resultSet.getInt(DbColumns.USER_ID));
                     user.setName(resultSet.getString(DbColumns.USER_NAME));
                     user.setSurname(resultSet.getString(DbColumns.USER_SURNAME));
@@ -107,7 +109,6 @@ public class MySqlUserRepository extends AbstractRepository<User> implements IUs
                     user.setRole(Role.getRoleByName(resultSet.getString(DbColumns.ROLE_NAME)));
                     user.setBan(resultSet.getBoolean(DbColumns.USER_IS_BAN));
                     user.setCredit(resultSet.getBoolean(DbColumns.USER_IS_CREDIT));
-                    connection.commit();
                 }
             }
         } catch (SQLException e) {
@@ -126,6 +127,9 @@ public class MySqlUserRepository extends AbstractRepository<User> implements IUs
      */
     @Override
     public User find(String email, String password) throws DAOException {
+
+        System.out.println("USE find");
+
         User user = null;
 
         try (Connection connection = getConnection();
@@ -133,12 +137,12 @@ public class MySqlUserRepository extends AbstractRepository<User> implements IUs
         ) {
             statement.setString(1, email);
             statement.setString(2, password);
+
             try (ResultSet resultSet = statement.executeQuery()) {
 
 
                 while (resultSet.next()) {
                     user = new User();
-                    connection.setAutoCommit(false);
                     user.setId(resultSet.getInt(DbColumns.USER_ID));
                     user.setName(resultSet.getString(DbColumns.USER_NAME));
                     user.setSurname(resultSet.getString(DbColumns.USER_SURNAME));
@@ -150,7 +154,6 @@ public class MySqlUserRepository extends AbstractRepository<User> implements IUs
                     user.setRole(Role.getRoleByName(resultSet.getString(DbColumns.ROLE_NAME)));
                     user.setBan(resultSet.getBoolean(DbColumns.USER_IS_BAN));
                     user.setCredit(resultSet.getBoolean(DbColumns.USER_IS_CREDIT));
-                    connection.commit();
                 }
 
             }
@@ -176,10 +179,10 @@ public class MySqlUserRepository extends AbstractRepository<User> implements IUs
     @Override
     public boolean delete(User user) throws DAOException {
 
+        System.out.println("USE delete");
+
         try (Connection connection = getConnection();) {
-            connection.setAutoCommit(false);
             super.delete(connection, user);
-            connection.commit();
             cache.deleteUser(user);
         } catch (SQLException throwables) {
             throw new DAOException(throwables);
@@ -196,10 +199,11 @@ public class MySqlUserRepository extends AbstractRepository<User> implements IUs
      */
     @Override
     public User create(User user) throws DAOException {
+
+        System.out.println("USER create");
+
         try (Connection connection = getConnection()) {
-            connection.setAutoCommit(false);
             user = super.create(connection, user);
-            connection.commit();
             cache.addUser(user);
         } catch (SQLException throwables) {
             throw new DAOException(throwables);
@@ -216,11 +220,14 @@ public class MySqlUserRepository extends AbstractRepository<User> implements IUs
     @Override
     public User update(User user) throws DAOException {
 
-        Connection connection = getConnection();
-        user = super.update(connection, user);
-        cache.updateUser(user);
+        try(Connection connection = getConnection()){
+            user = super.update(connection, user);
+            cache.updateUser(user);
+            return user;
+        } catch (SQLException throwables) {
+            throw new DAOException(throwables);
+        }
 
-        return user;
     }
     private MySqlUserRepository() {}
 }

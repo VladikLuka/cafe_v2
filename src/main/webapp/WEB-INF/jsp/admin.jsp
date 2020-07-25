@@ -158,7 +158,7 @@
         <div class="col-md-6 usr_info">
             <div id="div_add_money">
                 <label for="add_user_money"><local:Localization message="admin.add.money"/></label><input type="text" class="form-control" id="add_user_money">
-                <button type="submit" class="btn btn-success" id="add_money"><local:Localization message="admin.add.money"/></button>
+                <button type="submit" class="btn btn-success" id="add_money" style=""><local:Localization message="admin.add.money"/></button>
             </div>
             <div id="div_grab_money">
                 <label for="substr_user_money"><local:Localization message="admin.grab.money"/></label><input type="text" class="form-control" id="substr_user_money">

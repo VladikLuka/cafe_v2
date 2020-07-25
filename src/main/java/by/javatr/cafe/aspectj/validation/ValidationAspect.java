@@ -211,6 +211,57 @@ public class ValidationAspect {
     @Pointcut("execution(public * by.javatr.cafe.controller.command.impl.payment.CloseCreditBalance(..))")
     public void closeCreditBalance(){}
 
+    @Pointcut("execution(public * by.javatr.cafe.controller.command.impl.admin.CreateDish.execute(..))")
+    public void createDish(){}
+
+
+
+    @Around(value = "createDish()", argNames = "pjp,point")
+    public Object createDishValid(ProceedingJoinPoint pjp, JoinPoint point) throws ServiceException {
+
+        Object[] args = point.getArgs();
+        RequestContent content = (RequestContent) args[0];
+
+        String name = content.getRequestParam("dishName");
+        String description = content.getRequestParam("dishDescription");
+        String amount = content.getRequestParam("dishPrice");
+        String weight = content.getRequestParam("dishWeight");
+        String dishCategory = content.getRequestParam("dishCategory");
+        String picturePath = content.getRequestParam("dishPicture");
+
+
+        if(name == null || description == null || amount == null || weight == null || dishCategory == null || picturePath == null){
+            return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
+        }
+
+        if(!weight.matches(Regex.POS_INTEGER)){
+            return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
+        }
+
+        try {
+            new BigDecimal(amount);
+        }catch (NumberFormatException e){
+            return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
+        }
+
+        IUserService userService = (IUserService) BeanFactory.getInstance().getBean("userService");
+
+        try {
+            User user = userService.find((int)content.getSessionAttr(SessionAttributes.USER_ID));
+
+            if(!user.getRole().equals(Role.ADMIN)){
+                return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
+            }
+
+            return pjp.proceed();
+
+        }catch (Throwable throwable) {
+            logger.error(throwable);
+            throw new ServiceException(throwable);
+        }
+
+
+    }
 
     @Around(value = "closeCreditBalance()", argNames = "pjp,point")
     public Object closeCreditOrderValid(ProceedingJoinPoint pjp, JoinPoint point) throws ServiceException {

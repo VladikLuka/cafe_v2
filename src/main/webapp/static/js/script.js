@@ -193,6 +193,9 @@ $(document).ready(function(){
 
 	$("#add_money").click(function () {
 
+		var add_mon = document.getElementById("add_money");
+		add_mon.disabled = true;
+
 		let check = isDecimal2($("#add_user_money").val());
 
 		if(!check){
@@ -215,9 +218,15 @@ $(document).ready(function(){
 				$("#div_add_money").removeClass("has-error")
 				let element = document.getElementById("user_money")
 				element.value = JSON.parse(response)["money"]
+				var add_mon = document.getElementById("add_money");
+				add_mon.disabled = false;
 			},
 			statusCode:{
-				400: $("#div_add_money").addClass("has-error")
+				400: function(){
+					$("#div_add_money").addClass("has-error");
+					let add_mon2 = document.getElementById("add_money");
+					add_mon2.disabled = false;
+				}
 			}
 
 		})
@@ -587,8 +596,6 @@ $("#submit_address").click(function () {
 
 	$("#closeCredit").click(function () {
 
-		alert("ok");
-
 		let elementById = document.getElementById("closeCredit");
 
 			let data = {
@@ -602,7 +609,6 @@ $("#submit_address").click(function () {
 				url:"/controller",
 				data:data,
 				success:function (data, error, jqXHR) {
-					alert(jqXHR.getResponseHeader("Location"));
 					document.location.href = jqXHR.getResponseHeader("Location");
 				},
 				statusCode:{
@@ -617,10 +623,6 @@ $("#submit_address").click(function () {
 
 
 	$("#submit_deposit").click(function () {
-
-
-
-
 
 	})
 
@@ -973,8 +975,7 @@ function getLocCart() {
 
 		}
 
-
-		document.getElementById("total_price").innerHTML = "Total " + total_price + " BYN";
+		document.getElementById("total_price").innerHTML = "Total " + total_price.toFixed(2) + " BYN";
 	}
 }
 

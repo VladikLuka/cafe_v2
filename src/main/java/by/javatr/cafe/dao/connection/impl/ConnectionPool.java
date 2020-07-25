@@ -66,6 +66,9 @@ public enum ConnectionPool implements IConnectionPool {
     @Override
     public boolean release(Connection connection) {
 
+        System.out.println("free " + freeConnections.size());
+        System.out.println("free " + busyConnections.size());
+
         if (connection == null){
             return false;
         }
@@ -122,17 +125,17 @@ public enum ConnectionPool implements IConnectionPool {
             logger.error("DB DRIVER NOT FOUND");
         }
         String jdbcUrl;
-//        if(System.getenv("RDS_DB_NAME") != null) {
-//            String dbName = System.getenv("RDS_DB_NAME");
-//            String userName = System.getenv("RDS_USERNAME");
-//            String password = System.getenv("RDS_PASSWORD");
-//            String hostname = System.getenv("RDS_HOSTNAME");
-//            String port = System.getenv("RDS_PORT");
-//             jdbcUrl = "jdbc:mysql://" + hostname + ":" + port + "/" + dbName + "?user=" + userName + "&password=" + password + "&useUnicode=true&serverTimezone=UTC";
-//        }else {
-//            jdbcUrl = properties.getDbUrl()+ "&user=" + properties.getDbUser() + "&password=" + properties.getDbPassword();
-//        }
-        jdbcUrl = "jdbc:mysql://database-2.cs3cgmjptspr.us-east-2.rds.amazonaws.com:3306/rds?user=admin&password=vladislav7890&useUnicode=true&serverTimezone=UTC";
+        if(System.getenv("RDS_DB_NAME") != null) {
+            String dbName = System.getenv("RDS_DB_NAME");
+            String userName = System.getenv("RDS_USERNAME");
+            String password = System.getenv("RDS_PASSWORD");
+            String hostname = System.getenv("RDS_HOSTNAME");
+            String port = System.getenv("RDS_PORT");
+             jdbcUrl = "jdbc:mysql://" + hostname + ":" + port + "/" + dbName + "?user=" + userName + "&password=" + password + "&useUnicode=true&serverTimezone=UTC";
+        }else {
+            jdbcUrl = properties.getDbUrl()+ "&user=" + properties.getDbUser() + "&password=" + properties.getDbPassword();
+        }
+//        jdbcUrl = "jdbc:mysql://database-1.cs3cgmjptspr.us-east-2.rds.amazonaws.com:3306/rds?user=admin&password=vladislav7890&useUnicode=true&serverTimezone=UTC";
         for (int i = 0; i < connectCount; i++) {
             try {
                 ConnectionProxy connection = null;

@@ -34,6 +34,9 @@ public class MySqlAddressRepository extends AbstractRepository<Address> implemen
      */
     @Override
     public List<Address> getAll() throws DAOException {
+
+        System.out.println("ADDRESS getAll");
+
         if (!cache.getMapAddress().isEmpty()) {
             return cache.getListAddress();
         }
@@ -70,13 +73,17 @@ public class MySqlAddressRepository extends AbstractRepository<Address> implemen
      */
     @Override
     public List<Address> getAllId(int userId) throws DAOException {
+
+        System.out.println("ADDRESS getAllId");
+
         if(cache.getUserAddresses(userId)!= null){
             return cache.getUserAddresses(userId);
         }
 
         List<Address> list = new ArrayList<>();
         try (final Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement(GET_ALL_ADDRESSES_ID);) {
+             PreparedStatement statement = connection.prepareStatement(GET_ALL_ADDRESSES_ID);
+        ) {
             statement.setInt(1, userId);
             try(ResultSet resultSet = statement.executeQuery();){
                 while (resultSet.next()) {
@@ -108,16 +115,20 @@ public class MySqlAddressRepository extends AbstractRepository<Address> implemen
     @Override
     public Address get(Address address) throws DAOException {
 
+        System.out.println("ADDRESS getAll");
+
+
         Address address1 = cache.getAddress(address);
         if(address1 != null){
             return address1;
         }
 
         try (final Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement(GET_ADDRESS_ID);) {
-            statement.setInt(1, address.getId());
-            try(ResultSet resultSet = statement.executeQuery();
-            ){
+             PreparedStatement statement = connection.prepareStatement(GET_ADDRESS_ID);
+        ) {
+             statement.setInt(1, address.getId());
+
+             try(ResultSet resultSet = statement.executeQuery();){
                 while (resultSet.next()) {
                     address.setId(resultSet.getInt(1));
                     address.setCity(resultSet.getString(2));
@@ -144,6 +155,8 @@ public class MySqlAddressRepository extends AbstractRepository<Address> implemen
     @Override
     public Address create(Address address) throws DAOException {
 
+        System.out.println("ADDRESS create");
+
         try(Connection connection = getConnection();) {
             address = super.create(connection, address);
             cache.addAddress(address);
@@ -161,6 +174,8 @@ public class MySqlAddressRepository extends AbstractRepository<Address> implemen
     @Override
     public Address update(Address address) throws DAOException {
 
+        System.out.println("ADDRESS update");
+
         try (Connection connection = getConnection();) {
             address= super.update(connection, address);
             cache.updateAddress(address);
@@ -177,6 +192,9 @@ public class MySqlAddressRepository extends AbstractRepository<Address> implemen
      */
     @Override
     public boolean delete(Address address) throws DAOException {
+
+        System.out.println("ADDRESS delete");
+
         try(Connection connection = getConnection()){
             super.delete(connection, address);
             cache.deleteAddress(address);

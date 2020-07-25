@@ -16,8 +16,6 @@ public class Order  extends Entity<Order> implements Serializable {
 
     @Id(name="order_id")
     private int orderId;
-//    @Join(fieldColumn = "order_id")
-//    @ManyToMany(table = "orders_dishes", joinName = "orders_order_id", type = Dish.class)
     private Map<Dish, Integer> dishes;
     @Field(name="order_rating")
     private int orderRating;

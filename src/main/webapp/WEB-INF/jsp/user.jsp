@@ -125,20 +125,20 @@
     <div class="container_right">
         <h2><local:Localization message="user.orders.history"/></h2>
         <c:forEach items="${applicationScope.cache.getOrders(sessionScope.userId)}" var="order">
-            <div id="ord_history">
-                <div id="wrapp">${order.time}</div>
-                <div id="wrapp2">
-                    <button class="order_info" data-id = "${order.orderId}" type="button">
-                        <a href="/checkout/${order.orderId}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="26" viewBox="0 0 22 22">
-                                <g fill="#FFF">
-                                    <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
-                                </g>
-                            </svg>
-                        </a>
-                    </button>
+                <div id="ord_history">
+                    <div id="wrapp">${order.time}</div>
+                    <div id="wrapp2">
+                        <button class="order_info" data-id = "${order.orderId}" type="button">
+                            <a href="/checkout/${order.orderId}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="26" viewBox="0 0 22 22">
+                                    <g fill="#FFF">
+                                        <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
+                                    </g>
+                                </svg>
+                            </a>
+                        </button>
+                    </div>
                 </div>
-            </div>
         </c:forEach>
 
     </div>

@@ -109,6 +109,7 @@ $(document).ready(function() {
 			data:data,
 			dataType:"json",
 			success:function (response) {
+
 				$("#div_add_money").removeClass("has-error")
 				$("#div_add_point").removeClass("has-error");
 				$("#div_grab_money").removeClass("has-error")
@@ -130,7 +131,8 @@ $(document).ready(function() {
 				user_money.value = response["money"];
 				let user_isBan = document.getElementById("isBanned");
 				user_isBan.value = response["isBan"];
-
+				let user_role = document.getElementById("user_role");
+				user_role.value = response["role"];
 
 			}
 		})
@@ -160,9 +162,8 @@ $("#addProduct").click(function () {
 	swal({
 		title: "An input!",
 		text: "Write something interesting:",
-		input: "text",
 		showCancelButton: true,
-		closeOnConfirm: false,
+		closeOnConfirm: true,
 		animation: "slide-from-top",
 		inputPlaceholder: "Write something",
 		html:"<input type='file' name='file' id='dish_picture' value='add_picture' multiple accept='image/*'> " +
@@ -219,13 +220,28 @@ $("#addProduct").click(function () {
 
 	$("#submit_dish").click(function(){
 
+		if(page === "pizza"){
+			page = 4;
+		}else if(page === "drink"){
+			page = 1;
+		}else if(page === "meat"){
+			page = 5;
+		}else if(page === "garnish"){
+			page = 3;
+		}else if(page === "sushi"){
+			page = 6;
+		}else if(page === "salad"){
+			page = 2;
+		}
+
+
 		let data = {
 			"command":"create_dish",
 			"dishName":$("#swal-input1").val(),
 			"dishDescription":$("#swal-input2").val(),
 			"dishWeight":$("#swal-input3").val(),
 			"dishPrice":$("#swal-input4").val(),
-			"dishCategory":4,
+			"dishCategory":page,
 			"dishPicture": picturePath,
 
 		}

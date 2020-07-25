@@ -39,7 +39,7 @@
         <div class="content">
 
             <c:choose>
-                <c:when test="${requestScope.order.status ne 'CANCELED'}">
+                <c:when test="${requestScope.order.status ne 'CANCELED' and requestScope.order.status ne 'VIOLATED'}">
                     <div class="icon">
                         <img src="../../static/img/success.svg"/>
                     </div>
@@ -146,10 +146,12 @@
                     <td><fmt:message key="checkout.created" bundle="${lang}"/></td>
                     <td>${requestScope.order.time}</td>
                 </tr>
+                <c:if test="${empty requestScope.order.creditTime}">
                 <tr>
                     <td><fmt:message key="checkout.delivery" bundle="${lang}"/></td>
                     <td>${requestScope.order.deliveryTime}</td>
                 </tr>
+                </c:if>
                 <c:if test="${not empty requestScope.order.creditTime}">
                 <tr>
                     <td><fmt:message key="checkout.credit" bundle="${lang}"/></td>
