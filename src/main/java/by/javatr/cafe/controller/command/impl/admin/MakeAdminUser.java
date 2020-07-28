@@ -1,5 +1,6 @@
 package by.javatr.cafe.controller.command.impl.admin;
 
+import by.javatr.cafe.constant.RequestParameters;
 import by.javatr.cafe.container.annotation.Autowired;
 import by.javatr.cafe.container.annotation.Component;
 import by.javatr.cafe.controller.command.Command;
@@ -12,34 +13,29 @@ import com.google.gson.Gson;
 
 import javax.servlet.http.HttpServletResponse;
 
-
-/**
- * Class for processing admin request.
- * Ban chosen user
- */
 @Component
-public class BanUser implements Command {
+public class MakeAdminUser implements Command {
 
     @Autowired
     IUserService userService;
 
+
     @Override
     public RequestResult execute(RequestContent content) throws ServiceException {
-
-        int id = Integer.parseInt(content.getRequestParam("user_id"));
-
-        User user = null;
-        try {
-            user = userService.banUser(id);
-        } catch (ServiceException e) {
-            throw new ServiceException(e);
-        }
-
+        final int userId = Integer.parseInt(content.getRequestParam(RequestParameters.USER_ID));
         Gson gson = new Gson();
 
-        return new RequestResult(gson.toJson(user), HttpServletResponse.SC_OK);
+
+        final User user = userService.makeUser(userId);
+
+        if(user!=null){
+            return new RequestResult(gson.toJson(user) ,HttpServletResponse.SC_OK);
+        }else {
+            return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
+        }
+
     }
 
-    private BanUser() {
+    private MakeAdminUser() {
     }
 }

@@ -95,7 +95,7 @@ public class UserService implements IUserService {
     @Override
     public User loginUser(User user) throws ServiceException {
 
-        user.setPassword(hashPassword(user.getPassword()));
+        user.setPassword(Utils.hashPass(user.getPassword()));
         try {
             user = userRepository.find(user.getMail(), user.getPassword());
             if(user!=null){
@@ -117,7 +117,7 @@ public class UserService implements IUserService {
     @Override
     public User createUser(User user) throws ServiceException {
 
-        user.setPassword(hashPassword(user.getPassword()));
+        user.setPassword(Utils.hashPass(user.getPassword()));
         try {
             user = userRepository.create(user);
             user.setRole(Role.USER);
@@ -266,9 +266,45 @@ public class UserService implements IUserService {
             User user = new User(userId);
             user = userRepository.findUser(user);
 
-            user.setBan(false);
+            if(user != null){
+                user.setBan(false);
+                user = userRepository.update(user);
+            }
 
-            user = userRepository.update(user);
+            return user ;
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public User makeAdmin(int userId) throws ServiceException {
+        try {
+            User user = new User(userId);
+            user = userRepository.findUser(user);
+
+            if(user != null){
+                user.setRole(Role.ADMIN);
+                user = userRepository.update(user);
+            }
+
+            return user ;
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public User makeUser(int userId) throws ServiceException {
+        try {
+            User user = new User(userId);
+            user = userRepository.findUser(user);
+
+            if(user != null){
+                user.setRole(Role.USER);
+                user = userRepository.update(user);
+            }
+
             return user ;
         } catch (DAOException e) {
             throw new ServiceException(e);
@@ -281,10 +317,6 @@ public class UserService implements IUserService {
 
     public void setAddressRepository(IAddressRepository addressRepository) {
         this.addressRepository = addressRepository;
-    }
-
-    private String hashPassword(String password){
-        return Utils.hashPass(password);
     }
 
 }

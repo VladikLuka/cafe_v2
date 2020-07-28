@@ -454,6 +454,9 @@ $("#submit_address").click(function () {
 	let adr;
 
 	document.onclick = event =>{
+		if(event.target.classList.contains("delete2")){
+			delete_dish(event.target.dataset.id);
+		}
 		if(event.target.classList.contains("hide2")){
 			hide_dish(event.target.dataset.id);
 		}
@@ -498,6 +501,22 @@ $("#submit_address").click(function () {
 		}
 }
 
+function delete_dish(id){
+
+		$.ajax({
+			type:"POST",
+			url:"/controller",
+			data:{
+				"command":"delete_dish",
+				"id":id
+			},
+			success:function () {
+				alert("ok");
+				document.location.href = location.href;
+			}
+		})
+
+	}
 
 
 

@@ -40,4 +40,7 @@ public class CloseOrder implements Command {
 
         return new RequestResult(HttpServletResponse.SC_OK);
     }
+
+    private CloseOrder() {
+    }
 }

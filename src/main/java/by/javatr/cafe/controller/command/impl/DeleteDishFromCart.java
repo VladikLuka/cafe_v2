@@ -37,4 +37,7 @@ public class DeleteDishFromCart implements Command {
         }else return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
 
     }
+
+    private DeleteDishFromCart() {
+    }
 }

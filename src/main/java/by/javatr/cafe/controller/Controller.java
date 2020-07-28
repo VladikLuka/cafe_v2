@@ -6,7 +6,7 @@ import by.javatr.cafe.controller.command.CommandProvider;
 import by.javatr.cafe.controller.content.Navigation;
 import by.javatr.cafe.controller.content.RequestContent;
 import by.javatr.cafe.controller.content.RequestResult;
-import by.javatr.cafe.dao.connection.impl.ConnectionPool;
+import by.javatr.cafe.connection.impl.ConnectionPool;
 import by.javatr.cafe.exception.ServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

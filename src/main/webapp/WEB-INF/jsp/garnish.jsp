@@ -57,6 +57,7 @@
                             <c:if test="${dish.available eq false}">
                                 <button class="btn btn-success show2" type="submit" data-id="${dish.id}" id="${dish.id}"><fmt:message key="dish.show" bundle="${lang}"/></button>
                             </c:if>
+                            <button class="btn btn-success delete2" type="submit" data-id="${dish.id}">delete</button>
                         </c:if>
                     </div>
                 </div>

@@ -42,4 +42,6 @@ public class SignUp implements Command {
         return new RequestResult(Navigation.REDIRECT, Path.URL_PIZZA, HttpServletResponse.SC_OK);
     }
 
+    private SignUp() {
+    }
 }

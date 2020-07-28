@@ -81,4 +81,7 @@ public class CashOrder implements Command {
         return new RequestResult(Navigation.REDIRECT, "/checkout/" + order.getOrderId(), HttpServletResponse.SC_FOUND);
     }
 
+
+    private CashOrder() {
+    }
 }

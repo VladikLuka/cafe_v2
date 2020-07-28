@@ -44,4 +44,7 @@ public class ViolateOrder implements Command {
 
         return new RequestResult(HttpServletResponse.SC_OK);
     }
+
+    private ViolateOrder() {
+    }
 }

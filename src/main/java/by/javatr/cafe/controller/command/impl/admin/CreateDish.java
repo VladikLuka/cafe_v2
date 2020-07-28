@@ -16,7 +16,6 @@ import java.math.BigDecimal;
  * Class for processing admin request.
  * Create new dish
  */
-
 @Component
 public class CreateDish implements Command {
 
@@ -30,17 +29,23 @@ public class CreateDish implements Command {
         String description = content.getRequestParam("dishDescription");
         BigDecimal price = new BigDecimal(content.getRequestParam("dishPrice"));
         int weight = Integer.parseInt(content.getRequestParam("dishWeight"));
-        int category_id = Integer.parseInt(content.getRequestParam("dishCategory"));
+        int categoryId = Integer.parseInt(content.getRequestParam("dishCategory"));
         String picturePath = content.getRequestParam("dishPicture");
 
         picturePath = picturePath.replaceAll("\\\\", "/");
 
-        final Dish dish = dishService.create(new Dish(name, description, price, false, weight, category_id, picturePath));
+
+
+//        InputStream stream = new FileInputStream("");
+        final Dish dish = dishService.create(new Dish(name, description, price, false, weight, categoryId, picturePath));
 
         if(dish != null){
             return new RequestResult(HttpServletResponse.SC_OK);
         }else{
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
+    }
+
+    private CreateDish() {
     }
 }

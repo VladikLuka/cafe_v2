@@ -49,4 +49,7 @@ public class CloseCreditBalance implements Command {
         return new RequestResult(Navigation.REDIRECT, Path.URL_USER, HttpServletResponse.SC_OK);
 
     }
+
+    private CloseCreditBalance() {
+    }
 }

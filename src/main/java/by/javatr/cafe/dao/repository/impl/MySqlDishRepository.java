@@ -3,7 +3,7 @@ package by.javatr.cafe.dao.repository.impl;
 import by.javatr.cafe.container.annotation.Autowired;
 import by.javatr.cafe.container.annotation.Component;
 import by.javatr.cafe.dao.repository.AbstractRepository;
-import by.javatr.cafe.dao.connection.impl.ConnectionPool;
+import by.javatr.cafe.connection.impl.ConnectionPool;
 import by.javatr.cafe.dao.repository.IDishRepository;
 import by.javatr.cafe.entity.Dish;
 import by.javatr.cafe.exception.DAOException;

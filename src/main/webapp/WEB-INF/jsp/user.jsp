@@ -41,7 +41,7 @@
                                 <c:if test="${order.status eq 'PAID'}">
                                     <div id="credit_text">
                                         <h5>You have a credit! <br>
-                                        you should close credit before ${order.creditTime} <br>
+                                        You have to pay ${order.amount} BYN before ${order.creditTime}<br>
                                         <button class="btn btn-info" type="submit" id="closeCredit" data-userId="${sessionScope.userId}" data-orderId="${order.orderId}">Close credit</button>
                                         </h5>
                                     </div>

@@ -74,4 +74,7 @@ public class Deposit implements Command {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
     }
+
+    private Deposit() {
+    }
 }

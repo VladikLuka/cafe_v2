@@ -44,4 +44,7 @@ public class LogIn implements Command {
             return new RequestResult(Navigation.REDIRECT, Path.URL_PIZZA);
         }
     }
+
+    private LogIn() {
+    }
 }

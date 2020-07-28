@@ -1,4 +1,4 @@
-package by.javatr.cafe.dao.connection;
+package by.javatr.cafe.connection;
 
 import java.sql.Connection;
 import java.sql.SQLException;

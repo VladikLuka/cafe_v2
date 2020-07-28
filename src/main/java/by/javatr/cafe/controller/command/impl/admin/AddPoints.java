@@ -35,4 +35,6 @@ public class AddPoints implements Command {
 
         return new RequestResult(gson.toJson(user), HttpServletResponse.SC_OK);
     }
+
+    private AddPoints() {}
 }

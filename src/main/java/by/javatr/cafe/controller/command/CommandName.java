@@ -37,8 +37,10 @@ public enum CommandName {
     CASH_ORDER,
     CREDIT_ORDER,
     CLOSE_CREDIT,
-    CREATE_DISH
-
+    CREATE_DISH,
+    MAKE_ADMIN_USER,
+    MAKE_USER_ADMIN,
+    DELETE_DISH,
 
 
 }

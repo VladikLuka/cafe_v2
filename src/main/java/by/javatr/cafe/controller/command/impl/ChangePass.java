@@ -38,4 +38,7 @@ public class ChangePass implements Command {
 
         return new RequestResult(Navigation.REDIRECT, "/user", HttpServletResponse.SC_OK);
     }
+
+    private ChangePass() {
+    }
 }

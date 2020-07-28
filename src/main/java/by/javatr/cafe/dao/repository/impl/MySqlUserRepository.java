@@ -4,7 +4,7 @@ import by.javatr.cafe.constant.DbColumns;
 import by.javatr.cafe.container.annotation.Autowired;
 import by.javatr.cafe.container.annotation.Component;
 import by.javatr.cafe.dao.repository.AbstractRepository;
-import by.javatr.cafe.dao.connection.impl.ConnectionPool;
+import by.javatr.cafe.connection.impl.ConnectionPool;
 import by.javatr.cafe.entity.Role;
 import by.javatr.cafe.entity.User;
 import by.javatr.cafe.dao.repository.IUserRepository;

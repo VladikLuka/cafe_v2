@@ -1,4 +1,4 @@
-package by.javatr.cafe.dao.connection.impl;
+package by.javatr.cafe.connection.impl;
 
 import java.sql.Array;
 import java.sql.Blob;

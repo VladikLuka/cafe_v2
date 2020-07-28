@@ -1,7 +1,7 @@
 package by.javatr.cafe.dao.repository;
 
 import by.javatr.cafe.dao.annotation.*;
-import by.javatr.cafe.dao.connection.impl.ConnectionPool;
+import by.javatr.cafe.connection.impl.ConnectionPool;
 import by.javatr.cafe.entity.Entity;
 import by.javatr.cafe.exception.DAOException;
 

@@ -25,4 +25,7 @@ public class CleanCart implements Command {
 
         return new RequestResult(HttpServletResponse.SC_OK);
     }
+
+    private CleanCart() {
+    }
 }

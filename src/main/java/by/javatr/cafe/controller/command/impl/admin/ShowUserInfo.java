@@ -22,18 +22,23 @@ public class ShowUserInfo implements Command {
     @Autowired
     IUserService userService;
 
-    Gson gson = new Gson();
-
     @Override
     public RequestResult execute(RequestContent content) throws ServiceException {
-
         int id =Integer.parseInt(content.getRequestParam("id"));
+        Gson gson = new Gson();
 
         User user = userService.find(id);
+
+        if(user==null){
+            return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
+        }
 
         String jsonUser = gson.toJson(user);
         RequestResult result = new RequestResult(jsonUser, HttpServletResponse.SC_OK);
         result.setHeaders("content-type", "application/json;charset=UTF-8");
         return new RequestResult(gson.toJson(user), HttpServletResponse.SC_OK);
+    }
+
+    private ShowUserInfo() {
     }
 }

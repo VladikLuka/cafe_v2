@@ -1,7 +1,7 @@
-package by.javatr.cafe.dao.connection.impl;
+package by.javatr.cafe.connection.impl;
 
 import by.javatr.cafe.config.ApplicationConfiguration;
-import by.javatr.cafe.dao.connection.IConnectionPool;
+import by.javatr.cafe.connection.IConnectionPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -41,7 +41,7 @@ public enum ConnectionPool implements IConnectionPool {
         Connection connection = null;
         if(freeConnections.size() != 0){
             try {
-                    connection = freeConnections.poll(properties.getTimeout(), TimeUnit.MILLISECONDS);
+                connection = freeConnections.poll(properties.getTimeout(), TimeUnit.MILLISECONDS);
                 if(connection == null){
                     logger.error("failed to getting connection, too long");
                     throw new SQLException();

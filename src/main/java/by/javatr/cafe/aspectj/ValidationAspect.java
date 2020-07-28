@@ -1,4 +1,4 @@
-package by.javatr.cafe.aspectj.validation;
+package by.javatr.cafe.aspectj;
 
 import by.javatr.cafe.constant.*;
 import by.javatr.cafe.container.BeanFactory;
@@ -214,7 +214,43 @@ public class ValidationAspect {
     @Pointcut("execution(public * by.javatr.cafe.controller.command.impl.admin.CreateDish.execute(..))")
     public void createDish(){}
 
+    @Pointcut("execution(public * by.javatr.cafe.controller.command.impl.admin.MakeUserAdmin(..)) &&" +
+              "execution(public * by.javatr.cafe.controller.command.impl.admin.MakeAdminUser(..))")
+    public void changeRoleValid(){}
 
+    @Around(value = "changeRoleValid()", argNames = "pjp,point")
+    public Object changeRole(ProceedingJoinPoint pjp, JoinPoint point) throws ServiceException {
+
+        Object[] args = point.getArgs();
+        RequestContent content = (RequestContent) args[0];
+
+        final String userId = content.getRequestParam(RequestParameters.USER_ID);
+
+        if(userId == null){
+            return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
+        }
+
+        if(!Regex.POS_INTEGER.matches(userId)){
+            return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
+        }
+
+        IUserService userService = (IUserService) BeanFactory.getInstance().getBean("userService");
+
+        try {
+            User user = userService.find((int)content.getSessionAttr(SessionAttributes.USER_ID));
+
+            if(!user.getRole().equals(Role.ADMIN)){
+                return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
+            }
+
+            return pjp.proceed();
+
+        }catch (Throwable throwable) {
+            logger.error(throwable);
+            throw new ServiceException(throwable);
+        }
+
+    }
 
     @Around(value = "createDish()", argNames = "pjp,point")
     public Object createDishValid(ProceedingJoinPoint pjp, JoinPoint point) throws ServiceException {

@@ -42,4 +42,7 @@ public class Feedback implements Command {
 
         return new RequestResult(Navigation.REDIRECT, "/checkout/" + orderId);
     }
+
+    private Feedback() {
+    }
 }

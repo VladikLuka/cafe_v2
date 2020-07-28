@@ -30,4 +30,8 @@ public interface IUserService {
     User banUser(int id) throws ServiceException;
 
     User unbanUser(int id) throws ServiceException;
+
+    User makeAdmin(int id) throws ServiceException;
+
+    User makeUser(int id) throws ServiceException;
 }

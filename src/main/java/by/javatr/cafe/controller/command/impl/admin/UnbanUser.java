@@ -37,4 +37,7 @@ public class UnbanUser implements Command {
 
         return new RequestResult(gson.toJson(user), HttpServletResponse.SC_OK);
     }
+
+    private UnbanUser() {
+    }
 }

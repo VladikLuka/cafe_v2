@@ -32,4 +32,7 @@ public class ShowDish implements Command {
 
         return new RequestResult(HttpServletResponse.SC_OK);
     }
+
+    private ShowDish() {
+    }
 }

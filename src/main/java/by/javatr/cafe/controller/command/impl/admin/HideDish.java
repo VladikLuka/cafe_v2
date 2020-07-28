@@ -32,4 +32,7 @@ public class HideDish implements Command {
 
         return new RequestResult(HttpServletResponse.SC_OK);
     }
+
+    private HideDish() {
+    }
 }

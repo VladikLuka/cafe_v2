@@ -50,4 +50,8 @@ public class AddToCart implements Command {
         result.setHeaders("content-type", "application/json;charset=UTF-8");
         return result;
     }
+
+
+    private AddToCart() {
+    }
 }

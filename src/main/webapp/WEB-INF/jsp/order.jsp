@@ -95,7 +95,9 @@
 
         <c:forEach items="${sessionScope.cart.userCart}" var="dish">
             <div style="color:white;background-color: #767676; max-width: 500px; max-height: 300px; margin-top: 20px; border-radius: 15px; margin-left: 50px; display: inline-block">`
-                <div><img src="${dish.picturePath}" alt="" style="max-width: 100px; margin-left: 10px; display: inline-block"></div>
+                <div>
+                    <img src="${dish.picturePath}" alt="" style="max-width: 100px; margin-left: 10px; display: inline-block">
+                </div>
                 <div>
                     <div style="margin-left: 10px; display: inline-block">${dish.description}</div>
                     <div style="margin-left: 10px; display: inline-block">${dish.price}</div>

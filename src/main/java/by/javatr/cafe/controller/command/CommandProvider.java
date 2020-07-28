@@ -52,6 +52,9 @@ public class CommandProvider {
         repository.put(CommandName.CREDIT_ORDER, (CreditOrder) factory.getBean("creditOrder"));
         repository.put(CommandName.CLOSE_CREDIT, (CloseCreditBalance) factory.getBean("closeCreditBalance"));
         repository.put(CommandName.CREATE_DISH, (CreateDish) factory.getBean("createDish"));
+        repository.put(CommandName.MAKE_USER_ADMIN, (MakeUserAdmin) factory.getBean("makeUserAdmin"));
+        repository.put(CommandName.MAKE_ADMIN_USER, (MakeAdminUser) factory.getBean("makeAdminUser"));
+        repository.put(CommandName.DELETE_DISH, (DeleteDish) factory.getBean("deleteDish"));
     }
 
     public Command getCommand(String name){

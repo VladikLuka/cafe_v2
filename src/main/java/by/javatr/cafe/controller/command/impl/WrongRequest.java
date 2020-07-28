@@ -19,4 +19,7 @@ public class WrongRequest implements Command {
     public RequestResult execute(RequestContent content) {
         return new RequestResult(Navigation.FORWARD, Path.ERROR, HttpServletResponse.SC_NOT_FOUND);
     }
+
+    private WrongRequest() {
+    }
 }

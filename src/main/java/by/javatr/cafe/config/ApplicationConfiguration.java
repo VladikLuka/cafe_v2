@@ -4,7 +4,6 @@ package by.javatr.cafe.config;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Objects;
 import java.util.ResourceBundle;
 
 /**
@@ -14,7 +13,7 @@ public enum ApplicationConfiguration {
     /** Property - instance */
     INSTANCE;
 
-    Logger logger = LogManager.getLogger(ApplicationConfiguration.class);
+    private final Logger logger = LogManager.getLogger(ApplicationConfiguration.class);
 
     /**
      * Url database
@@ -81,30 +80,29 @@ public enum ApplicationConfiguration {
     private void initDbProperties() {
         final ResourceBundle dbBundle = ResourceBundle.getBundle("db");
 
-
-        if (Objects.nonNull(dbBundle.getString("dbUrl"))) {
+        if (dbBundle.containsKey("dbUrl")) {
             dbUrl = dbBundle.getString("dbUrl");
         }
-        if (Objects.nonNull(dbBundle.getString("dbUser"))) {
+        if (dbBundle.containsKey("dbUser")) {
             dbUser = dbBundle.getString("dbUser");
         }
-        if (Objects.nonNull(dbPassword = dbBundle.getString("dbPassword"))) {
+        if (dbBundle.containsKey("dbPassword")) {
             dbPassword = dbBundle.getString("dbPassword");
         }
-        if (Objects.nonNull(db = dbBundle.getString("db"))) {
+        if (dbBundle.containsKey("db")) {
             this.db = dbBundle.getString("db");
         }
-        if (Objects.nonNull(dbBundle.getString("connectPool_Max_Size"))) {
+        if (dbBundle.containsKey("maxSize")) {
             maxSize = Integer.parseInt(dbBundle.getString("connectPool_Max_Size"));
         }
-        if (Objects.nonNull(dbBundle.getString("connectPool_Init_Size"))) {
+        if (dbBundle.containsKey("initSize")) {
             initSize = Integer.parseInt(dbBundle.getString("connectPool_Init_Size"));
         }
-        if (Objects.nonNull(dbBundle.getString("connectPool_Step_Size"))) {
+        if (dbBundle.containsKey("stemSize")) {
             stepSize = Integer.parseInt(dbBundle.getString("connectPool_Step_Size"));
         }
 
-        if (Objects.nonNull(dbBundle.getString("connectPool_Step_Size"))) {
+        if (dbBundle.containsKey("timeout")) {
             timeout = Integer.parseInt(dbBundle.getString("timeout"));
         }
 
@@ -117,7 +115,7 @@ public enum ApplicationConfiguration {
     private void intiDiProperties(){
         final ResourceBundle diBundle = ResourceBundle.getBundle("di");
 
-        if(Objects.nonNull(diBundle.getString("diPackage"))){
+        if(diBundle.containsKey("diPackage")){
             diPackage = diBundle.getString("diPackage");
         }
 

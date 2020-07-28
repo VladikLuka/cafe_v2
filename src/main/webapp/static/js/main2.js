@@ -168,12 +168,12 @@ $("#addProduct").click(function () {
 		inputPlaceholder: "Write something",
 		html:"<input type='file' name='file' id='dish_picture' value='add_picture' multiple accept='image/*'> " +
 			"<input type='submit' id='send_picture' value='add picture'>" +
-			"<lable for='swal-input1'>dish name</lable>" +
+			"<lable for='swal-input1'><br>dish name</lable>" +
 			"<input id=\"swal-input1\" class=\"swal2-input\" placeholder='Write smth'> \n" +
 			"<lable for='swal-input2'>dish description</lable>" +
 			"<input id=\"swal-input2\" class=\"swal2-input\" placeholder='Write smth'>" +
 			"<lable for='swal-input3'>dish weight</lable>" +
-			"<input id=\"swal-input3\" class=\"swal2-input\" placeholder='Write smth'> \n" +
+			"<input id=\"swal-input3\" class=\"swal2-input\ \has-error\" placeholder='Write smth'> \n" +
 			"<lable for='swal-input4'>dish price</lable>" +
 			"<input id=\"swal-input4\" class=\"swal2-input\" placeholder='Write smth'> \n" +
 			"<input type='submit' id='submit_dish'  value='submit_dish'/>" +
@@ -261,6 +261,50 @@ $("#addProduct").click(function () {
 
 })
 
+
+$("#make_admin").click(function(){
+
+	let data = {
+		"command":"make_user_admin",
+		"user_id":$("#user_id").val()
+
+	}
+
+	$.ajax({
+
+		type:"POST",
+		url:"/controller",
+		data:data,
+		success:function (response) {
+			let user_role = document.getElementById("user_role");
+			user_role.value = JSON.parse(response)["role"];
+		}
+
+	})
+
+})
+
+$("#make_user").click(function(){
+
+
+	let data = {
+		"command":"make_admin_user",
+		"user_id":$("#user_id").val()
+	}
+
+	$.ajax({
+
+		type:"POST",
+		url:"/controller",
+		data:data,
+		success:function (response) {
+			let user_role = document.getElementById("user_role");
+			user_role.value = JSON.parse(response)["role"];
+		}
+
+	})
+
+})
 
 
 

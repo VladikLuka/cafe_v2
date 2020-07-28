@@ -25,5 +25,6 @@ public class ReturnToken implements Command {
 
     }
 
-
+    private ReturnToken() {
+    }
 }

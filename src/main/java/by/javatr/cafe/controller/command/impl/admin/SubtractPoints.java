@@ -38,4 +38,7 @@ public class SubtractPoints implements Command {
         result.setHeaders("content-type", "application/json;charset=UTF-8");
         return new RequestResult(gson.toJson(user), HttpServletResponse.SC_OK);
     }
+
+    private SubtractPoints() {
+    }
 }

@@ -48,4 +48,6 @@ public class DeleteAddress implements Command {
 
     }
 
+    private DeleteAddress() {
+    }
 }
