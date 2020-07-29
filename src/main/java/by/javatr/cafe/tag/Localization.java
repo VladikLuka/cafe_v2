@@ -8,10 +8,14 @@ import java.util.ResourceBundle;
 
 public class Localization extends SimpleTagSupport {
 
-    private static String message;
+    private String tagMessage;
 
     public void setMessage(String input){
-        message = input;
+        tagMessage = input;
+    }
+
+    public String getMessage() {
+        return tagMessage;
     }
 
     @Override
@@ -21,8 +25,14 @@ public class Localization extends SimpleTagSupport {
 
         ResourceBundle bundle = ResourceBundle.getBundle("locale", new Locale(locale));
 
-        String message = bundle.getString(Localization.message);
-        getJspContext().getOut().print(message);
+        if(bundle.containsKey(tagMessage)){
+            String message = bundle.getString(getMessage());
+            getJspContext().getOut().print(message);
+        }else{
+            final String[] split = tagMessage.split("\\.");
+            getJspContext().getOut().print(split[split.length - 1]);
+        }
+
     }
 
 }

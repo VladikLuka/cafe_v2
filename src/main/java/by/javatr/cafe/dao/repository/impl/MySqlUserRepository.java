@@ -26,18 +26,23 @@ public class MySqlUserRepository extends AbstractRepository<User> implements IUs
     private static final String GET_USER = "select * from user left join role on role.role_id = user.roles_role_id where user.user_id = ?";
 
     @Autowired
-    private Cache cache;
+    private final Cache cache = Cache.getInstance();
+
+
+    public MySqlUserRepository(Connection connection) {
+        setConnection(connection);
+    }
+
+    public MySqlUserRepository() {
+        setConnection(ConnectionPool.CONNECTION_POOL.retrieve());
+    }
 
     /**
      * Returns all users
-     *
      * @return list of users
      */
     @Override
     public List<User> getAllUser() throws DAOException {
-
-        System.out.println("USE getAllUser");
-
 
         if (!cache.getListUser().isEmpty()) {
             return cache.getListUser();
@@ -85,8 +90,6 @@ public class MySqlUserRepository extends AbstractRepository<User> implements IUs
     @Override
     public User findUser(User user) throws DAOException {
 
-        System.out.println("USE findUser");
-
         if (cache.getUser(user.getId()) != null) {
             return cache.getUser(user.getId());
         }
@@ -128,8 +131,6 @@ public class MySqlUserRepository extends AbstractRepository<User> implements IUs
     @Override
     public User find(String email, String password) throws DAOException {
 
-        System.out.println("USE find");
-
         User user = null;
 
         try (Connection connection = getConnection();
@@ -163,7 +164,7 @@ public class MySqlUserRepository extends AbstractRepository<User> implements IUs
                 }
             }
         } catch (SQLException e) {
-            throw new DAOException("an error occurred in EM_PSW find user", e);
+            throw new DAOException("an error occurred in email password find user", e);
         }
 
         return null;
@@ -178,15 +179,8 @@ public class MySqlUserRepository extends AbstractRepository<User> implements IUs
      */
     @Override
     public boolean delete(User user) throws DAOException {
-
-        System.out.println("USE delete");
-
-        try (Connection connection = getConnection();) {
-            super.delete(connection, user);
-            cache.deleteUser(user);
-        } catch (SQLException throwables) {
-            throw new DAOException(throwables);
-        }
+        super.delete(user);
+        cache.deleteUser(user);
         return true;
     }
 
@@ -199,15 +193,8 @@ public class MySqlUserRepository extends AbstractRepository<User> implements IUs
      */
     @Override
     public User create(User user) throws DAOException {
-
-        System.out.println("USER create");
-
-        try (Connection connection = getConnection()) {
-            user = super.create(connection, user);
-            cache.addUser(user);
-        } catch (SQLException throwables) {
-            throw new DAOException(throwables);
-        }
+        user = super.create(user);
+        cache.addUser(user);
         return user;
     }
 
@@ -219,15 +206,8 @@ public class MySqlUserRepository extends AbstractRepository<User> implements IUs
      */
     @Override
     public User update(User user) throws DAOException {
-
-        try(Connection connection = getConnection()){
-            user = super.update(connection, user);
-            cache.updateUser(user);
-            return user;
-        } catch (SQLException throwables) {
-            throw new DAOException(throwables);
-        }
-
+        user = super.update(user);
+        cache.updateUser(user);
+        return user;
     }
-    private MySqlUserRepository() {}
 }

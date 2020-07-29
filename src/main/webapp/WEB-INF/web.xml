@@ -74,10 +74,16 @@
 
 
     <jsp-config>
-    <taglib>
-        <taglib-uri>/tld/localization.tld</taglib-uri>
-        <taglib-location>/tld/localization.tld</taglib-location>
-    </taglib>
+        <taglib>
+            <taglib-uri>/tld/localization.tld</taglib-uri>
+            <taglib-location>/tld/localization.tld</taglib-location>
+        </taglib>
+
+        <taglib>
+            <taglib-uri>/time</taglib-uri>
+            <taglib-location>/tld/time.tld</taglib-location>
+        </taglib>
+
     </jsp-config>
 
 </web-app>

@@ -46,10 +46,8 @@ class UserServiceTest {
 
         userService = (UserService) BeanFactory.getInstance().getBean("userService");
         MySqlUserRepository mock = Mockito.mock(MySqlUserRepository.class);
-        userService.setUserRepository(mock);
         userRepository = mock;
         MySqlAddressRepository address_mock = Mockito.mock(MySqlAddressRepository.class);
-        userService.setAddressRepository(address_mock);
         addressRepository = address_mock;
 
     }

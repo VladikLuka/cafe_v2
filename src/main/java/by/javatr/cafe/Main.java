@@ -2,24 +2,41 @@ package by.javatr.cafe;
 
 import by.javatr.cafe.connection.impl.ConnectionPool;
 import by.javatr.cafe.dao.repository.AbstractRepository;
-import by.javatr.cafe.entity.Entity;
 import by.javatr.cafe.entity.User;
-import by.javatr.cafe.exception.DAOException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
-public class Main extends AbstractRepository<User> {
+public class Main extends AbstractRepository<User>{
 
-    @Override
-    public User update(Connection connection, Entity<User> entity) throws DAOException {
-        return super.update(connection, entity);
-    }
+
 
     public static void main(String[] args) throws SQLException, InterruptedException {
 
+        DateFormat instance = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+        try {
+            final Date parse = instance.parse("2020-09-15 10:10:10");
+
+            final long credit_time = parse.getTime();
+
+            final long now = Calendar.getInstance().getTime().getTime();
+
+            long differ = credit_time - now;
+
+
+            long days = differ / 86_400_000;
+
+            System.out.println(days);
+
+        }catch (Exception e){
+
+        }
 
     }
 
@@ -37,7 +54,6 @@ public class Main extends AbstractRepository<User> {
             statement.setInt(2, 10);
             statement.executeUpdate();
 
-            System.out.println("OK");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }finally {
@@ -77,5 +93,4 @@ public class Main extends AbstractRepository<User> {
 
         return res;
     }
-
 }

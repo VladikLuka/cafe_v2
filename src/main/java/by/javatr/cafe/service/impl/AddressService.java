@@ -1,11 +1,11 @@
 package by.javatr.cafe.service.impl;
 
-import by.javatr.cafe.container.annotation.Autowired;
 import by.javatr.cafe.container.annotation.Component;
-import by.javatr.cafe.dao.repository.IUserRepository;
-import by.javatr.cafe.entity.User;
+import by.javatr.cafe.dao.DAOFactory;
 import by.javatr.cafe.dao.repository.IAddressRepository;
+import by.javatr.cafe.dao.repository.IUserRepository;
 import by.javatr.cafe.entity.Address;
+import by.javatr.cafe.entity.User;
 import by.javatr.cafe.exception.DAOException;
 import by.javatr.cafe.exception.ServiceException;
 import by.javatr.cafe.service.IAddressService;
@@ -23,13 +23,7 @@ public class AddressService implements IAddressService {
 
     public static final Logger logger = LogManager.getLogger(AddressService.class);
 
-    @Autowired
-    private IAddressRepository addressRepository;
-    @Autowired
-    private IUserRepository userRepository;
-
     private AddressService(){}
-
 
     /**
      * Update address
@@ -38,8 +32,11 @@ public class AddressService implements IAddressService {
      */
     @Override
     public Address update(Address address) throws ServiceException {
-        try {
-            final Address update = addressRepository.update(address);
+
+        try(DAOFactory factory = new DAOFactory()) {
+            IAddressRepository addressRepository = factory.getAddressRepository();
+
+            Address update = addressRepository.update(address);
             if(update == null) throw new ServiceException("invalid update address");
             return address;
         } catch (DAOException e) {
@@ -55,7 +52,8 @@ public class AddressService implements IAddressService {
     public List<Address> getAll() throws ServiceException {
 
         List<Address> all = null;
-        try {
+        try (DAOFactory factory = new DAOFactory();){
+            IAddressRepository addressRepository = factory.getAddressRepository();
             all = addressRepository.getAll();
         } catch (DAOException e) {
             throw new ServiceException("get all addresses service ex",e);
@@ -73,7 +71,8 @@ public class AddressService implements IAddressService {
     public List<Address> getAllForUser(int userId) throws ServiceException {
 
         List<Address> allId = null;
-        try {
+        try (DAOFactory factory = new DAOFactory()){
+            IAddressRepository addressRepository = factory.getAddressRepository();
             allId = addressRepository.getAllId(userId);
         } catch (DAOException e) {
             throw new ServiceException(e);
@@ -89,7 +88,12 @@ public class AddressService implements IAddressService {
     @Override
     public Address create(Address address) throws ServiceException {
 
+        DAOFactory factory = new DAOFactory();
+
         try {
+            IAddressRepository addressRepository = factory.getAddressRepository();
+            IUserRepository userRepository = factory.getUserRepository();
+
             address = addressRepository.create(address);
             if(address != null){
                 final User user = userRepository.findUser(new User(address.getUserId()));
@@ -101,9 +105,10 @@ public class AddressService implements IAddressService {
                 return null;
             }
         } catch (DAOException e) {
-
+            factory.rollback();
             throw new ServiceException("failed to create address ",e);
-
+        }finally {
+            factory.endTransaction();
         }
     }
 
@@ -115,7 +120,9 @@ public class AddressService implements IAddressService {
     @Override
     public Address find(Address address) throws ServiceException {
 
-        try {
+        try(DAOFactory factory = new DAOFactory()) {
+            IAddressRepository addressRepository = factory.getAddressRepository();
+
             address = addressRepository.get(address);
             return address ;
         } catch (DAOException e) {
@@ -131,14 +138,11 @@ public class AddressService implements IAddressService {
      */
     @Override
     public boolean delete(Address address) throws ServiceException {
-        try {
+        try(DAOFactory factory = new DAOFactory()) {
+            IAddressRepository addressRepository = factory.getAddressRepository();
             return addressRepository.delete(address);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-    }
-
-    public void setAddressRepository(IAddressRepository addressRepository) {
-        this.addressRepository = addressRepository;
     }
 }

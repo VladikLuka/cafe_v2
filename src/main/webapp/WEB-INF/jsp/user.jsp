@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="local" uri="/tld/localization.tld" %>
+<%@ taglib prefix="time" uri="/time" %>
 
 <html>
 <head>
@@ -41,7 +42,7 @@
                                 <c:if test="${order.status eq 'PAID'}">
                                     <div id="credit_text">
                                         <h5>You have a credit! <br>
-                                        You have to pay ${order.amount} BYN before ${order.creditTime}<br>
+                                        You have to pay ${order.amount} BYN before <time:Time time="${order.creditTime}"/> days<br>
                                         <button class="btn btn-info" type="submit" id="closeCredit" data-userId="${sessionScope.userId}" data-orderId="${order.orderId}">Close credit</button>
                                         </h5>
                                     </div>

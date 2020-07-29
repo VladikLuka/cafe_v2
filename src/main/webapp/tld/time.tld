@@ -6,14 +6,14 @@
         version="2.1">
 
     <tlib-version>1.0</tlib-version>
-    <short-name>Localization</short-name>
+    <short-name>Time</short-name>
 
     <tag>
-        <name>Localization</name>
-        <tag-class>by.javatr.cafe.tag.Localization</tag-class>
+        <name>Time</name>
+        <tag-class>by.javatr.cafe.tag.Time</tag-class>
         <body-content>empty</body-content>
         <attribute>
-            <name>message</name>
+            <name>time</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>

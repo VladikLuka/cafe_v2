@@ -15,9 +15,6 @@
 </head>
 <body>
 
-<fmt:setLocale value="${sessionScope.locale}"/>
-<fmt:setBundle basename="locale" var="lang"/>
-
 <header class="main">
     <div class="container wide">
         <div class="content slim">
@@ -44,11 +41,11 @@
                         <img src="../../static/img/success.svg"/>
                     </div>
                     <div>
-                        <h1><fmt:message key="sweet.success" bundle="${lang}"/></h1>
-                        <section><fmt:message key="checkout.description" bundle="${lang}"/>
+                        <h1><local:Localization message="sweet.success"/></h1>
+                        <section><local:Localization message="checkout.description"/>
                             <c:if test="${empty requestScope.order.orderReview}">
                                 <c:if test="${requestScope.order.status eq 'CLOSED'}">
-                                    <br><fmt:message key="checkout.leave.feedback" bundle="${lang}"/></section>
+                                    <br><local:Localization message="checkout.leave.feedback"/></section>
                                 </c:if>
                                 <c:if test="${requestScope.order.status eq 'CLOSED'}">
 <%--                                    <form action="${pageContext.request.contextPath}/controller" method="post">--%>
@@ -73,7 +70,7 @@
                                             <input type="hidden" name="command" value="feedback">
                                             <input type="hidden" name="order_id" value="${requestScope.order.orderId}">
                                             <button type="submit" class="button primary back" id="feedback_submit">
-                                                <span id="leave_feedback"><fmt:message key="checkout.button.feedback" bundle="${lang}"/></span>
+                                                <span id="leave_feedback"><local:Localization message="checkout.button.feedback"/></span>
                                             </button>
                                         </section>
 <%--                                    </form>--%>
@@ -92,7 +89,7 @@
                             </c:if>
                         </c:if>
                         <c:if test="${not empty requestScope.order.orderReview}">
-                            <section><fmt:message key="checkout.your.order" bundle="${lang}"/></section>
+                            <section><local:Localization message="checkout.your.order"/></section>
                             <section>${requestScope.order.orderReview}</section>
                         </c:if>
 
@@ -104,7 +101,7 @@
                     </div>
                     <section>
                         <div>
-                            <br><fmt:message key="checkout.cancel.order" bundle="${lang}"/>
+                            <br><local:Localization message=""/>
                         </div>
                     </section>
                 </c:otherwise>
@@ -114,16 +111,9 @@
 </div>
 
 <aside class="drawer dark">
-<%--    <header>--%>
-<%--        <div class="content compact">--%>
-<%--            <a href="https://developers.braintreepayments.com" class="braintree" target="_blank">Braintree</a>--%>
-<%--            <h3>API Response</h3>--%>
-<%--        </div>--%>
-<%--    </header>--%>
-
     <article class="content compact">
         <section>
-            <h5><fmt:message key="checkout.transaction" bundle="${lang}"/></h5>
+            <h5><local:Localization message="checkout.transaction"/></h5>
             <table cellpadding="0" cellspacing="0">
                 <tbody>
                 <tr>
@@ -131,30 +121,30 @@
                     <td id="order_id" data-id ="${requestScope.order.orderId}">${requestScope.order.orderId}</td>
                 </tr>
                 <tr>
-                    <td><fmt:message key="checkout.status" bundle="${lang}"/></td>
+                    <td><local:Localization message="checkout.status"/></td>
                     <td>${requestScope.order.method}</td>
                 </tr>
                 <tr>
-                    <td><fmt:message key="checkout.amount" bundle="${lang}"/></td>
+                    <td><local:Localization message="checkout.amount"/></td>
                     <td>${requestScope.order.amount}</td>
                 </tr>
                 <tr>
-                    <td><fmt:message key="checkout.status" bundle="${lang}"/></td>
+                    <td><local:Localization message="checkout.status"/></td>
                     <td>${requestScope.order.status}</td>
                 </tr>
                 <tr>
-                    <td><fmt:message key="checkout.created" bundle="${lang}"/></td>
+                    <td><local:Localization message="checkout.created"/></td>
                     <td>${requestScope.order.time}</td>
                 </tr>
                 <c:if test="${empty requestScope.order.creditTime}">
                 <tr>
-                    <td><fmt:message key="checkout.delivery" bundle="${lang}"/></td>
+                    <td><local:Localization message="checkout.delivery"/></td>
                     <td>${requestScope.order.deliveryTime}</td>
                 </tr>
                 </c:if>
                 <c:if test="${not empty requestScope.order.creditTime}">
                 <tr>
-                    <td><fmt:message key="checkout.credit" bundle="${lang}"/></td>
+                    <td><local:Localization message="checkout.credit"/></td>
                     <td>${requestScope.order.creditTime}</td>
                 </tr>
                 </c:if>
@@ -164,24 +154,24 @@
 
         <section>
             <c:if test="${not empty requestScope.order.address}">
-                <h5><fmt:message key="order.address" bundle="${lang}"/></h5>
+                <h5><local:Localization message="order.address"/></h5>
 
                 <table cellpadding="0" cellspacing="0">
                     <tbody>
                     <tr>
-                        <td><fmt:message key="user.city" bundle="${lang}"/></td>
+                        <td><local:Localization message="user.city"/></td>
                         <td>${requestScope.order.address.city}</td>
                     </tr>
                     <tr>
-                        <td><fmt:message key="user.street" bundle="${lang}"/></td>
+                        <td><local:Localization message="user.street"/></td>
                         <td>${requestScope.order.address.street}</td>
                     </tr>
                     <tr>
-                        <td><fmt:message key="user.house" bundle="${lang}"/></td>
+                        <td><local:Localization message="user.house"/></td>
                         <td>${requestScope.order.address.house}</td>
                     </tr>
                     <tr>
-                        <td><fmt:message key="user.flat" bundle="${lang}"/></td>
+                        <td><local:Localization message="user.flat"/></td>
                         <td>${requestScope.order.address.flat}</td>
                     </tr>
                     </tbody>
@@ -192,16 +182,16 @@
 
         <c:if test="${not empty requestScope.order.dishes}">
             <section>
-                <h5><fmt:message key="checkout.dishes" bundle="${lang}"/></h5>
+                <h5><local:Localization message="checkout.dishes"/></h5>
                 <table cellpadding="0" cellspacing="0">
                     <tbody>
                     <c:forEach items="${requestScope.order.dishes}" var="dish">
                         <tr>
-                            <td><fmt:message key="checkout.dish.name" bundle="${lang}"/></td>
+                            <td><local:Localization message="checkout.dish.name"/></td>
                             <td>${dish.key.name}</td>
                         </tr>
                         <tr>
-                            <td><fmt:message key="checkout.dish.quantity" bundle="${lang}"/></td>
+                            <td><local:Localization message="checkout.dish.quantity"/></td>
                             <td>${dish.value}</td>
                         </tr>
                     </c:forEach>

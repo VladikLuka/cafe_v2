@@ -50,10 +50,8 @@ class OrderServiceTest {
 
         orderService = (OrderService) BeanFactory.getInstance().getBean("orderService");
         MySqlOrderRepository mock = Mockito.mock(MySqlOrderRepository.class);
-        orderService.setOrderRepository(mock);
         orderRepository = mock;
         MySqlUserRepository user_mock = Mockito.mock(MySqlUserRepository.class);
-        orderService.setUserRepository(user_mock);
         userRepository = user_mock;
 
     }

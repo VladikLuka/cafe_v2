@@ -40,7 +40,6 @@ public class AddressServiceTest {
 
         addressService = (AddressService) BeanFactory.getInstance().getBean("addressService");
         MySqlAddressRepository mock = Mockito.mock(MySqlAddressRepository.class);
-        addressService.setAddressRepository(mock);
         addressRepository = mock;
     }
 

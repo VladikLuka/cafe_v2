@@ -1,7 +1,6 @@
 package by.javatr.cafe.dao.repository;
 
 import by.javatr.cafe.dao.annotation.*;
-import by.javatr.cafe.connection.impl.ConnectionPool;
 import by.javatr.cafe.entity.Entity;
 import by.javatr.cafe.exception.DAOException;
 
@@ -24,25 +23,26 @@ public class AbstractRepository<T extends Entity<T>> {
 
     private static final String GET_LAST_ID = "select LAST_INSERT_ID()";
 
+    private Connection connection;
+
+    public void setConnection(Connection connection) {
+        this.connection = connection;
+    }
+
     /**
      * Return connection
      * @return Connection
      */
-    public static Connection getConnection() throws DAOException {
-        try {
-            return ConnectionPool.CONNECTION_POOL.retrieve();
-        } catch (SQLException throwables) {
-            throw new DAOException(throwables);
-        }
+    public Connection getConnection() {
+        return connection;
     }
 
     /**
      * Update entity
-     * @param connection connection
      * @param entity to be updated
      * @return updated entity
      */
-    public T update (Connection connection, Entity<T> entity) throws DAOException {
+    public T update (Entity<T> entity) throws DAOException {
         String table = null;
         int id = 0;
         String joinField = null;
@@ -159,7 +159,7 @@ public class AbstractRepository<T extends Entity<T>> {
      * @param entity entity being created
      * @return created entity
      */
-    public T create(Connection connection, Entity<T> entity) throws DAOException {
+    public T create(Entity<T> entity) throws DAOException {
         Map<String, Object> fieldValues = new HashMap<>();
 
         String table = null;
@@ -273,7 +273,7 @@ public class AbstractRepository<T extends Entity<T>> {
      * @param entity entity being deleted
      * @return boolean
      */
-    public boolean delete(Connection connection, Entity<T> entity) throws DAOException {
+    public boolean delete(Entity<T> entity) throws DAOException {
         String table = null;
         int id = 0;
         try {

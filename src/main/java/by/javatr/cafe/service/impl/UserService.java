@@ -1,7 +1,7 @@
 package by.javatr.cafe.service.impl;
 
-import by.javatr.cafe.container.annotation.Autowired;
 import by.javatr.cafe.container.annotation.Component;
+import by.javatr.cafe.dao.DAOFactory;
 import by.javatr.cafe.entity.Role;
 import by.javatr.cafe.dao.repository.IAddressRepository;
 import by.javatr.cafe.entity.Address;
@@ -24,11 +24,6 @@ import java.math.RoundingMode;
 @Component
 public class UserService implements IUserService {
 
-    @Autowired
-    IUserRepository userRepository;
-    @Autowired
-    IAddressRepository addressRepository;
-
     private UserService() {}
 
     /**
@@ -39,11 +34,18 @@ public class UserService implements IUserService {
     @Override
     public User find(int userId) throws ServiceException {
 
-        try {
+        try (DAOFactory factory = new DAOFactory()){
+            IAddressRepository addressRepository = factory.getAddressRepository();
+            IUserRepository userRepository = factory.getUserRepository();
+
             User user= new User();
             user.setId(userId);
             user = userRepository.findUser(user);
-            user.setAddress(addressRepository.getAllId(user.getId()));
+
+            if(user != null){
+                user.setAddress(addressRepository.getAllId(user.getId()));
+            }
+
             return user;
         } catch (DAOException e) {
             throw new ServiceException(e);
@@ -59,7 +61,8 @@ public class UserService implements IUserService {
     @Override
     public User update(User user) throws ServiceException {
 
-        try {
+        try (DAOFactory factory = new DAOFactory()){
+            IUserRepository userRepository = factory.getUserRepository();
             userRepository.update(user);
         } catch (DAOException e) {
             throw new ServiceException(e);
@@ -75,7 +78,13 @@ public class UserService implements IUserService {
     @Override
     public boolean delete(int userId) throws ServiceException {
 
+        DAOFactory factory = new DAOFactory();
+
         try {
+
+            IAddressRepository addressRepository = factory.getAddressRepository();
+            IUserRepository userRepository = factory.getUserRepository();
+
             User user = new User(userId);
             Address address = new Address();
             address.setUserId(userId);
@@ -83,7 +92,10 @@ public class UserService implements IUserService {
             userRepository.delete(user);
             return true;
         }catch (DAOException e){
+            factory.rollback();
             throw new ServiceException("Failed delete user", e);
+        }finally {
+            factory.endTransaction();
         }
     }
 
@@ -96,7 +108,11 @@ public class UserService implements IUserService {
     public User loginUser(User user) throws ServiceException {
 
         user.setPassword(Utils.hashPass(user.getPassword()));
-        try {
+        try (DAOFactory factory = new DAOFactory()){
+
+            IUserRepository userRepository = factory.getUserRepository();
+            IAddressRepository addressRepository = factory.getAddressRepository();
+
             user = userRepository.find(user.getMail(), user.getPassword());
             if(user!=null){
                 user.setAddress(addressRepository.getAllId(user.getId()));
@@ -118,7 +134,8 @@ public class UserService implements IUserService {
     public User createUser(User user) throws ServiceException {
 
         user.setPassword(Utils.hashPass(user.getPassword()));
-        try {
+        try (DAOFactory factory = new DAOFactory()){
+            IUserRepository userRepository = factory.getUserRepository();
             user = userRepository.create(user);
             user.setRole(Role.USER);
         } catch (DAOException e) {
@@ -139,13 +156,11 @@ public class UserService implements IUserService {
         User user = null;
         amount = amount.setScale(2, RoundingMode.HALF_UP);
 
-        try{
+        try (DAOFactory factory = new DAOFactory()){
             user = find(userId);
-        } catch (ServiceException e) {
-            throw new ServiceException("Cannot to find user" + e);
-        }
 
-        try {
+            IUserRepository userRepository = factory.getUserRepository();
+
             user.setMoney(user.getMoney().add(amount));
             userRepository.update(user);
         } catch (DAOException e) {
@@ -166,13 +181,11 @@ public class UserService implements IUserService {
     public User addPoints(int point, int userId) throws ServiceException {
         User user = null;
 
-        try{
+        try (DAOFactory factory = new DAOFactory()) {
             user = find(userId);
-        }catch (ServiceException e){
-            throw new ServiceException(e);
-        }
 
-        try {
+            IUserRepository userRepository = factory.getUserRepository();
+
             user.setLoyaltyPoint(user.getLoyaltyPoint() + point);
             userRepository.update(user);
         } catch (DAOException e) {
@@ -193,15 +206,22 @@ public class UserService implements IUserService {
     public User subtractMoney(BigDecimal amount, int userId) throws ServiceException {
         User user = null;
         final BigDecimal zero = new BigDecimal(0);
-        try {
+        try (DAOFactory factory = new DAOFactory()){
+
+            IUserRepository userRepository = factory.getUserRepository();
+
             amount = amount.setScale(2, RoundingMode.HALF_UP);
 
             user = find(userId);
-            user.setMoney(user.getMoney().subtract(amount));
-            if (user.getMoney().compareTo(zero) < 0) {
-                user.setMoney(zero);
+
+            if(user!= null){
+                user.setMoney(user.getMoney().subtract(amount));
+                if (user.getMoney().compareTo(zero) < 0) {
+                    user.setMoney(zero);
+                }
+                userRepository.update(user);
             }
-            userRepository.update(user);
+
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -218,7 +238,10 @@ public class UserService implements IUserService {
     @Override
     public User subtractPoints(int amount, int userId) throws ServiceException {
         User user = null;
-        try {
+        try (DAOFactory factory = new DAOFactory()){
+
+            IUserRepository userRepository = factory.getUserRepository();
+
             user = find(userId);
             user.setLoyaltyPoint(user.getLoyaltyPoint() - amount);
             if(user.getLoyaltyPoint() < 0){
@@ -241,7 +264,10 @@ public class UserService implements IUserService {
     @Override
     public User banUser(int userId) throws ServiceException {
 
-        try {
+        try (DAOFactory factory = new DAOFactory();){
+
+            IUserRepository userRepository = factory.getUserRepository();
+
             User user = new User(userId);
             user = userRepository.findUser(user);
 
@@ -262,7 +288,10 @@ public class UserService implements IUserService {
     @Override
     public User unbanUser(int userId) throws ServiceException {
 
-        try {
+        try (DAOFactory factory = new DAOFactory();){
+
+            IUserRepository userRepository = factory.getUserRepository();
+
             User user = new User(userId);
             user = userRepository.findUser(user);
 
@@ -279,7 +308,10 @@ public class UserService implements IUserService {
 
     @Override
     public User makeAdmin(int userId) throws ServiceException {
-        try {
+        try (DAOFactory factory = new DAOFactory();){
+
+            IUserRepository userRepository = factory.getUserRepository();
+
             User user = new User(userId);
             user = userRepository.findUser(user);
 
@@ -296,7 +328,10 @@ public class UserService implements IUserService {
 
     @Override
     public User makeUser(int userId) throws ServiceException {
-        try {
+        try (DAOFactory factory = new DAOFactory();){
+
+            IUserRepository userRepository = factory.getUserRepository();
+
             User user = new User(userId);
             user = userRepository.findUser(user);
 
@@ -310,13 +345,4 @@ public class UserService implements IUserService {
             throw new ServiceException(e);
         }
     }
-
-    public void setUserRepository(IUserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    public void setAddressRepository(IAddressRepository addressRepository) {
-        this.addressRepository = addressRepository;
-    }
-
 }

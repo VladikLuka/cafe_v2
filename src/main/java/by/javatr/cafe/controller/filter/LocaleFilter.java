@@ -36,7 +36,6 @@ public class LocaleFilter implements Filter {
 
         if(request.getParameter("command_locale") != null){
             session.setAttribute(SessionAttributes.LOCALE, request.getParameter("command_locale"));
-            System.out.println(request.getAttribute("URL"));
             response.sendRedirect(request.getRequestURI());
             return;
         }

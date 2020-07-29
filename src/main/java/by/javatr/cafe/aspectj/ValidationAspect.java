@@ -791,8 +791,6 @@ public class ValidationAspect {
     @Around(value = "addSubstMoneyUserService()", argNames = "pjp,point")
     public Object changeMoneyServiceValid(ProceedingJoinPoint pjp, JoinPoint point) throws ServiceException {
 
-        System.out.println("CHANGE MONEY SERVICE");
-
         Object[] args = point.getArgs();
         BigDecimal amount = (BigDecimal) args[0];
         int userId = (int)args[1];
@@ -1261,8 +1259,6 @@ public class ValidationAspect {
 
     @Around(value = "changeMoney()", argNames = "pjp,point")
     public Object addSubstMoneyValid(ProceedingJoinPoint pjp, JoinPoint point) throws ServiceException {
-
-        System.out.println("CHANGE MONEY");
 
         Object[] args = point.getArgs();
         RequestContent content = (RequestContent) args[0];

@@ -1,8 +1,8 @@
 package by.javatr.cafe.service.impl;
 
 import by.javatr.cafe.constant.PaymentStatus;
-import by.javatr.cafe.container.annotation.Autowired;
 import by.javatr.cafe.container.annotation.Component;
+import by.javatr.cafe.dao.DAOFactory;
 import by.javatr.cafe.dao.repository.IOrderRepository;
 import by.javatr.cafe.dao.repository.IUserRepository;
 import by.javatr.cafe.entity.Order;
@@ -24,10 +24,10 @@ import java.util.List;
 @Component
 public class OrderService implements IOrderService {
 
-    @Autowired
-    IUserRepository userRepository;
-    @Autowired
-    IOrderRepository orderRepository;
+//    @Autowired
+//    IUserRepository userRepository;
+//    @Autowired
+//    IOrderRepository orderRepository;
 
 
     /**
@@ -39,14 +39,27 @@ public class OrderService implements IOrderService {
     @Override
     public Order makeOrderCashCard(Order order, User user) throws ServiceException {
 
-        try {
-            user.setLoyaltyPoint(user.getLoyaltyPoint() + 25);
+        DAOFactory factory = new DAOFactory();
+
+        try{
+            factory.beginTransaction();
+            IOrderRepository orderRepository = factory.getOrderRepository();
+            IUserRepository userRepository = factory.getUserRepository();
+
             order = orderRepository.createOrder(order);
             order = orderRepository.createOrderDish(order);
+
+            user.setLoyaltyPoint(user.getLoyaltyPoint() + 25);
             userRepository.update(user);
-        } catch (DAOException e) {
+
+            factory.commit();
+
+            } catch (DAOException e) {
+            factory.rollback();
             user.setLoyaltyPoint(user.getLoyaltyPoint() - 25);
             throw new ServiceException(e);
+        }finally {
+            factory.endTransaction();
         }
         return order;
     }
@@ -60,20 +73,35 @@ public class OrderService implements IOrderService {
     @Override
     public Order makeOrderBalance(Order order, User user) throws ServiceException {
 
+        DAOFactory factory = new DAOFactory();
+
         try{
+            factory.beginTransaction();
+
+            IOrderRepository orderRepository = factory.getOrderRepository();
+            IUserRepository userRepository = factory.getUserRepository();
+
             final BigDecimal zero = new BigDecimal(0);
             final BigDecimal subtract = user.getMoney().subtract(order.getAmount());
 
             if(subtract.compareTo(zero) < 0) throw new IllegalArgumentException("Not enough money");
             user.setMoney(subtract);
             user.setLoyaltyPoint(user.getLoyaltyPoint() + 25);
+
             orderRepository.createOrder(order);
             orderRepository.createOrderDish(order);
+
             userRepository.update(user);
+
+            factory.commit();
+
         } catch (DAOException e) {
+            factory.rollback();
             user.setLoyaltyPoint(user.getLoyaltyPoint() - 25);
             user.setMoney(user.getMoney().add(order.getAmount()));
             throw new ServiceException(e);
+        }finally {
+            factory.endTransaction();
         }
     return order;
     }
@@ -87,16 +115,29 @@ public class OrderService implements IOrderService {
     @Override
     public Order creditOrder(Order order, User user) throws ServiceException {
 
+        DAOFactory factory = new DAOFactory();
+
         try{
+            factory.beginTransaction();
+
+            IOrderRepository orderRepository = factory.getOrderRepository();
+            IUserRepository userRepository = factory.getUserRepository();
+
             user.setLoyaltyPoint(user.getLoyaltyPoint() + 25);
             user.setCredit(true);
             orderRepository.createOrder(order);
             orderRepository.createOrderDish(order);
             userRepository.update(user);
+
+            factory.commit();
+
         } catch (DAOException e) {
+            factory.rollback();
             user.setCredit(false);
             user.setLoyaltyPoint(user.getLoyaltyPoint() - 25);
             throw new ServiceException(e);
+        }finally {
+            factory.endTransaction();
         }
         return order;
 
@@ -109,7 +150,9 @@ public class OrderService implements IOrderService {
      */
     @Override
     public List<Order> getOrders(User user) throws ServiceException {
-        try {
+
+        try (DAOFactory factory = new DAOFactory();){
+            IOrderRepository orderRepository = factory.getOrderRepository();
             return orderRepository.getAll(user);
         } catch (DAOException e) {
             throw new ServiceException(e);
@@ -120,19 +163,26 @@ public class OrderService implements IOrderService {
     /**
      * Replenish user balance
      * @return created order
-     * @throws ServiceException
      */
     @Override
     public Order deposit(Order order) throws ServiceException {
 
+        DAOFactory factory = new DAOFactory();
+
         try {
+            IOrderRepository orderRepository = factory.getOrderRepository();
+            IUserRepository userRepository = factory.getUserRepository();
+
             User user = userRepository.findUser(new User(order.getUserId()));
             user.setMoney(user.getMoney().add(order.getAmount()));
             order = orderRepository.createOrder(order);
             userRepository.update(user);
 
         } catch (DAOException e) {
+            factory.rollback();
             throw new ServiceException(e);
+        }finally {
+            factory.endTransaction();
         }
 
         return order;
@@ -146,7 +196,10 @@ public class OrderService implements IOrderService {
     @Override
     public Order updateOrder(Order order) throws ServiceException {
 
+        DAOFactory factory = new DAOFactory();
+
         try {
+            IOrderRepository orderRepository = factory.getOrderRepository();
             return orderRepository.updateOrder(order);
         } catch (DAOException e) {
             throw new ServiceException(e);
@@ -161,7 +214,10 @@ public class OrderService implements IOrderService {
     @Override
     public Order getOrder(Order order) throws ServiceException {
 
-        try {
+        try (DAOFactory factory = new DAOFactory();){
+
+            IOrderRepository orderRepository = factory.getOrderRepository();
+
             if(order.getUserId() != 0) {
                 List<Order> all = orderRepository.getAll(new User(order.getUserId()));
                 for (Order user_order :all) {
@@ -191,7 +247,11 @@ public class OrderService implements IOrderService {
     @Override
     public boolean cancelOrder(Order order) throws ServiceException {
 
+        DAOFactory factory = new DAOFactory();
+
         try {
+            IUserRepository userRepository = factory.getUserRepository();
+
             order = getOrder(order);
 
             DateFormat instance = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -216,9 +276,12 @@ public class OrderService implements IOrderService {
 
             return true;
         } catch (ServiceException | DAOException e) {
+            factory.rollback();
             throw new ServiceException(e);
         } catch (ParseException e) {
             throw new ServiceException("Incorrect date format", e);
+        }finally {
+            factory.endTransaction();
         }
     }
 
@@ -230,9 +293,15 @@ public class OrderService implements IOrderService {
     @Override
     public boolean closeCredit(Order order) throws ServiceException {
 
+        DAOFactory factory = new DAOFactory();
+
         User user = new User(order.getUserId());
 
         try {
+            factory.beginTransaction();
+            IOrderRepository orderRepository = factory.getOrderRepository();
+            IUserRepository userRepository = factory.getUserRepository();
+
             user = userRepository.findUser(user);
 
             BigDecimal user_money = user.getMoney();
@@ -246,12 +315,16 @@ public class OrderService implements IOrderService {
                 orderRepository.updateOrder(order);
             }
 
+            factory.commit();
+
         }catch (DAOException e){
+            factory.endTransaction();
             user.setCredit(true);
             user.setMoney(user.getMoney().add(order.getAmount()));
             throw new ServiceException(e);
+        }finally {
+            factory.rollback();
         }
-
         return true;
     }
 
@@ -263,7 +336,14 @@ public class OrderService implements IOrderService {
     @Override
     public boolean violateOrder(Order order) throws ServiceException {
 
+        DAOFactory factory = new DAOFactory();
+
         try {
+            factory.beginTransaction();
+            IOrderRepository orderRepository = factory.getOrderRepository();
+            IUserRepository userRepository = factory.getUserRepository();
+
+
             order = getOrder(order);
             order.setStatus(PaymentStatus.VIOLATED);
 
@@ -274,22 +354,21 @@ public class OrderService implements IOrderService {
             if (user.getLoyaltyPoint() < 0){
                 user.setBan(true);
             }
+
             orderRepository.updateOrder(order);
             userRepository.update(user);
+
+            factory.commit();
+
             return true;
         } catch (ServiceException | DAOException e) {
+            factory.rollback();
             throw new ServiceException(e);
+        }finally {
+            factory.endTransaction();
         }
 
 
 
-    }
-
-    public void setOrderRepository(IOrderRepository orderRepository) {
-        this.orderRepository = orderRepository;
-    }
-
-    public void setUserRepository(IUserRepository userRepository) {
-        this.userRepository = userRepository;
     }
 }

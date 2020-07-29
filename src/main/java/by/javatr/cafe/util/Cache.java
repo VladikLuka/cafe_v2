@@ -1,5 +1,6 @@
 package by.javatr.cafe.util;
 
+import by.javatr.cafe.container.BeanFactory;
 import by.javatr.cafe.container.annotation.Component;
 import by.javatr.cafe.entity.Address;
 import by.javatr.cafe.entity.Dish;
@@ -13,6 +14,17 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 @Component
 public class Cache {
+
+    private static Cache cache;
+
+    public static Cache getInstance(){
+
+        if(cache == null){
+            cache = (Cache)BeanFactory.getInstance().getBean("cache");
+        }
+
+        return cache;
+    }
 
     private final Map<Integer, ArrayList<Address>> mapAddress = new ConcurrentHashMap<>();
     private final CopyOnWriteArrayList<Dish> dishList = new CopyOnWriteArrayList<>();

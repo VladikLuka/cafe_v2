@@ -33,10 +33,9 @@ public enum ConnectionPool implements IConnectionPool {
     /**
      * Retrieve connection from pool
      * @return Connection
-     * @throws SQLException some trouble with database
      */
     @Override
-    public Connection retrieve() throws SQLException {
+    public Connection retrieve() {
 
         Connection connection = null;
         if(freeConnections.size() != 0){
@@ -44,7 +43,6 @@ public enum ConnectionPool implements IConnectionPool {
                 connection = freeConnections.poll(properties.getTimeout(), TimeUnit.MILLISECONDS);
                 if(connection == null){
                     logger.error("failed to getting connection, too long");
-                    throw new SQLException();
                 }
             } catch (InterruptedException e) {
                 logger.error("Interrupted ex in connection pool retrieve", e);
@@ -65,9 +63,6 @@ public enum ConnectionPool implements IConnectionPool {
      */
     @Override
     public boolean release(Connection connection) {
-
-        System.out.println("free " + freeConnections.size());
-        System.out.println("free " + busyConnections.size());
 
         if (connection == null){
             return false;

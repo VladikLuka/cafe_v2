@@ -4,6 +4,7 @@ import by.javatr.cafe.entity.Order;
 import by.javatr.cafe.entity.User;
 import by.javatr.cafe.exception.DAOException;
 
+import java.sql.Connection;
 import java.util.List;
 
 public interface IOrderRepository {
@@ -23,5 +24,7 @@ public interface IOrderRepository {
     Order createOrder(Order order) throws DAOException;
 
     Order createOrderDish(Order order) throws DAOException;
+
+    void setConnection(Connection connection);
 
 }

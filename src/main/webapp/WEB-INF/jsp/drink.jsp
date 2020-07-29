@@ -37,25 +37,21 @@
                     <img src="${dish.picturePath}" class="css-adaptive" alt="" id="dish_pic">
                 </div>
 
-
-                <fmt:setLocale value="${sessionScope.locale}"/>
-                <fmt:setBundle basename="locale" var="lang"/>
-
-                <div id="product_title"><fmt:message key="dish.name.${dish.name}" bundle="${lang}"/></div>
+                <div id="product_title"><local:Localization message="dish.name.${dish.name}"/></div>
                 <div id="product_modification">
                     <div id="product_info">
                         <div id="test-line">
                             <div id="product_price">${dish.price} BYN</div>
-                            <div id="product_weight">${dish.weight} <fmt:message key="dish.ml" bundle="${lang}"/></div>
+                            <div id="product_weight">${dish.weight} <local:Localization message="dish.ml"/></div>
                         </div>
                         <div id="product_action">
-                            <button class="btn btn-success" type="button" id="${dish.id}" onClick="getdetails(this)"><fmt:message key="dish.add.to.cart" bundle="${lang}"/></button>
+                            <button class="btn btn-success" type="button" id="${dish.id}" onClick="getdetails(this)"><local:Localization message="dish.add.to.cart"/></button>
                             <c:if test="${applicationScope.cache.getUser(sessionScope.userId).role eq 'ADMIN'}">
                                 <c:if test="${dish.available eq true}">
-                                    <button class="btn btn-success hide2" type="submit" data-id="${dish.id}" id="${dish.id}"><fmt:message key="dish.hide" bundle="${lang}"/></button>
+                                    <button class="btn btn-success hide2" type="submit" data-id="${dish.id}" id="${dish.id}"><local:Localization message="dish.hide"/></button>
                                 </c:if>
                                 <c:if test="${dish.available eq false}">
-                                    <button class="btn btn-success show2" type="submit" data-id="${dish.id}" id="${dish.id}"><fmt:message key="dish.show" bundle="${lang}"/></button>
+                                    <button class="btn btn-success show2" type="submit" data-id="${dish.id}" id="${dish.id}"><local:Localization message="dish.show"/></button>
                                 </c:if>
                                 <button class="btn btn-success delete2" type="submit" data-id="${dish.id}">delete</button>
                             </c:if>

@@ -60,7 +60,7 @@ img{
 
 #dish_pic{
 	max-width: 300px;
-	max-height: 300px;
+	height: 250px;
 }
 
 #dishes{
@@ -95,4 +95,8 @@ img{
 	margin-top: 80px;
 	background: transparent;
 	border: 0;
+}
+
+#product_description{
+	min-height: 54px;
 }

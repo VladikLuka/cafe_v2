@@ -1,5 +1,6 @@
 package by.javatr.cafe.dao.repository.impl;
 
+import by.javatr.cafe.connection.impl.ConnectionPool;
 import by.javatr.cafe.container.annotation.Autowired;
 import by.javatr.cafe.container.annotation.Component;
 import by.javatr.cafe.constant.PaymentMethod;
@@ -38,7 +39,16 @@ public class MySqlOrderRepository extends AbstractRepository<Order> implements I
     private static final String GET_ALL_ORDERS = "select * from orders as o left join orders_dishes as od on od.orders_order_id = o.order_id left join dish as d on dishes_dish_id = d.dish_id left join address as a on a.address_id = o.address_address_id";
 
     @Autowired
-    private Cache cache;
+    private final Cache cache = Cache.getInstance();
+
+
+    public MySqlOrderRepository(Connection connection) {
+        setConnection(connection);
+    }
+
+    public MySqlOrderRepository() {
+        setConnection(ConnectionPool.CONNECTION_POOL.retrieve());
+    }
 
     /**
      * Returns all orders
@@ -46,8 +56,6 @@ public class MySqlOrderRepository extends AbstractRepository<Order> implements I
      */
     @Override
     public List<Order> getAll() throws DAOException {
-
-        System.out.println("ORDER getAll");
 
         if (!cache.getListOrders().isEmpty()) {
             return cache.getListOrders();
@@ -111,8 +119,6 @@ public class MySqlOrderRepository extends AbstractRepository<Order> implements I
     @Override
     public Order createOrder(Order order) throws DAOException{
 
-        System.out.println("ORDER createOrder");
-
         try(Connection connection = getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(CREATE_ORDER);
             PreparedStatement preparedStatement2 = connection.prepareStatement(GET_LAST_ID);
@@ -149,8 +155,6 @@ public class MySqlOrderRepository extends AbstractRepository<Order> implements I
     @Override
     public Order createOrderDish(Order order) throws DAOException{
 
-        System.out.println("ORDER createOrderDish");
-
         try(    Connection connection = getConnection();
                 PreparedStatement preparedStatement1 = connection.prepareStatement((CREATE_ORDER_DISH));
         ){
@@ -176,8 +180,6 @@ public class MySqlOrderRepository extends AbstractRepository<Order> implements I
      */
     @Override
     public List<Order> getAll(User user) throws DAOException {
-
-        System.out.println("ORDER getAllUser");
 
         if (!cache.getOrders(user.getId()).isEmpty()) {
             return cache.getOrders(user.getId());
@@ -241,15 +243,8 @@ public class MySqlOrderRepository extends AbstractRepository<Order> implements I
      */
     @Override
     public Order updateOrder(Order order) throws DAOException {
-
-        System.out.println("ORDER update");
-
-        try(Connection connection = getConnection()){
-            super.update(connection, order);
-            cache.updateOrder(order);
-        } catch (SQLException throwables) {
-            throw new DAOException(throwables);
-        }
+        super.update(order);
+        cache.updateOrder(order);
         return order;
     }
 
@@ -260,15 +255,9 @@ public class MySqlOrderRepository extends AbstractRepository<Order> implements I
      */
     @Override
     public boolean delete(Order order) throws DAOException {
-
-        System.out.println("ORDER dalete");
-
-        try (Connection connection = getConnection()){
-            super.delete(connection, order);
-            cache.deleteOrder(order);
-        } catch (SQLException throwables) {
-            throw new DAOException(throwables);
-        }
+        super.delete(order);
+        cache.deleteOrder(order);
         return true;
     }
+
 }

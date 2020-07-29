@@ -41,7 +41,6 @@ class DishServiceTest {
 
         dishService = (DishService) BeanFactory.getInstance().getBean("dishService");
         IDishRepository mock = Mockito.mock(MySqlDishRepository.class);
-        dishService.setDishRepository(mock);
         dishRepository = mock;
     }
 
