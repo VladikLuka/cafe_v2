@@ -12,10 +12,10 @@ import java.io.IOException;
 
 @Component
 public class DishPageError implements Page {
-    Logger logger = LogManager.getLogger(getClass());
+    private final Logger logger = LogManager.getLogger(getClass());
 
-    private final  String ACCESS = AccessLevel.GUEST;
-    private final  String PATH = Path.PIZZA;
+    private static final  String ACCESS = AccessLevel.GUEST;
+    private static final  String PATH = Path.PIZZA;
 
     public boolean thisURL(String url){
         return url.matches("/pizza/") || url.matches("/pizza")

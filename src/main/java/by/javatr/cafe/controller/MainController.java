@@ -23,9 +23,9 @@ import java.io.IOException;
  * Accept requests and send response
  */
 @WebServlet("/controller")
-public class Controller extends HttpServlet {
+public class MainController extends HttpServlet {
 
-    private final Logger logger = LogManager.getLogger(Controller.class);
+    private final Logger logger = LogManager.getLogger(MainController.class);
     private final CommandProvider provider = new CommandProvider();
 
     @Override
@@ -33,9 +33,8 @@ public class Controller extends HttpServlet {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
-            logger.error("My SQL Driver Not Found" , e);
+            logger.error("DB DRIVER NOT FOUND");
         }
-
     }
 
     /**
@@ -88,7 +87,7 @@ public class Controller extends HttpServlet {
         } catch (IOException | ServletException e) {
             logger.error(e);
         }
-    }
+     }
 
     /**
      * Defines the type of response

@@ -40,8 +40,7 @@ class DishServiceTest {
         BeanFactory.getInstance().run(" " + absolutePath);
 
         dishService = (DishService) BeanFactory.getInstance().getBean("dishService");
-        IDishRepository mock = Mockito.mock(MySqlDishRepository.class);
-        dishRepository = mock;
+        dishRepository = Mockito.mock(MySqlDishRepository.class);
     }
 
 

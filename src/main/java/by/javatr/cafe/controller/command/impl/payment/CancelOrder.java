@@ -33,7 +33,7 @@ public class CancelOrder implements Command {
 
         int orderId = Integer.parseInt(content.getRequestParam(RequestParameters.ORDER_ID));
 
-        int userId =(int) content.getSessionAttr(SessionAttributes.USER_ID);
+        int userId = (int) content.getSessionAttr(SessionAttributes.USER_ID);
 
         Order order = new Order(orderId, userId);
 

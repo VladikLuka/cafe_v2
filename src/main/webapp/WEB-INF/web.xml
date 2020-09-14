@@ -29,8 +29,6 @@
         <url-pattern>/upload</url-pattern>
     </filter-mapping>
 
-
-
     <filter>
         <filter-name>BanFilter</filter-name>
         <filter-class>by.javatr.cafe.controller.filter.BanFilter</filter-class>

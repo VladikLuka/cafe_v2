@@ -1,18 +1,14 @@
 package by.javatr.cafe.controller;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 @WebServlet("/upload")
 @MultipartConfig(
@@ -23,19 +19,20 @@ import java.util.List;
 public class FileUploadController extends HttpServlet {
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ServletFileUpload sf = new ServletFileUpload(new DiskFileItemFactory());
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
 
-        try {
-            List<FileItem> multifiles = sf.parseRequest(req);
+        String uploadFilePath = req.getServletContext().getRealPath("");
 
-            for (FileItem item: multifiles){
-                item.write(new File(req.getServletContext().getRealPath("./") + "\\static\\img\\upload\\" + item.getName()));
-                resp.getWriter().print("\\static\\img\\upload\\" + item.getName());
-            }
-        } catch (Exception e) {
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        File fileSaveDir = new File(uploadFilePath);
+        if(!fileSaveDir.exists()){
+            fileSaveDir.mkdirs();
         }
 
+        for (Part part: req.getParts()) {
+            if(part.getSubmittedFileName() != null){
+                part.write(uploadFilePath + File.separator + "\\static\\img\\upload\\" + part.getSubmittedFileName());
+                resp.getWriter().print("\\static\\img\\upload\\" + part.getSubmittedFileName());
+            }
+        }
     }
 }

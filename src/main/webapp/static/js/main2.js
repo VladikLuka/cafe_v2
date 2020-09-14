@@ -162,8 +162,9 @@ $("#addProduct").click(function () {
 	swal({
 		title: "An input!",
 		text: "Write something interesting:",
-		showCancelButton: true,
-		closeOnConfirm: true,
+		showCancelButton: false,
+		closeOnConfirm: false,
+		showConfirmButton: false,
 		animation: "slide-from-top",
 		inputPlaceholder: "Write something",
 		html:"<input type='file' name='file' id='dish_picture' value='add_picture' multiple accept='image/*'> " +
@@ -176,7 +177,7 @@ $("#addProduct").click(function () {
 			"<input id=\"swal-input3\" class=\"swal2-input\ \has-error\" placeholder='Write smth'> \n" +
 			"<lable for='swal-input4'>dish price</lable>" +
 			"<input id=\"swal-input4\" class=\"swal2-input\" placeholder='Write smth'> \n" +
-			"<input type='submit' id='submit_dish'  value='submit_dish'/>" +
+			"<input type='submit' id='submit_dish'  value='submit dish'/>" +
 			" "
 	})
 

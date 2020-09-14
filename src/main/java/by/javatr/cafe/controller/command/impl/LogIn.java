@@ -45,6 +45,10 @@ public class LogIn implements Command {
         }
     }
 
+    public void setService(IUserService service) {
+        this.service = service;
+    }
+
     private LogIn() {
     }
 }

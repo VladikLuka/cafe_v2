@@ -3,6 +3,7 @@ package by.javatr.cafe.service.impl;
 import by.javatr.cafe.container.annotation.Component;
 import by.javatr.cafe.entity.Cart;
 import by.javatr.cafe.entity.Dish;
+import by.javatr.cafe.exception.ServiceException;
 import by.javatr.cafe.service.ICartService;
 
 import java.math.BigDecimal;
@@ -78,7 +79,11 @@ public class CartService implements ICartService {
      * @return amount 
      */
     @Override
-    public BigDecimal amount(Cart cart) {
+    public BigDecimal amount(Cart cart) throws ServiceException {
+
+        if (cart == null){
+            throw new ServiceException("Cart is empty");
+        }
 
         List<Dish> cart1 = cart.getUserCart();
 

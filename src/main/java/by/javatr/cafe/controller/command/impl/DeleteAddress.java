@@ -48,6 +48,10 @@ public class DeleteAddress implements Command {
 
     }
 
+    public void setService(IAddressService service) {
+        this.service = service;
+    }
+
     private DeleteAddress() {
     }
 }

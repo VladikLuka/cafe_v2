@@ -1,8 +1,8 @@
 package by.javatr.cafe.controller.page;
 
 import by.javatr.cafe.constant.AccessLevel;
+import by.javatr.cafe.constant.Category;
 import by.javatr.cafe.constant.Path;
-import by.javatr.cafe.container.BeanFactory;
 import by.javatr.cafe.container.annotation.Autowired;
 import by.javatr.cafe.container.annotation.Component;
 import by.javatr.cafe.service.IDishService;
@@ -14,7 +14,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * processes the request and transfers useful information to the jsp
@@ -55,11 +54,7 @@ public class Pizza implements Page {
     @Override
     public void process(HttpServletRequest req, HttpServletResponse resp) {
         try {
-            final Map<String, Object> container = BeanFactory.getInstance().getContainer();
-
-
-
-            displayDishes(req,resp,dishService,userService,4, PATH, logger);
+            displayDishes(req,resp,dishService,userService, Category.PIZZA, PATH, logger);
         } catch (ServletException | IOException e) {
             try {
                 req.getRequestDispatcher(ERROR).forward(req,resp);

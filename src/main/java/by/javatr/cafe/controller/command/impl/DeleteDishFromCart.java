@@ -38,6 +38,10 @@ public class DeleteDishFromCart implements Command {
 
     }
 
+    public void setService(ICartService service) {
+        this.service = service;
+    }
+
     private DeleteDishFromCart() {
     }
 }

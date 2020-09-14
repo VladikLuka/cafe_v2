@@ -155,7 +155,6 @@ public class AbstractRepository<T extends Entity<T>> {
 
     /**
      * Create entity
-     * @param connection connection
      * @param entity entity being created
      * @return created entity
      */
@@ -225,7 +224,10 @@ public class AbstractRepository<T extends Entity<T>> {
         for (String key : keys) {
             countMark.append("?").append(",");
             Object o = fieldValues.get(key);
-            if(o.getClass().equals(Boolean.class)){
+
+            if(o == null){
+                values.append(key).append("=").append(o).append(",");
+            }else if(o.getClass().equals(Boolean.class)){
                 values.append(key).append("=").append(o).append(",");
             }else {
                 values.append(key).append("=").append("\"").append(o).append("\"").append(",");
@@ -252,8 +254,9 @@ public class AbstractRepository<T extends Entity<T>> {
             for (java.lang.reflect.Field field :declaredFields) {
                 if(field.isAnnotationPresent(Id.class)){
                     try(ResultSet resultSet = statement2.executeQuery();)
-                    {   field.setAccessible(true);
+                    {
                         resultSet.next();
+                        field.setAccessible(true);
                         field.set(entity, resultSet.getInt(1));
                         field.setAccessible(false);
                     }
@@ -269,7 +272,6 @@ public class AbstractRepository<T extends Entity<T>> {
 
     /**
      * Delete entity
-     * @param connection connection
      * @param entity entity being deleted
      * @return boolean
      */

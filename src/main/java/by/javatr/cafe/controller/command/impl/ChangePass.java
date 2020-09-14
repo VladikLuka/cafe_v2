@@ -39,6 +39,10 @@ public class ChangePass implements Command {
         return new RequestResult(Navigation.REDIRECT, "/user", HttpServletResponse.SC_OK);
     }
 
+    public void setUserService(IUserService userService) {
+        this.userService = userService;
+    }
+
     private ChangePass() {
     }
 }

@@ -1,6 +1,7 @@
 package by.javatr.cafe.controller.page;
 
 import by.javatr.cafe.constant.AccessLevel;
+import by.javatr.cafe.constant.Category;
 import by.javatr.cafe.constant.Path;
 import by.javatr.cafe.container.annotation.Autowired;
 import by.javatr.cafe.container.annotation.Component;
@@ -54,7 +55,7 @@ public class Garnish implements Page {
     @Override
     public void process(HttpServletRequest req, HttpServletResponse resp) {
         try {
-            displayDishes(req,resp, dishService, userService, 3, PATH, logger);
+            displayDishes(req,resp, dishService, userService, Category.GARNISH, PATH, logger);
         } catch (ServletException | IOException e) {
             logger.error(e);
         }

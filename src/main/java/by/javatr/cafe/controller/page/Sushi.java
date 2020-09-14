@@ -1,6 +1,7 @@
 package by.javatr.cafe.controller.page;
 
 import by.javatr.cafe.constant.AccessLevel;
+import by.javatr.cafe.constant.Category;
 import by.javatr.cafe.constant.Path;
 import by.javatr.cafe.container.annotation.Autowired;
 import by.javatr.cafe.container.annotation.Component;
@@ -52,7 +53,7 @@ public class Sushi implements Page {
     @Override
     public void process(HttpServletRequest req, HttpServletResponse resp) {
         try {
-            displayDishes(req, resp, dishService, userService, 6, PATH, logger);
+            displayDishes(req, resp, dishService, userService, Category.SUSHI, PATH, logger);
         }catch (ServletException | IOException e) {
             try {
                 req.getRequestDispatcher(ERROR).forward(req,resp);

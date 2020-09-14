@@ -1,72 +1,109 @@
 package by.javatr.cafe;
 
-import by.javatr.cafe.connection.impl.ConnectionPool;
 import by.javatr.cafe.dao.repository.AbstractRepository;
 import by.javatr.cafe.entity.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Main extends AbstractRepository<User>{
 
+    int calculate() {
+        return Integer.MAX_VALUE - Integer.MIN_VALUE;
+    }
 
+    public static void mergeSort(int[] a, int n) {
+        if (n < 2) {
+            return;
+        }
+        int mid = n / 2;
+        int[] l = new int[mid];
+        int[] r = new int[n - mid];
 
+        for (int i = 0; i < mid; i++) {
+            l[i] = a[i];
+        }
+        for (int i = mid; i < n; i++) {
+            r[i - mid] = a[i];
+        }
+        mergeSort(l, mid);
+        mergeSort(r, n - mid);
+
+        merge(a, l, r, mid, n - mid);
+    }
+
+    public static void merge(
+            int[] a, int[] l, int[] r, int left, int right) {
+
+        int i = 0, j = 0, k = 0;
+        while (i < left && j < right) {
+            if (l[i] <= r[j]) {
+                a[k++] = l[i++];
+            }
+            else {
+                a[k++] = r[j++];
+            }
+        }
+        while (i < left) {
+            a[k++] = l[i++];
+        }
+        while (j < right) {
+            a[k++] = r[j++];
+        }
+    }
+
+    Integer a = new Integer(2); Integer b = new Integer(2);
+
+    public int shift(int value, int offset) {
+        value += offset;
+        return value;
+    }
+    
     public static void main(String[] args) throws SQLException, InterruptedException {
 
-        DateFormat instance = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        final String[] uploads = "/upload/data/3".split("upload");
 
-        try {
-            final Date parse = instance.parse("2020-09-15 10:10:10");
-
-            final long credit_time = parse.getTime();
-
-            final long now = Calendar.getInstance().getTime().getTime();
-
-            long differ = credit_time - now;
-
-
-            long days = differ / 86_400_000;
-
-            System.out.println(days);
-
-        }catch (Exception e){
-
-        }
+        System.out.println(Arrays.asList(uploads));
 
     }
 
-    public static void getCon(int money) throws SQLException {
 
-
-        PreparedStatement statement = null;
-        Connection retrieve = null;
-        try {
-            retrieve = ConnectionPool.CONNECTION_POOL.retrieve();
-
-            statement = retrieve.prepareStatement("update user set user_money=?,roles_role_id=\"1\",user_email=\"TESTLOG@gmail.com\",user_password=\"222b125eae8e38b3ce07a62bc1320409\",user_isCredit=false,user_id=\"10\",user_isBan=false,user_name=\"Vladik\",user_phone=\"+375333044914\",user_surname=\"Luka\",user_loyaltyPoints=\"25\" where user_id = ?");
-
-            statement.setInt(1, money);
-            statement.setInt(2, 10);
-            statement.executeUpdate();
-
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }finally {
-            retrieve.close();
-            statement.close();
+    public static void merge(List<Integer> l1, List<Integer> l2) {
+        for (int index1 = 0, index2 = 0; index2 < l2.size(); index1++) {
+            if (index1 == l1.size() || l1.get(index1) > l2.get(index2)) {
+                l1.add(index1, l2.get(index2++));
+            }
         }
-
-
-
     }
 
-    public int devide(int a, int b) {
-        return a/b;
+    public void sort(ArrayList<Integer> a,ArrayList<Integer> b ){
+        int k = 0;
+        int j = 0;
+
+        for (int i = 0; i < a.size() + b.size(); i++) {
+
+            if(j == b.size()){
+                return;
+            }
+            if(k == a.size()){
+                for (int l = j; l < b.size(); l++) {
+                    a.add(b.get(l));
+                }
+                return;
+            }
+
+            final int i1 = a.get(k).compareTo(b.get(j));
+
+            if(i1 < 0){
+                k++;
+            }else {
+                a.add(k, b.get(j));
+                k++;
+                j++;
+            }
+        }
     }
 
     public String coord(String str){

@@ -16,12 +16,9 @@
 
 </head>
 <body>
-
 <jsp:include page="part/header_v2.jsp"/>
 
 <div class="container" id="catalog">
-
-
 
     <c:forEach items="${requestScope.drinks}" var="dish">
             <c:choose>
@@ -53,7 +50,7 @@
                                 <c:if test="${dish.available eq false}">
                                     <button class="btn btn-success show2" type="submit" data-id="${dish.id}" id="${dish.id}"><local:Localization message="dish.show"/></button>
                                 </c:if>
-                                <button class="btn btn-success delete2" type="submit" data-id="${dish.id}">delete</button>
+                                <button class="btn btn-success delete2" type="submit" data-id="${dish.id}"><local:Localization message="dish.delete"/></button>
                             </c:if>
                         </div>
                     </div>

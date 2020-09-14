@@ -9,7 +9,6 @@ import by.javatr.cafe.dao.repository.impl.MySqlAddressRepository;
 import by.javatr.cafe.dao.repository.impl.MySqlDishRepository;
 import by.javatr.cafe.dao.repository.impl.MySqlOrderRepository;
 import by.javatr.cafe.dao.repository.impl.MySqlUserRepository;
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -41,7 +40,7 @@ public class DAOFactory implements AutoCloseable {
         try {
             connection.setAutoCommit(false);
         } catch (SQLException e) {
-            logger.log(Level.ERROR, "An exception occurred during setting auto commit in false.");
+            logger.error("An exception occurred during setting auto commit in false.");
         }
     }
 
@@ -50,7 +49,7 @@ public class DAOFactory implements AutoCloseable {
             connection.setAutoCommit(true);
             connection.close();
         } catch (SQLException e) {
-            logger.log(Level.ERROR, "An exception occurred during setting auto commit in false.");
+            logger.error("An exception occurred during setting auto commit in false.");
         }
     }
 
@@ -58,7 +57,7 @@ public class DAOFactory implements AutoCloseable {
         try {
             connection.commit();
         } catch (SQLException e) {
-            logger.log(Level.ERROR, "An exception occurred during committing.", e);
+            logger.error("An exception occurred during committing.", e);
         }
     }
 
@@ -66,15 +65,15 @@ public class DAOFactory implements AutoCloseable {
         try {
             connection.rollback();
         } catch (SQLException e) {
-            logger.log(Level.ERROR, "An exception occurred during rolling back transaction.", e);
+            logger.error("An exception occurred during rolling back transaction.", e);
         }
     }
 
     public void close() {
         try {
             connection.close();
-        } catch (SQLException throwables) {
-            logger.log(Level.ERROR, throwables);
+        } catch (SQLException e) {
+            logger.error("An exception occurred during rolling back transaction.", e);
         }
     }
 

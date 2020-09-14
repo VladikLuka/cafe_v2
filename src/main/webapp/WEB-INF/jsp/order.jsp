@@ -62,8 +62,6 @@
             </div>
         </div>
 
-
-
         <script>
             var calendar = document.getElementById("delivery_time");
             console.log(moment().format("YYYY-MM-DD hh:mm:ss"));
@@ -93,14 +91,16 @@
     <div class="container_right">
         <h2 style="padding-left: 20px"><local:Localization message="order.order"/></h2>
 
-        <c:forEach items="${sessionScope.cart.userCart}" var="dish">
-            <div style="color:white;background-color: #767676; max-width: 500px; max-height: 300px; margin-top: 20px; border-radius: 15px; margin-left: 50px; display: inline-block">`
-                <div>
-                    <img src="${dish.picturePath}" alt="" style="max-width: 100px; margin-left: 10px; display: inline-block">
+        <c:forEach items="${requestScope.dishes}" var="dishes">
+            <div style="color:#666666;background-color: #a5dc86; width: 500px; height: 180px; margin-top: 20px; border-radius: 15px; margin-left: 50px;	box-shadow: 0 0 5px rgba(0,0,0,0.5);">
+                <div style="height: 400px; width: 100px; display: inline-block">
+                    <img src="${dishes.key.picturePath}" alt="" style="max-width: 100px; margin-left: 10px; display: inline-block">
                 </div>
-                <div>
-                    <div style="margin-left: 10px; display: inline-block">${dish.description}</div>
-                    <div style="margin-left: 10px; display: inline-block">${dish.price}</div>
+                <div style="height: 400px; width: 350px; display: inline-block">
+                    <div style="margin-left: 10px; display: inline-block; "><h4><b>${dishes.key.name}</b></h4></div>
+                    <div style="margin-left: 10px; display: inline-block ">${dishes.key.description}</div>
+                    <div style="margin-left: 10px; display: inline-block">${dishes.key.price} BYN</div>
+                    <div style="width:100%;display:flex;justify-content:flex-end;"><h6>X${dishes.value}</h6></div>
                 </div>
             </div>
         </c:forEach>

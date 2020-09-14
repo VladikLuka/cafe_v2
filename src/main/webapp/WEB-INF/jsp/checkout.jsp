@@ -77,6 +77,7 @@
                                 </c:if>
 
                             <c:if test="${requestScope.order.status ne 'CLOSED'}">
+                                <c:if test="${requestScope.order.orderId eq requestScope.order.userId}">
                                 <section>
                                     <form action="${pageContext.request.contextPath}/controller" method="post">
                                         <input type="hidden" name="command" value="cancel_order">
@@ -86,6 +87,7 @@
                                         </button>
                                     </form>
                                 </section>
+                                </c:if>
                             </c:if>
                         </c:if>
                         <c:if test="${not empty requestScope.order.orderReview}">
@@ -114,7 +116,7 @@
     <article class="content compact">
         <section>
             <h5><local:Localization message="checkout.transaction"/></h5>
-            <table cellpadding="0" cellspacing="0">
+            <table>
                 <tbody>
                 <tr>
                     <td>id</td>
@@ -156,7 +158,7 @@
             <c:if test="${not empty requestScope.order.address}">
                 <h5><local:Localization message="order.address"/></h5>
 
-                <table cellpadding="0" cellspacing="0">
+                <table>
                     <tbody>
                     <tr>
                         <td><local:Localization message="user.city"/></td>
@@ -183,12 +185,12 @@
         <c:if test="${not empty requestScope.order.dishes}">
             <section>
                 <h5><local:Localization message="checkout.dishes"/></h5>
-                <table cellpadding="0" cellspacing="0">
+                <table>
                     <tbody>
                     <c:forEach items="${requestScope.order.dishes}" var="dish">
                         <tr>
                             <td><local:Localization message="checkout.dish.name"/></td>
-                            <td>${dish.key.name}</td>
+                            <td><local:Localization message="dish.name.${dish.key.name}"/></td>
                         </tr>
                         <tr>
                             <td><local:Localization message="checkout.dish.quantity"/></td>

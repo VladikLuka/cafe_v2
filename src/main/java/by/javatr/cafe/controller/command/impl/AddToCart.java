@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class AddToCart implements Command {
     @Autowired
-    private IDishService service;
+    private IDishService dishService;
     @Autowired
     private ICartService cartService;
 
@@ -32,7 +32,7 @@ public class AddToCart implements Command {
     public RequestResult execute(RequestContent content) throws ServiceException {
         String id = content.getRequestParam(RequestParameters.ID);
 
-        Dish dish = service.get(Integer.parseInt(id));
+        Dish dish = dishService.get(Integer.parseInt(id));
 
         Gson gson = new Gson();
 
@@ -51,6 +51,13 @@ public class AddToCart implements Command {
         return result;
     }
 
+    public void setDishService(IDishService dishService) {
+        this.dishService = dishService;
+    }
+
+    public void setCartService(ICartService cartService) {
+        this.cartService = cartService;
+    }
 
     private AddToCart() {
     }

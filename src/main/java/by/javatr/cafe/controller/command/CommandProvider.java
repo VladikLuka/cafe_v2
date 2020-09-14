@@ -32,7 +32,7 @@ public class CommandProvider {
         repository.put(CommandName.PAY, (Deposit) factory.getBean("deposit"));
         repository.put(CommandName.GET_TOKEN, (ReturnToken) factory.getBean("returnToken"));
         repository.put(CommandName.CHANGE_PASS, (ChangePass) factory.getBean("changePass"));
-        repository.put(CommandName.MAKE_ORDER, (CardOrder) factory.getBean("makeOrderCard"));
+        repository.put(CommandName.MAKE_ORDER, (CardOrder) factory.getBean("cardOrder"));
         repository.put(CommandName.BALANCE_ORDER, (BalanceOrder) factory.getBean("balanceOrder"));
         repository.put(CommandName.SHOW_DISH, (ShowDish) factory.getBean("showDish"));
         repository.put(CommandName.HIDE_DISH, (HideDish) factory.getBean("hideDish"));

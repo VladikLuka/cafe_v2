@@ -112,14 +112,14 @@ public interface Page {
         long pages = Math.round(ceil);
         req.setAttribute("pages", pages);
 
-        for (int i = 0; i < drinks.size(); i++) {
-            if(drinks.get(i).isAvailable()){
+        for (Dish drink : drinks) {
+            if (drink.isAvailable()) {
                 ctr -= 1;
-                if(ctr < 0){
-                    page_dishes.add(drinks.get(i));
+                if (ctr < 0) {
+                    page_dishes.add(drink);
                 }
             }
-            if(page_dishes.size() == DISH_ON_PAGE){
+            if (page_dishes.size() == DISH_ON_PAGE) {
                 break;
             }
         }

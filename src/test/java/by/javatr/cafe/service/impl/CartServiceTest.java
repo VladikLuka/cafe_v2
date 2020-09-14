@@ -4,6 +4,7 @@ import by.javatr.cafe.container.BeanFactory;
 import by.javatr.cafe.entity.Cart;
 import by.javatr.cafe.entity.Dish;
 import by.javatr.cafe.exception.DIException;
+import by.javatr.cafe.exception.ServiceException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -25,7 +26,7 @@ class CartServiceTest {
         String absolutePath = file.getAbsolutePath();
         absolutePath = absolutePath.replaceAll("\\\\", "/");
         absolutePath = absolutePath + "/target/test/WEB-INF/classes/by/javatr/cafe/";
-        BeanFactory.getInstance().run(" " + absolutePath);
+        BeanFactory.getInstance().run(absolutePath);
 
         cartService = (CartService) BeanFactory.getInstance().getBean("cartService");
 
@@ -104,7 +105,7 @@ class CartServiceTest {
     }
 
     @Test
-    void amount(){
+    void amount() throws ServiceException {
 
         Cart cart = new Cart();
         cart.setUserCart(new ArrayList<>());

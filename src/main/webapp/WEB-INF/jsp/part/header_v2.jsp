@@ -1,7 +1,6 @@
 <%@ taglib prefix="local" uri="/tld/localization.tld" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -115,13 +114,13 @@
   2.18a2.19 2.19 0 104.379.001 2.19 2.19 0 00-4.379-.001z" id="cart_icon"></path></svg></span></div>
                             <div id="cart_1">
                                 <div class="container_cart">
-                                    <button class="btn button-info" id="show_less_cart">Show less</button>
+                                    <button class="btn button-info" id="show_less_cart"><local:Localization message="header.cart.hide"/></button>
 
                                     <div id="cart_item">
 
                                     </div>
 
-                                        <h2 id="total_price">Total 0</h2>
+                                        <h2 id="total_price" style="color: gray">Total 0</h2>
 
                                     <c:choose>
                                         <c:when test="${not empty sessionScope.userId}">

@@ -36,9 +36,17 @@ public class AddAddress implements Command {
 
         Address address = new Address(city, street, house, flat, userId, true);
 
-        service.create(address);
+        address = service.create(address);
+
+        if (address == null) {
+            return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
+        }
 
         return new RequestResult(Navigation.REDIRECT, Path.URL_USER, HttpServletResponse.SC_OK);
+    }
+
+    public void setService(IAddressService service) {
+        this.service = service;
     }
 
     private AddAddress() {}

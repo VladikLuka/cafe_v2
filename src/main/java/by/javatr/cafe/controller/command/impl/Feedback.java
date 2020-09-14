@@ -43,6 +43,7 @@ public class Feedback implements Command {
         return new RequestResult(Navigation.REDIRECT, "/checkout/" + orderId);
     }
 
-    private Feedback() {
+    public void setOrderService(IOrderService orderService) {
+        this.orderService = orderService;
     }
 }

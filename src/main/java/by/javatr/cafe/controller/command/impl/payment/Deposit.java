@@ -71,6 +71,8 @@ public class Deposit implements Command {
             orderService.deposit(order);
             return new RequestResult(Navigation.REDIRECT, "/checkout/" + order.getOrderId(), HttpServletResponse.SC_OK);
         }else{
+            System.out.println(result.getErrors());
+            System.out.println(result.getMessage());
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
     }

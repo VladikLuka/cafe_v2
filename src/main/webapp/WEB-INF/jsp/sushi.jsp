@@ -38,7 +38,7 @@
                 </div>
 
                 <div id="product_title"><local:Localization message="dish.name.${dish.name}"/></div>
-                <div id="product_description" style="min-height: 70px"><local:Localization message="dish.description.${dish.description}"/></div>
+                <div id="product_description"><local:Localization message="dish.description.${dish.description}"/></div>
                 <div id="product_modification">
                     <div id="product_info">
                         <div id="test-line">
@@ -54,7 +54,7 @@
                                 <c:if test="${dish.available eq false}">
                                     <button class="btn btn-success show2" type="submit" data-id="${dish.id}" id="${dish.id}"><local:Localization message="dish.show"/></button>
                                 </c:if>
-                                <button class="btn btn-success delete2" type="submit" data-id="${dish.id}">delete</button>
+                                <button class="btn btn-success delete2" type="submit" data-id="${dish.id}"><local:Localization message="dish.delete"/></button>
                             </c:if>
                         </div>
                     </div>

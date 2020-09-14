@@ -40,183 +40,236 @@ public class ValidationAspect {
     private final Logger logger = LogManager.getLogger(getClass());
 
     @Before(value = "execution(public * by.javatr.cafe.controller.listener.Config.contextInitialized(..))")
-    public void test(){
+    public void test() {
         logger.info("ASPECT WORK");
         System.out.println("AspectJ WORK CORRECT");
     }
 
     @Pointcut("execution(public * by.javatr.cafe.controller.command.impl.AddAddress.execute(..))")
-    public void AddAddress(){}
+    public void AddAddress() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.controller.command.impl.AddToCart.execute(..))")
-    public void addToCart(){}
+    public void addToCart() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.service.impl.OrderService.makeOrderCashCard(..))")
-    public void makeOrderValidation(){}
+    public void makeOrderValidation() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.controller.command.impl.ChangePass.execute(..))")
-    public void changePass(){}
+    public void changePass() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.controller.command.impl.DeleteAddress.execute(..))")
-    public void delAddress(){}
+    public void delAddress() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.controller.command.impl.DeleteDishFromCart.execute(..))")
-    public void deleteFromCart(){}
+    public void deleteFromCart() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.controller.command.impl.Feedback.execute(..))")
-    public void fb(){}
+    public void fb() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.controller.command.impl.LogIn.execute(..))")
-    public void logIn(){}
+    public void logIn() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.controller.command.impl.SignUp.execute(..))")
-    public void signUp(){}
+    public void signUp() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.controller.command.impl.payment.BalanceOrder.execute(..))")
-    public void balanceOrderValid(){}
+    public void balanceOrderValid() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.controller.command.impl.payment.CancelOrder.execute(..))")
-    public void cancelOrder(){}
+    public void cancelOrder() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.controller.command.impl.payment.CashOrder.execute(..)) " +
             "  || execution(public * by.javatr.cafe.controller.command.impl.payment.BalanceOrder.execute(..))")
-    public void cashBalanceOrder(){}
+    public void cashBalanceOrder() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.controller.command.impl.payment.Deposit.execute(..))")
-    public void deposit_test(){}
+    public void deposit_test() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.controller.command.impl.payment.CardOrder.execute(..))")
-    public void makeOrderCard(){}
+    public void makeOrderCard() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.controller.command.impl.admin.AddMoney.execute(..)) " +
             "  || execution(public * by.javatr.cafe.controller.command.impl.admin.SubtractMoney.execute(..))")
-    public void changeMoney(){}
+    public void changeMoney() {
+    }
 
 
     @Pointcut("execution(public * by.javatr.cafe.controller.command.impl.admin.AddPoints.execute(..))" +
-             " || execution(public * by.javatr.cafe.controller.command.impl.admin.SubtractPoints.execute(..))")
-    public void changePoints(){}
+            " || execution(public * by.javatr.cafe.controller.command.impl.admin.SubtractPoints.execute(..))")
+    public void changePoints() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.controller.command.impl.admin.BanUser.execute(..))")
-    public void banUser(){}
+    public void banUser() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.controller.command.impl.admin.UnbanUser.execute(..))")
-    public void unbanUser(){}
+    public void unbanUser() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.controller.command.impl.admin.CloseOrder.execute(..))")
-    public void closeOrder(){}
+    public void closeOrder() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.controller.command.impl.admin.CloseOrder.execute(..))")
-    public void violateOrder(){}
+    public void violateOrder() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.controller.command.impl.admin.HideDish.execute(..))")
-    public void hideDish(){}
+    public void hideDish() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.controller.command.impl.admin.ShowDish.execute(..))")
-    public void showDish(){}
+    public void showDish() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.controller.command.impl.admin.ShowUserInfo.execute(..))")
-    public void showUserInfo(){}
+    public void showUserInfo() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.service.impl.UserService.find(..))" +
             "||execution(public * by.javatr.cafe.service.impl.UserService.delete(..))")
-    public void userServiceFindDelete(){}
+    public void userServiceFindDelete() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.service.impl.UserService.update(..))")
-    public void userServiceUpdate(){}
+    public void userServiceUpdate() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.service.impl.UserService.loginUser(..))")
-    public void loginUserService(){}
+    public void loginUserService() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.service.impl.UserService.createUser(..))")
-    public void createUserService(){}
+    public void createUserService() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.service.impl.UserService.addMoney(..))" +
             "||execution(public * by.javatr.cafe.service.impl.UserService.subtractMoney(..))")
-    public void addSubstMoneyUserService(){}
+    public void addSubstMoneyUserService() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.service.impl.UserService.addPoints(..))" +
             "||execution(public * by.javatr.cafe.service.impl.UserService.subtractPoints(..))")
-    public void addSubstPointsUserService(){}
+    public void addSubstPointsUserService() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.service.impl.UserService.banUser(..))" +
             "||execution(public * by.javatr.cafe.service.impl.UserService.unbanUser(..))")
-    public void banUnbanUserService(){}
+    public void banUnbanUserService() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.service.impl.AddressService.update(..))")
-    public void updateAddressService(){}
+    public void updateAddressService() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.service.impl.AddressService.getAllForUser(..))")
-    public void getAllForUserAddressService(){}
+    public void getAllForUserAddressService() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.service.impl.AddressService.create(..))")
-    public void createAddressService(){}
+    public void createAddressService() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.service.impl.AddressService.find(..))" +
             "||execution(public * by.javatr.cafe.service.impl.AddressService.delete(..))")
-    public void findDeleteAddressService(){}
+    public void findDeleteAddressService() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.service.impl.CartService.addToCart(..))")
-    public void addToCartService(){}
+    public void addToCartService() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.service.impl.CartService.deleteFromCart(..))")
-    public void deleteFromCartService(){}
+    public void deleteFromCartService() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.service.impl.CartService.clean(..))" +
             "||execution(public * by.javatr.cafe.service.impl.CartService.getAll(..)) ")
-    public void clearGetAllCartService(){}
+    public void clearGetAllCartService() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.service.impl.DishService.get(..))")
-    public void getDishService(){}
+    public void getDishService() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.service.impl.DishService.update(..))" +
             "||execution(public * by.javatr.cafe.service.impl.DishService.delete(..))" +
             "||execution(public * by.javatr.cafe.service.impl.DishService.hideDish(..))" +
             "||execution(public * by.javatr.cafe.service.impl.DishService.showDish(..))")
-    public void dishServiceValid(){}
+    public void dishServiceValid() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.service.impl.DishService.create(..))")
-    public void createDishService(){}
+    public void createDishService() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.service.impl.OrderService.makeOrderCashCard(..))")
-    public void makeOrderService(){}
+    public void makeOrderService() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.service.impl.OrderService.makeOrderBalance(..))")
-    public void makeOrderBalanceService(){}
+    public void makeOrderBalanceService() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.service.impl.OrderService.amount(..))")
-    public void amountService(){}
+    public void amountService() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.service.impl.OrderService.getOrders(..))")
-    public void getOrdersService(){}
+    public void getOrdersService() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.service.impl.OrderService.deposit(..))")
-    public void depositOrderService(){}
+    public void depositOrderService() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.service.impl.OrderService.updateOrder(..))")
-    public void updateOrderService(){}
+    public void updateOrderService() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.service.impl.OrderService.getOrder(..))")
-    public void getOrderService(){}
+    public void getOrderService() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.service.impl.OrderService.cancelOrder(..))")
-    public void cancelOrderService(){}
+    public void cancelOrderService() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.service.impl.OrderService.violateOrder(..))")
-    public void violateOrderService(){}
+    public void violateOrderService() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.controller.command.impl.payment.CreditOrder.execute(..))")
-    public void creditOrder(){}
+    public void creditOrder() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.controller.command.impl.payment.CloseCreditBalance(..))")
-    public void closeCreditBalance(){}
+    public void closeCreditBalance() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.controller.command.impl.admin.CreateDish.execute(..))")
-    public void createDish(){}
+    public void createDish() {
+    }
 
     @Pointcut("execution(public * by.javatr.cafe.controller.command.impl.admin.MakeUserAdmin(..)) &&" +
-              "execution(public * by.javatr.cafe.controller.command.impl.admin.MakeAdminUser(..))")
-    public void changeRoleValid(){}
+            "execution(public * by.javatr.cafe.controller.command.impl.admin.MakeAdminUser(..))")
+    public void changeRoleValid() {
+    }
 
     @Around(value = "changeRoleValid()", argNames = "pjp,point")
     public Object changeRole(ProceedingJoinPoint pjp, JoinPoint point) throws ServiceException {
@@ -226,26 +279,26 @@ public class ValidationAspect {
 
         final String userId = content.getRequestParam(RequestParameters.USER_ID);
 
-        if(userId == null){
+        if (userId == null) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
-        if(!Regex.POS_INTEGER.matches(userId)){
+        if (!Regex.POS_INTEGER.matches(userId)) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
         IUserService userService = (IUserService) BeanFactory.getInstance().getBean("userService");
 
         try {
-            User user = userService.find((int)content.getSessionAttr(SessionAttributes.USER_ID));
+            User user = userService.find((int) content.getSessionAttr(SessionAttributes.USER_ID));
 
-            if(!user.getRole().equals(Role.ADMIN)){
+            if (!user.getRole().equals(Role.ADMIN)) {
                 return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
             }
 
             return pjp.proceed();
 
-        }catch (Throwable throwable) {
+        } catch (Throwable throwable) {
             logger.error(throwable);
             throw new ServiceException(throwable);
         }
@@ -266,32 +319,32 @@ public class ValidationAspect {
         String picturePath = content.getRequestParam("dishPicture");
 
 
-        if(name == null || description == null || amount == null || weight == null || dishCategory == null || picturePath == null){
+        if (name == null || description == null || amount == null || weight == null || dishCategory == null || picturePath == null) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
-        if(!weight.matches(Regex.POS_INTEGER)){
+        if (!weight.matches(Regex.POS_INTEGER)) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
         try {
             new BigDecimal(amount);
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
         IUserService userService = (IUserService) BeanFactory.getInstance().getBean("userService");
 
         try {
-            User user = userService.find((int)content.getSessionAttr(SessionAttributes.USER_ID));
+            User user = userService.find((int) content.getSessionAttr(SessionAttributes.USER_ID));
 
-            if(!user.getRole().equals(Role.ADMIN)){
+            if (!user.getRole().equals(Role.ADMIN)) {
                 return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
             }
 
             return pjp.proceed();
 
-        }catch (Throwable throwable) {
+        } catch (Throwable throwable) {
             logger.error(throwable);
             throw new ServiceException(throwable);
         }
@@ -344,24 +397,24 @@ public class ValidationAspect {
         RequestContent content = (RequestContent) args[0];
 
         final String addressId = content.getRequestParam(RequestParameters.ADDRESS);
-        Integer userId =(Integer) content.getSessionAttr(SessionAttributes.USER_ID);
+        Integer userId = (Integer) content.getSessionAttr(SessionAttributes.USER_ID);
         IUserService userService = (IUserService) BeanFactory.getInstance().getBean("userService");
 
-        if(addressId == null || userId == null){
+        if (addressId == null || userId == null) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
-        if(!addressId.matches(Regex.POS_INTEGER)){
+        if (!addressId.matches(Regex.POS_INTEGER)) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
         try {
             final User user = userService.find(userId);
-            if(user == null){
+            if (user == null) {
                 return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
             }
 
-            if(user.isCredit()){
+            if (user.isCredit()) {
                 return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
             }
 
@@ -380,16 +433,10 @@ public class ValidationAspect {
         Object[] args = point.getArgs();
         Order order = (Order) args[0];
 
-        if(order == null){
+        if (order == null) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
-
-        try {
-            return pjp.proceed();
-        } catch (Throwable throwable) {
-            throw new ServiceException(throwable);
-        }
-
+        return proceed(pjp);
     }
 
     @Around(value = "cancelOrderService()", argNames = "pjp,point")
@@ -398,20 +445,14 @@ public class ValidationAspect {
         Object[] args = point.getArgs();
         Order order = (Order) args[0];
 
-        if(order == null){
+        if (order == null) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
         if (order.getUserId() <= 0 || order.getOrderId() <= 0 || order.getAmount() == null) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
-
-        try {
-            return pjp.proceed();
-        } catch (Throwable throwable) {
-            throw new ServiceException(throwable);
-        }
-
+        return proceed(pjp);
     }
 
     @Around(value = "getOrderService()", argNames = "pjp,point")
@@ -420,20 +461,14 @@ public class ValidationAspect {
         Object[] args = point.getArgs();
         Order order = (Order) args[0];
 
-        if(order == null){
+        if (order == null) {
             throw new IllegalArgumentException("order is null");
         }
 
         if (order.getOrderId() <= 0) {
             throw new IllegalArgumentException("incorrect id");
         }
-
-        try {
-            return pjp.proceed();
-        } catch (Throwable throwable) {
-            throw new ServiceException(throwable);
-        }
-
+        return proceed(pjp);
     }
 
     @Around(value = "updateOrderService()", argNames = "pjp,point")
@@ -442,16 +477,10 @@ public class ValidationAspect {
         Object[] args = point.getArgs();
         Order order = (Order) args[0];
 
-        if(order == null){
+        if (order == null) {
             throw new IllegalArgumentException("order is null");
         }
-
-        try {
-            return pjp.proceed();
-        } catch (Throwable throwable) {
-            throw new ServiceException(throwable);
-        }
-
+        return proceed(pjp);
     }
 
     @Around(value = "depositOrderService()", argNames = "pjp,point")
@@ -460,20 +489,14 @@ public class ValidationAspect {
         Object[] args = point.getArgs();
         Order order = (Order) args[0];
 
-        if(order == null){
+        if (order == null) {
             throw new IllegalArgumentException("order is null");
         }
 
-        if(order.getUserId() <= 0 || order.getAmount() == null){
+        if (order.getUserId() <= 0 || order.getAmount() == null) {
             throw new IllegalArgumentException("check object");
         }
-
-        try {
-            return pjp.proceed();
-        } catch (Throwable throwable) {
-            throw new ServiceException(throwable);
-        }
-
+        return proceed(pjp);
     }
 
     @Around(value = "getOrdersService()", argNames = "pjp,point")
@@ -482,16 +505,10 @@ public class ValidationAspect {
         Object[] args = point.getArgs();
         User user = (User) args[0];
 
-        if(user == null){
+        if (user == null) {
             throw new IllegalArgumentException("user is null");
         }
-
-        try {
-            return pjp.proceed();
-        } catch (Throwable throwable) {
-            throw new ServiceException(throwable);
-        }
-
+        return proceed(pjp);
     }
 
 
@@ -501,16 +518,10 @@ public class ValidationAspect {
         Object[] args = point.getArgs();
         Cart cart = (Cart) args[0];
 
-        if(cart == null){
+        if (cart == null) {
             throw new IllegalArgumentException("cart is null");
         }
-
-        try {
-            return pjp.proceed();
-        } catch (Throwable throwable) {
-            throw new ServiceException(throwable);
-        }
-
+        return proceed(pjp);
     }
 
 
@@ -521,20 +532,14 @@ public class ValidationAspect {
         Order order = (Order) args[0];
         User user = (User) args[1];
 
-        if(order == null || user == null){
+        if (order == null || user == null) {
             throw new IllegalArgumentException("order or user is null");
         }
 
-        if(order.getAmount() == null){
+        if (order.getAmount() == null) {
             throw new IllegalArgumentException("order amount is null");
         }
-
-        try {
-            return pjp.proceed();
-        } catch (Throwable throwable) {
-            throw new ServiceException(throwable);
-        }
-
+        return proceed(pjp);
     }
 
     @Around(value = "makeOrderService()", argNames = "pjp,point")
@@ -544,34 +549,22 @@ public class ValidationAspect {
         Order order = (Order) args[0];
         User user = (User) args[1];
 
-        if(order == null || user == null){
+        if (order == null || user == null) {
             throw new IllegalArgumentException("order or user is null");
         }
-
-        try {
-            return pjp.proceed();
-        } catch (Throwable throwable) {
-            throw new ServiceException(throwable);
-        }
-
+        return proceed(pjp);
     }
 
-        @Around(value = "createDishService()", argNames = "pjp,point")
-        public Object createDishServiceValid(ProceedingJoinPoint pjp, JoinPoint point) throws ServiceException {
+    @Around(value = "createDishService()", argNames = "pjp,point")
+    public Object createDishServiceValid(ProceedingJoinPoint pjp, JoinPoint point) throws ServiceException {
 
         Object[] args = point.getArgs();
         Dish dish = (Dish) args[0];
 
-        if(dish == null){
+        if (dish == null) {
             throw new IllegalArgumentException("dish is null");
         }
-
-        try {
-            return pjp.proceed();
-        } catch (Throwable throwable) {
-            throw new ServiceException(throwable);
-        }
-
+        return proceed(pjp);
     }
 
     @Around(value = "dishServiceValid()", argNames = "pjp,point")
@@ -580,20 +573,14 @@ public class ValidationAspect {
         Object[] args = point.getArgs();
         Dish dish = (Dish) args[0];
 
-        if(dish == null){
+        if (dish == null) {
             throw new IllegalArgumentException("dish is null");
         }
 
-        if(dish.getId() <= 0) {
+        if (dish.getId() <= 0) {
             throw new IllegalArgumentException("dish incorrect id");
         }
-
-        try {
-            return pjp.proceed();
-        } catch (Throwable throwable) {
-            throw new ServiceException(throwable);
-        }
-
+        return proceed(pjp);
     }
 
     @Around(value = "getDishService()", argNames = "pjp,point")
@@ -602,17 +589,11 @@ public class ValidationAspect {
         Object[] args = point.getArgs();
         int dish_id = (int) args[0];
 
-        if(dish_id <= 0){
+        if (dish_id <= 0) {
             throw new IllegalArgumentException("incorrect id");
         }
-
-        try {
-            return pjp.proceed();
-        } catch (Throwable throwable) {
-            throw new ServiceException(throwable);
-        }
+        return proceed(pjp);
     }
-
 
 
     @Around(value = "clearGetAllCartService()", argNames = "pjp,point")
@@ -625,14 +606,10 @@ public class ValidationAspect {
             throw new IllegalArgumentException("cart is null");
         }
 
-        if(cart.getUserCart() == null){
+        if (cart.getUserCart() == null) {
             throw new IllegalArgumentException("cart is null");
         }
-        try {
-            return pjp.proceed();
-        } catch (Throwable throwable) {
-            throw new ServiceException(throwable);
-        }
+        return proceed(pjp);
     }
 
     @Around(value = "deleteFromCartService()", argNames = "pjp,point")
@@ -642,15 +619,10 @@ public class ValidationAspect {
         Cart cart = (Cart) args[0];
         int dish_id = (int) args[1];
 
-        if(cart == null || dish_id <= 0){
+        if (cart == null || dish_id <= 0) {
             throw new IllegalArgumentException("incorrect args");
         }
-
-        try {
-            return pjp.proceed();
-        } catch (Throwable throwable) {
-            throw new ServiceException(throwable);
-        }
+        return proceed(pjp);
     }
 
     @Around(value = "addToCartService()", argNames = "pjp,point")
@@ -660,15 +632,10 @@ public class ValidationAspect {
         Cart cart = (Cart) args[0];
         Dish dish = (Dish) args[1];
 
-        if(cart == null || dish == null){
+        if (cart == null || dish == null) {
             throw new IllegalArgumentException("cart or dish is null");
         }
-
-        try {
-            return pjp.proceed();
-        } catch (Throwable throwable) {
-            throw new ServiceException(throwable);
-        }
+        return proceed(pjp);
     }
 
     @Around(value = "findDeleteAddressService()", argNames = "pjp,point")
@@ -677,20 +644,14 @@ public class ValidationAspect {
         Object[] args = point.getArgs();
         Address address = (Address) args[0];
 
-        if(address == null){
+        if (address == null) {
             throw new IllegalArgumentException("address is null");
         }
 
-        if(address.getId() == 0){
+        if (address.getId() == 0) {
             throw new IllegalArgumentException("incorrect address id");
         }
-
-        try {
-            return pjp.proceed();
-        } catch (Throwable throwable) {
-            throw new ServiceException(throwable);
-        }
-
+        return proceed(pjp);
     }
 
     @Around(value = "getAllForUserAddressService()", argNames = "pjp,point")
@@ -699,16 +660,10 @@ public class ValidationAspect {
         Object[] args = point.getArgs();
         int address_id = (int) args[0];
 
-        if(address_id <= 0){
+        if (address_id <= 0) {
             throw new IllegalArgumentException("incorrect address id");
         }
-
-        try {
-            return pjp.proceed();
-        } catch (Throwable throwable) {
-            throw new ServiceException(throwable);
-        }
-
+        return proceed(pjp);
     }
 
     @Around(value = "createAddressService()", argNames = "pjp,point")
@@ -717,20 +672,14 @@ public class ValidationAspect {
         Object[] args = point.getArgs();
         Address address = (Address) args[0];
 
-        if(address == null){
+        if (address == null) {
             throw new IllegalArgumentException("address is null");
         }
 
-        if(address.getCity() == null || address.getStreet() == null || address.getHouse() == null || address.getFlat() == null || address.getUserId() == 0){
+        if (address.getCity() == null || address.getStreet() == null || address.getHouse() == null || address.getFlat() == null || address.getUserId() == 0) {
             throw new IllegalArgumentException("incorrect address");
         }
-
-        try {
-            return pjp.proceed();
-        } catch (Throwable throwable) {
-            throw new ServiceException(throwable);
-        }
-
+        return proceed(pjp);
     }
 
     @Around(value = "updateAddressService()", argNames = "pjp,point")
@@ -739,16 +688,10 @@ public class ValidationAspect {
         Object[] args = point.getArgs();
         Address address = (Address) args[0];
 
-        if(address == null){
+        if (address == null) {
             throw new IllegalArgumentException("address is null");
         }
-
-        try {
-            return pjp.proceed();
-        } catch (Throwable throwable) {
-            throw new ServiceException(throwable);
-        }
-
+        return proceed(pjp);
     }
 
     @Around(value = "banUnbanUserService()", argNames = "pjp,point")
@@ -757,16 +700,10 @@ public class ValidationAspect {
         Object[] args = point.getArgs();
         int userId = (int) args[0];
 
-        if(userId <= 0){
+        if (userId <= 0) {
             throw new IllegalArgumentException("incorrect user id");
         }
-
-        try {
-            return pjp.proceed();
-        } catch (Throwable throwable) {
-            throw new ServiceException(throwable);
-        }
-
+        return proceed(pjp);
     }
 
     @Around(value = "addSubstPointsUserService()", argNames = "pjp,point")
@@ -776,16 +713,10 @@ public class ValidationAspect {
         int points = (int) args[0];
         int userId = (int) args[1];
 
-        if(points == 0 || userId <= 0){
+        if (points == 0 || userId <= 0) {
             throw new IllegalArgumentException("incorrect args");
         }
-
-        try {
-            return pjp.proceed();
-        } catch (Throwable throwable) {
-            throw new ServiceException(throwable);
-        }
-
+        return proceed(pjp);
     }
 
     @Around(value = "addSubstMoneyUserService()", argNames = "pjp,point")
@@ -793,102 +724,72 @@ public class ValidationAspect {
 
         Object[] args = point.getArgs();
         BigDecimal amount = (BigDecimal) args[0];
-        int userId = (int)args[1];
+        int userId = (int) args[1];
 
-        if(amount == null || userId <= 0){
+        if (amount == null || userId <= 0) {
             throw new IllegalArgumentException("incorrect user fields");
         }
 
-        if(amount.compareTo(BigDecimal.ZERO) <= 0){
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("incorrect amount");
         }
-
-        try {
-            return pjp.proceed();
-        } catch (Throwable throwable) {
-            throw new ServiceException(throwable);
-        }
-
+        return proceed(pjp);
     }
 
     @Around(value = "createUserService()", argNames = "pjp,point")
     public Object createUserServiceValid(ProceedingJoinPoint pjp, JoinPoint point) throws ServiceException {
 
         Object[] args = point.getArgs();
-        User user = (User)args[0];
+        User user = (User) args[0];
 
-        if(user == null){
+        if (user == null) {
             throw new IllegalArgumentException("user is null");
         }
 
-        if(user.getMail() == null || user.getName() == null || user.getSurname() == null || user.getPassword() == null || user.getPhone() == null){
+        if (user.getMail() == null || user.getName() == null || user.getSurname() == null || user.getPassword() == null || user.getPhone() == null) {
             throw new IllegalArgumentException("incorrect user field");
         }
-
-        try {
-            return pjp.proceed();
-        } catch (Throwable throwable) {
-            throw new ServiceException(throwable);
-        }
-
+        return proceed(pjp);
     }
 
     @Around(value = "loginUserService()", argNames = "pjp,point")
     public Object loginUserServiceValid(ProceedingJoinPoint pjp, JoinPoint point) throws ServiceException {
 
         Object[] args = point.getArgs();
-        User user = (User)args[0];
+        User user = (User) args[0];
 
-        if(user == null){
+        if (user == null) {
             throw new IllegalArgumentException("user is null");
         }
 
-        if(user.getPassword() == null || user.getMail() == null){
+        if (user.getPassword() == null || user.getMail() == null) {
             throw new IllegalArgumentException("incorrect user fields");
         }
-
-        try {
-            return pjp.proceed();
-        } catch (Throwable throwable) {
-            throw new ServiceException(throwable);
-        }
-
+        return proceed(pjp);
     }
 
     @Around(value = "userServiceUpdate()", argNames = "pjp,point")
     public Object userServiceUpdateValid(ProceedingJoinPoint pjp, JoinPoint point) throws ServiceException {
 
         Object[] args = point.getArgs();
-        User user = (User)args[0];
+        User user = (User) args[0];
 
-        if(user == null){
+        if (user == null) {
             throw new IllegalArgumentException("user is null");
         }
-
-        try {
-            return pjp.proceed();
-        } catch (Throwable throwable) {
-            throw new ServiceException(throwable);
-        }
-
+        return proceed(pjp);
     }
 
     @Around(value = "userServiceFindDelete()", argNames = "pjp,point")
     public Object userServiceFindDeleteValid(ProceedingJoinPoint pjp, JoinPoint point) throws ServiceException {
 
         Object[] args = point.getArgs();
-        int userId = (int)args[0];
+        int userId = (int) args[0];
 
-        if(userId <= 0){
+        if (userId <= 0) {
             throw new IllegalArgumentException("incorrect user id");
         }
-
-        try {
-            return pjp.proceed();
-        } catch (Throwable throwable) {
-            throw new ServiceException(throwable);
-        }
-
+        return proceed(pjp);
     }
 
     @Around(value = "showUserInfo()", argNames = "pjp,point")
@@ -901,24 +802,18 @@ public class ValidationAspect {
         final String showUserId = content.getRequestParam(RequestParameters.ID);
         final Integer userId = (Integer) content.getSessionAttr(SessionAttributes.USER_ID);
 
-        if(showUserId == null){
+        if (showUserId == null) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
-        if(!showUserId.matches(Regex.POS_INTEGER)){
+        if (!showUserId.matches(Regex.POS_INTEGER)) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
-        if(!userService.find(userId).getRole().equals(Role.ADMIN) || userService.find(Integer.parseInt(showUserId)) == null){
+        if (!userService.find(userId).getRole().equals(Role.ADMIN) || userService.find(Integer.parseInt(showUserId)) == null) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
-
-
-        try {
-            return pjp.proceed();
-        } catch (Throwable throwable) {
-            throw new ServiceException(throwable);
-        }
+        return proceed(pjp);
     }
 
 
@@ -932,42 +827,36 @@ public class ValidationAspect {
         RequestContent content = (RequestContent) args[0];
 
         final String dishId = content.getRequestParam("id");
-        final Integer userId =(Integer) content.getSessionAttr(SessionAttributes.USER_ID);
+        final Integer userId = (Integer) content.getSessionAttr(SessionAttributes.USER_ID);
 
-        if(dishId == null || userId == null){
+        if (dishId == null || userId == null) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
-        if(!dishId.matches(Regex.POS_INTEGER)){
+        if (!dishId.matches(Regex.POS_INTEGER)) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
         try {
 
             final User user = userService.find(userId);
-            if(!user.getRole().equals(Role.ADMIN)){
+            if (!user.getRole().equals(Role.ADMIN)) {
                 return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
             }
 
             final Dish dish = dishService.get(Integer.parseInt(dishId));
-            if(dish == null){
+            if (dish == null) {
                 return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
             }
 
-            if(dish.isAvailable()){
+            if (dish.isAvailable()) {
                 return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
             }
 
         } catch (ServiceException e) {
             throw new ServiceException(e);
         }
-
-        try {
-            return pjp.proceed();
-        } catch (Throwable throwable) {
-            throw new ServiceException(throwable);
-        }
-
+        return proceed(pjp);
     }
 
     @Around(value = "hideDish()", argNames = "pjp,point")
@@ -980,42 +869,36 @@ public class ValidationAspect {
         RequestContent content = (RequestContent) args[0];
 
         final String dishId = content.getRequestParam("id");
-        final Integer userId =(Integer) content.getSessionAttr(SessionAttributes.USER_ID);
+        final Integer userId = (Integer) content.getSessionAttr(SessionAttributes.USER_ID);
 
-        if(dishId == null || userId == null){
+        if (dishId == null || userId == null) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
-        if(!dishId.matches(Regex.POS_INTEGER)){
+        if (!dishId.matches(Regex.POS_INTEGER)) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
         try {
 
             final User user = userService.find(userId);
-            if(!user.getRole().equals(Role.ADMIN)){
+            if (!user.getRole().equals(Role.ADMIN)) {
                 return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
             }
 
             final Dish dish = dishService.get(Integer.parseInt(dishId));
-            if(dish == null){
+            if (dish == null) {
                 return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
             }
 
-            if(!dish.isAvailable()){
+            if (!dish.isAvailable()) {
                 return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
             }
 
         } catch (ServiceException e) {
             throw new ServiceException(e);
         }
-
-        try {
-            return pjp.proceed();
-        } catch (Throwable throwable) {
-            throw new ServiceException(throwable);
-        }
-
+        return proceed(pjp);
     }
 
 
@@ -1029,30 +912,30 @@ public class ValidationAspect {
         RequestContent content = (RequestContent) args[0];
 
         final String orderId = content.getRequestParam("id");
-        final Integer userId =(Integer) content.getSessionAttr(SessionAttributes.USER_ID);
+        final Integer userId = (Integer) content.getSessionAttr(SessionAttributes.USER_ID);
 
-        if(orderId == null || userId == null){
+        if (orderId == null || userId == null) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
-        if(!orderId.matches(Regex.POS_INTEGER)){
+        if (!orderId.matches(Regex.POS_INTEGER)) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
         try {
 
             final User user = userService.find(userId);
-            if(!user.getRole().equals(Role.ADMIN)){
+            if (!user.getRole().equals(Role.ADMIN)) {
                 return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
             }
 
             Order order = orderService.getOrder(new Order(Integer.parseInt(orderId)));
 
-            if(order == null){
+            if (order == null) {
                 return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
             }
 
-            if(order.getStatus().equals(PaymentStatus.VIOLATED)){
+            if (order.getStatus().equals(PaymentStatus.VIOLATED)) {
                 return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
             }
 
@@ -1060,14 +943,7 @@ public class ValidationAspect {
             logger.error(e);
             throw new ServiceException(e);
         }
-
-        try {
-            return pjp.proceed();
-        } catch (Throwable throwable) {
-            logger.error(throwable);
-            throw new ServiceException(throwable);
-        }
-
+        return proceed(pjp);
     }
 
 
@@ -1081,30 +957,30 @@ public class ValidationAspect {
         RequestContent content = (RequestContent) args[0];
 
         final String orderId = content.getRequestParam(RequestParameters.ID);
-        final Integer userId =(Integer) content.getSessionAttr(SessionAttributes.USER_ID);
+        final Integer userId = (Integer) content.getSessionAttr(SessionAttributes.USER_ID);
 
-        if(orderId == null || userId == null){
+        if (orderId == null || userId == null) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
-        if(!orderId.matches(Regex.POS_INTEGER)){
+        if (!orderId.matches(Regex.POS_INTEGER)) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
         try {
 
             final User user = userService.find(userId);
-            if(!user.getRole().equals(Role.ADMIN)){
+            if (!user.getRole().equals(Role.ADMIN)) {
                 return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
             }
 
             Order order = orderService.getOrder(new Order(Integer.parseInt(orderId)));
 
-            if(order == null){
+            if (order == null) {
                 return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
             }
 
-            if(order.getStatus().equals(PaymentStatus.CLOSED)){
+            if (order.getStatus().equals(PaymentStatus.CLOSED)) {
                 return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
             }
 
@@ -1112,14 +988,7 @@ public class ValidationAspect {
             logger.error(e);
             throw new ServiceException(e);
         }
-
-        try {
-            return pjp.proceed();
-        } catch (Throwable throwable) {
-            logger.error(throwable);
-            throw new ServiceException(throwable);
-        }
-
+        return proceed(pjp);
     }
 
     @Around(value = "unbanUser()", argNames = "pjp,point")
@@ -1131,40 +1000,32 @@ public class ValidationAspect {
         RequestContent content = (RequestContent) args[0];
 
         final String banUserId = content.getRequestParam(RequestParameters.USER_ID);
-        final Integer userId = (Integer)content.getSessionAttr(SessionAttributes.USER_ID);
+        final Integer userId = (Integer) content.getSessionAttr(SessionAttributes.USER_ID);
 
-        if(banUserId == null || userId == null){
+        if (banUserId == null || userId == null) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
-        if(!banUserId.matches(Regex.POS_INTEGER)){
+        if (!banUserId.matches(Regex.POS_INTEGER)) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
         try {
             final User user = userService.find(userId);
-            if(!user.getRole().equals(Role.ADMIN)){
+            if (!user.getRole().equals(Role.ADMIN)) {
                 return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
             }
 
             final User banUser = userService.find(Integer.parseInt(banUserId));
 
-            if(!banUser.isBan()){
+            if (!banUser.isBan()) {
                 return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
             }
         } catch (ServiceException e) {
             logger.error(e);
             throw new ServiceException(e);
         }
-
-
-        try {
-            return pjp.proceed();
-        } catch (Throwable throwable) {
-            logger.error(throwable);
-            throw new ServiceException(throwable);
-        }
-
+        return proceed(pjp);
     }
 
     @Around(value = "banUser()", argNames = "pjp,point")
@@ -1176,40 +1037,32 @@ public class ValidationAspect {
         RequestContent content = (RequestContent) args[0];
 
         final String banUserId = content.getRequestParam(RequestParameters.USER_ID);
-        final Integer userId = (Integer)content.getSessionAttr(SessionAttributes.USER_ID);
+        final Integer userId = (Integer) content.getSessionAttr(SessionAttributes.USER_ID);
 
-        if(banUserId == null || userId == null){
+        if (banUserId == null || userId == null) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
-        if(!banUserId.matches(Regex.POS_INTEGER)){
+        if (!banUserId.matches(Regex.POS_INTEGER)) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
         try {
             final User user = userService.find(userId);
-            if(!user.getRole().equals(Role.ADMIN)){
+            if (!user.getRole().equals(Role.ADMIN)) {
                 return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
             }
 
             final User banUser = userService.find(Integer.parseInt(banUserId));
 
-            if(banUser.isBan()){
+            if (banUser.isBan()) {
                 return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
             }
         } catch (ServiceException e) {
             logger.error(e);
             throw new ServiceException(e);
         }
-
-
-        try {
-            return pjp.proceed();
-        } catch (Throwable throwable) {
-            logger.error(throwable);
-            throw new ServiceException(throwable);
-        }
-
+        return proceed(pjp);
     }
 
     @Around(value = "changePoints()", argNames = "pjp,point")
@@ -1222,39 +1075,34 @@ public class ValidationAspect {
 
         final String points = content.getRequestParam(RequestParameters.POINTS);
         final String userChange = content.getRequestParam(RequestParameters.USER_ID);
-        final Integer userId =(Integer) content.getSessionAttr(SessionAttributes.USER_ID);
+        final Integer userId = (Integer) content.getSessionAttr(SessionAttributes.USER_ID);
 
-        if(points == null || userChange == null ||userId == null){
+        if (points == null || userChange == null || userId == null) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
-        if(!points.matches(Regex.POS_INTEGER)){
+        if (!points.matches(Regex.POS_INTEGER)) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
-        if(!userChange.matches(Regex.POS_INTEGER)){
+        if (!userChange.matches(Regex.POS_INTEGER)) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
         try {
             final User changeUser = userService.find(Integer.parseInt(userChange));
-            if(changeUser == null){
+            if (changeUser == null) {
                 return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
             }
             final User user = userService.find(userId);
-            if (!user.getRole().equals(Role.ADMIN)){
+            if (!user.getRole().equals(Role.ADMIN)) {
                 return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
             }
         } catch (ServiceException e) {
             throw new ServiceException(e);
         }
 
-        try {
-            return pjp.proceed();
-        } catch (Throwable throwable) {
-            logger.error(throwable);
-            throw new ServiceException(throwable);
-        }
+        return proceed(pjp);
     }
 
     @Around(value = "changeMoney()", argNames = "pjp,point")
@@ -1267,23 +1115,23 @@ public class ValidationAspect {
         final String userIdChange = content.getRequestParam(RequestParameters.USER_ID);
         final Integer userId = (Integer) content.getSessionAttr(SessionAttributes.USER_ID);
 
-        if(amountStr == null || userIdChange == null || userId == null){
+        if (amountStr == null || userIdChange == null || userId == null) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
-        if(!userIdChange.matches(Regex.POS_INTEGER)){
+        if (!userIdChange.matches(Regex.POS_INTEGER)) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
         IUserService userService = (IUserService) BeanFactory.getInstance().getBean("userService");
         try {
             final User changeUser = userService.find(Integer.parseInt(userIdChange));
-            if(changeUser == null){
+            if (changeUser == null) {
                 return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
             }
 
             final User user = userService.find(userId);
-            if(!user.getRole().equals(Role.ADMIN)){
+            if (!user.getRole().equals(Role.ADMIN)) {
                 return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
             }
         } catch (ServiceException e) {
@@ -1291,20 +1139,13 @@ public class ValidationAspect {
             throw new ServiceException(e);
         }
 
-        try{
+        try {
             new BigDecimal(amountStr);
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             logger.error(e);
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
-
-        try {
-            return pjp.proceed();
-        } catch (Throwable throwable) {
-            logger.error(throwable);
-            throw new ServiceException(throwable);
-        }
-
+        return proceed(pjp);
     }
 
 
@@ -1313,7 +1154,7 @@ public class ValidationAspect {
 
         Object[] args = point.getArgs();
         RequestContent content = (RequestContent) args[0];
-        IUserService userService =(IUserService) BeanFactory.getInstance().getBean("userService");
+        IUserService userService = (IUserService) BeanFactory.getInstance().getBean("userService");
 
         String addressIdStr = content.getRequestParam(RequestParameters.ADDRESS);
         String payMethod = content.getRequestParam(RequestParameters.PAYMENT_NONCE);
@@ -1321,39 +1162,34 @@ public class ValidationAspect {
         Integer userId = (Integer) content.getSessionAttr(SessionAttributes.USER_ID);
         Cart cart = (Cart) content.getSessionAttr(SessionAttributes.CART);
 
-        if(addressIdStr == null || payMethod == null || userId == null || deliveryTime == null || cart == null){
+        if (addressIdStr == null || payMethod == null || userId == null || deliveryTime == null || cart == null) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
-        if(!deliveryTime.matches("^(\\d{4})-(\\d{2})-(\\d{2}) (\\d{2}):(\\d{2}):(\\d{2})")){
+        if (!deliveryTime.matches("^(\\d{4})-(\\d{2})-(\\d{2}) (\\d{2}):(\\d{2}):(\\d{2})")) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
 
-        if(cart.getUserCart() == null){
+        if (cart.getUserCart() == null) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
-        if(cart.getUserCart().isEmpty()){
+        if (cart.getUserCart().isEmpty()) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
         User user = userService.find(userId);
 
-        if(user == null){
+        if (user == null) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
-        if(user.isCredit()){
+        if (user.isCredit()) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
-        try {
-            return pjp.proceed();
-        } catch (Throwable throwable) {
-            logger.error(throwable);
-            throw new ServiceException(throwable);
-        }
+        return proceed(pjp);
 
     }
 
@@ -1365,38 +1201,33 @@ public class ValidationAspect {
 
         String payMethod = content.getRequestParam(RequestParameters.PAYMENT_NONCE);
         String amount = content.getRequestParam(RequestParameters.AMOUNT);
-        Integer userId =(Integer) content.getSessionAttr(SessionAttributes.USER_ID);
+        Integer userId = (Integer) content.getSessionAttr(SessionAttributes.USER_ID);
 
-        if(payMethod == null || amount == null || userId == null){
+        if (payMethod == null || amount == null || userId == null) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
-        try{
+        try {
             new BigDecimal(amount);
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             throw new ServiceException(e);
         }
 
-        try {
-            return pjp.proceed();
-        } catch (Throwable throwable) {
-            logger.error(throwable);
-            throw new ServiceException(throwable);
-        }
+        return proceed(pjp);
 
     }
 
     @Around(value = "cancelOrder()", argNames = "pjp,point")
-    public Object cancelOrderValid(ProceedingJoinPoint pjp, JoinPoint point){
+    public Object cancelOrderValid(ProceedingJoinPoint pjp, JoinPoint point) {
 
         Object[] args = point.getArgs();
         RequestContent content = (RequestContent) args[0];
 
         final String orderIdStr = content.getRequestParam(RequestParameters.ORDER_ID);
-        Integer userId =(Integer) content.getSessionAttr(SessionAttributes.USER_ID);
+        Integer userId = (Integer) content.getSessionAttr(SessionAttributes.USER_ID);
 
 
-        if(userId == null || orderIdStr == null){
+        if (userId == null || orderIdStr == null) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
@@ -1409,14 +1240,14 @@ public class ValidationAspect {
         try {
             final List<Order> orders = orderService.getOrders(new User(userId));
 
-            for (Order order :orders) {
-                if(order.getOrderId() == orderId){
+            for (Order order : orders) {
+                if (order.getOrderId() == orderId) {
                     result = pjp.proceed();
                     break;
                 }
             }
 
-            if(result == null){
+            if (result == null) {
                 return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
             }
 
@@ -1436,42 +1267,37 @@ public class ValidationAspect {
         String deliveryTime = content.getRequestParam(RequestParameters.TIME_DELIVERY);
         String addressIdStr = content.getRequestParam(RequestParameters.ADDRESS);
         int userId = (int) content.getSessionAttr(SessionAttributes.USER_ID);
-        Cart cart =(Cart) content.getSessionAttr(SessionAttributes.CART);
+        Cart cart = (Cart) content.getSessionAttr(SessionAttributes.CART);
         IUserService userService = (IUserService) BeanFactory.getInstance().getBean("userService");
 
 
-        if(deliveryTime == null || addressIdStr == null || cart == null){
+        if (deliveryTime == null || addressIdStr == null || cart == null) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
-        if(cart.getUserCart() == null){
+        if (cart.getUserCart() == null) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
-        if(cart.getUserCart().isEmpty()){
+        if (cart.getUserCart().isEmpty()) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
-        if(!deliveryTime.matches("^(\\d{4})-(\\d{2})-(\\d{2}) (\\d{2}):(\\d{2}):(\\d{2})")){
+        if (!deliveryTime.matches("^(\\d{4})-(\\d{2})-(\\d{2}) (\\d{2}):(\\d{2}):(\\d{2})")) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
         User user = userService.find(userId);
 
-        if(user == null){
+        if (user == null) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
-        if(user.isCredit()){
+        if (user.isCredit()) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
-        try {
-            return pjp.proceed();
-        } catch (Throwable throwable) {
-            logger.error(throwable);
-            throw new ServiceException(throwable);
-        }
+        return proceed(pjp);
 
     }
 
@@ -1487,13 +1313,14 @@ public class ValidationAspect {
         String password = content.getRequestParam(RequestParameters.USER_PASSWORD);
         String phone = content.getRequestParam(RequestParameters.USER_PHONE);
 
-        if(name == null || surname == null || email == null || password == null || phone == null) return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
+        if (name == null || surname == null || email == null || password == null || phone == null)
+            return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
 
-        if(!name.matches(Regex.NAME) ||
+        if (!name.matches(Regex.NAME) ||
                 !surname.matches(Regex.NAME) ||
                 !email.matches(Regex.EMAIL) ||
                 !password.matches(Regex.PASSWORD) ||
-                !phone.matches(Regex.PHONE)){
+                !phone.matches(Regex.PHONE)) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
@@ -1503,16 +1330,9 @@ public class ValidationAspect {
 
         user = userService.loginUser(user);
 
-        if(user != null) return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
+        if (user != null) return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
 
-        try {
-            Object o = pjp.proceed();
-            logger.info("User registered" + name + " " + surname + " " + email + " " + phone);
-            return o;
-        } catch (Throwable throwable) {
-            logger.error(throwable);
-            throw new ServiceException(throwable);
-        }
+        return proceed(pjp);
 
     }
 
@@ -1525,11 +1345,12 @@ public class ValidationAspect {
         final String login = content.getRequestParam(RequestParameters.LOGIN_EMAIL);
         final String password = content.getRequestParam(RequestParameters.LOGIN_PASSWORD);
 
-        if (login == null || password == null){
+        if (login == null || password == null) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
-        if(!login.matches(Regex.EMAIL) || !password.matches(Regex.PASSWORD)) return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
+        if (!login.matches(Regex.EMAIL) || !password.matches(Regex.PASSWORD))
+            return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
 
         try {
             return pjp.proceed();
@@ -1549,11 +1370,13 @@ public class ValidationAspect {
         final String feedback = content.getRequestParam(RequestParameters.ORDER_FEEDBACK);
         String orderIdStr = content.getRequestParam(RequestParameters.ORDER_ID);
 
-        if(stars == null || feedback == null || orderIdStr == null) return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
+        if (stars == null || feedback == null || orderIdStr == null)
+            return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
 
-        if(Integer.parseInt(stars) < 1 || Integer.parseInt(stars) > 5) return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
+        if (Integer.parseInt(stars) < 1 || Integer.parseInt(stars) > 5)
+            return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
 
-        if(!orderIdStr.matches(Regex.POS_INTEGER)) return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
+        if (!orderIdStr.matches(Regex.POS_INTEGER)) return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
 
         int orderId = Integer.parseInt(orderIdStr);
 
@@ -1563,7 +1386,7 @@ public class ValidationAspect {
 
             Order order = orderService.getOrder(new Order(orderId));
 
-            if(order == null){
+            if (order == null) {
                 return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
             }
 
@@ -1590,17 +1413,17 @@ public class ValidationAspect {
 
         String dishIdStr = content.getRequestParam(RequestParameters.ID);
 
-        if(!dishIdStr.matches(Regex.POS_INTEGER)) return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
+        if (!dishIdStr.matches(Regex.POS_INTEGER)) return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
 
         int dishId = Integer.parseInt(dishIdStr);
 
         final Cart cart = (Cart) content.getSessionAttr(SessionAttributes.CART);
 
-        if(cart == null) return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
+        if (cart == null) return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
 
-        if(cart.getUserCart() == null) return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
+        if (cart.getUserCart() == null) return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
 
-        if(cart.getUserCart().isEmpty()) return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
+        if (cart.getUserCart().isEmpty()) return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
 
         IDishService dishService = (IDishService) BeanFactory.getInstance().getBean("dishService");
 
@@ -1608,12 +1431,7 @@ public class ValidationAspect {
 
         if (!cart.getUserCart().contains(dish)) return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
 
-        try {
-            return pjp.proceed();
-        } catch (Throwable throwable) {
-            logger.error(throwable);
-            throw new ServiceException(throwable);
-        }
+        return proceed(pjp);
 
     }
 
@@ -1629,15 +1447,14 @@ public class ValidationAspect {
 
         int id;
 
-        if (content.getRequestParam(RequestParameters.ID)!=null) {
+        if (content.getRequestParam(RequestParameters.ID) != null) {
             final String addressId = content.getRequestParam(RequestParameters.ID);
-            if (addressId.matches(Regex.POS_INTEGER)){
+            if (addressId.matches(Regex.POS_INTEGER)) {
                 id = Integer.parseInt(addressId);
-            }else{
+            } else {
                 return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
             }
-        }
-        else{
+        } else {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
 
@@ -1648,7 +1465,7 @@ public class ValidationAspect {
             User user = userService.find(userId);
             Address address = addressService.find(new Address(id));
 
-            if(user.getId() != address.getUserId()){
+            if (user.getId() != address.getUserId()) {
                 return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
             }
 
@@ -1672,18 +1489,13 @@ public class ValidationAspect {
         String oldPass = content.getRequestParam(RequestParameters.OLD_PASSWORD);
         String newPass = content.getRequestParam(RequestParameters.NEW_PASSWORD);
 
-        if(oldPass == null || newPass == null) return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
-        if(oldPass.equals(newPass)) return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
+        if (oldPass == null || newPass == null) return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
+        if (oldPass.equals(newPass)) return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
 
-        if(!newPass.matches(Regex.PASSWORD)) {
+        if (!newPass.matches(Regex.PASSWORD)) {
             return new RequestResult(HttpServletResponse.SC_BAD_REQUEST);
         }
-        try {
-            return pjp.proceed();
-        } catch (Throwable throwable) {
-            logger.error("ChangePass exception", throwable);
-            throw new ServiceException(throwable);
-        }
+        return proceed(pjp);
 
     }
 
@@ -1700,7 +1512,7 @@ public class ValidationAspect {
             id = content.getRequestParam(RequestParameters.ID);
             try {
                 Integer.parseInt(id);
-                return (RequestResult) pjp.proceed();
+                return pjp.proceed();
             } catch (Throwable e) {
                 logger.error(e);
                 return new RequestResult(Navigation.FORWARD, Path.ERROR, HttpServletResponse.SC_BAD_REQUEST);
@@ -1720,11 +1532,11 @@ public class ValidationAspect {
 
         Integer userId = (Integer) content.getSessionAttr(SessionAttributes.USER_ID);
 
-        if(userId == null){
-            return result ;
+        if (userId == null) {
+            return result;
         }
 
-        if(userService.find(userId).getRole().ordinal() > Role.getRoleByName(AccessLevel.USER).ordinal()){
+        if (userService.find(userId).getRole().ordinal() > Role.getRoleByName(AccessLevel.USER).ordinal()) {
             return result;
         }
         Map<String, String[]> requestParameters = content.getRequestParameters();
@@ -1732,32 +1544,39 @@ public class ValidationAspect {
         String street = null;
         String house = null;
         String flat = null;
-        if(requestParameters.containsKey(RequestParameters.ADDRESS_CITY)) city = content.getRequestParam(RequestParameters.ADDRESS_CITY);
-        if(requestParameters.containsKey(RequestParameters.ADDRESS_STREET)) street = content.getRequestParam(RequestParameters.ADDRESS_STREET);
-        if(requestParameters.containsKey(RequestParameters.ADDRESS_HOUSE)) house = content.getRequestParam(RequestParameters.ADDRESS_HOUSE);
-        if(requestParameters.containsKey(RequestParameters.ADDRESS_FLAT)) flat = content.getRequestParam(RequestParameters.ADDRESS_FLAT);
+        if (requestParameters.containsKey(RequestParameters.ADDRESS_CITY))
+            city = content.getRequestParam(RequestParameters.ADDRESS_CITY);
+        if (requestParameters.containsKey(RequestParameters.ADDRESS_STREET))
+            street = content.getRequestParam(RequestParameters.ADDRESS_STREET);
+        if (requestParameters.containsKey(RequestParameters.ADDRESS_HOUSE))
+            house = content.getRequestParam(RequestParameters.ADDRESS_HOUSE);
+        if (requestParameters.containsKey(RequestParameters.ADDRESS_FLAT))
+            flat = content.getRequestParam(RequestParameters.ADDRESS_FLAT);
 
-        if(city!= null && street!= null && house!= null && flat!= null) {
-            if(!(city.equals("") || street.equals("") || house.equals("") || flat.equals(""))){
+        if (city != null && street != null && house != null && flat != null) {
+            if (!(city.equals("") || street.equals("") || house.equals("") || flat.equals(""))) {
                 boolean b = city.length() < 20 && street.length() < 30;
-                if (b){
-                    try {
-                        return pjp.proceed();
-                    } catch (Throwable throwable) {
-                        logger.error(throwable);
-                        throw new ServiceException(throwable);
-                    }
-                }else {
+                if (b) {
+                    return proceed(pjp);
+                } else {
                     return new RequestResult(Navigation.FORWARD, Path.ERROR, HttpServletResponse.SC_BAD_REQUEST);
                 }
-            }else {
+            } else {
                 return new RequestResult(Navigation.FORWARD, Path.ERROR, HttpServletResponse.SC_BAD_REQUEST);
             }
-        }else{
+        } else {
             return new RequestResult(Navigation.FORWARD, Path.ERROR, HttpServletResponse.SC_BAD_REQUEST);
         }
 
     }
 
+    private Object proceed(ProceedingJoinPoint pjp) throws ServiceException {
+        try {
+            return pjp.proceed();
+        } catch (Throwable throwable) {
+            logger.error(throwable);
+            throw new ServiceException(throwable);
+        }
+    }
 }
 

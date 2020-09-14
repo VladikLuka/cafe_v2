@@ -48,5 +48,9 @@ public class GetDishInCart implements Command {
         return result;
     }
 
+    public void setService(ICartService service) {
+        this.service = service;
+    }
+
     private GetDishInCart() {}
 }

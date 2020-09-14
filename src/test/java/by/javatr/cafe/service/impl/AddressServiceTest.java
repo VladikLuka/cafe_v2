@@ -36,7 +36,7 @@ public class AddressServiceTest {
         String absolutePath = file.getAbsolutePath();
         absolutePath = absolutePath.replaceAll("\\\\", "/");
         absolutePath = absolutePath + "/target/test/WEB-INF/classes/by/javatr/cafe/";
-        BeanFactory.getInstance().run(" " + absolutePath);
+        BeanFactory.getInstance().run(absolutePath);
 
         addressService = (AddressService) BeanFactory.getInstance().getBean("addressService");
         MySqlAddressRepository mock = Mockito.mock(MySqlAddressRepository.class);

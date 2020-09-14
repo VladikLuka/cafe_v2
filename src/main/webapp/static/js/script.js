@@ -235,6 +235,9 @@ $(document).ready(function(){
 
 	$("#add_points").click(function () {
 
+		var add_mon = document.getElementById("add_points");
+		add_mon.disabled = true;
+
 		let data = {
 			"command":"add_points",
 			"points":$("#give_user_points").val(),
@@ -251,9 +254,15 @@ $(document).ready(function(){
 				$("#div_add_point").removeClass("has-error");
 				let element = document.getElementById("user_point")
 				element.value = JSON.parse(response)["loyaltyPoint"]
+				var add_mon = document.getElementById("add_points");
+				add_mon.disabled = false;
 			},
 			statusCode:{
-				400: $("#div_add_point").addClass("has-error")
+				400: function() {
+					$("#div_add_point").addClass("has-error")
+					var add_mon = document.getElementById("add_points");
+					add_mon.disabled = false;
+				}
 			}
 
 		})
@@ -710,7 +719,7 @@ function delete_dish(id){
 									},
 									statusCode:{
 										400:function () {
-											swal("Something went wrong", "check balance", "error");
+											swal("Something went wrong", "too much money", "error");
 										}
 									}
 								})
@@ -751,7 +760,7 @@ function delete_dish(id){
 									},
 									statusCode:{
 										400:function () {
-											swal("Something went wrong", "check balance", "error");
+											swal("Something went wrong", "too much money ", "error");
 										}
 									}
 								})
@@ -761,6 +770,9 @@ function delete_dish(id){
 					}
 
 				});
+			},
+			400:function(response){
+				swal("Something went wrong", "too much money", "error");
 			}
 		}
 

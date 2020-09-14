@@ -1,18 +1,23 @@
 package by.javatr.cafe.dao.repository.impl;
 
+import by.javatr.cafe.connection.impl.ConnectionPool;
 import by.javatr.cafe.constant.DbColumns;
-import by.javatr.cafe.container.annotation.Autowired;
 import by.javatr.cafe.container.annotation.Component;
 import by.javatr.cafe.dao.repository.AbstractRepository;
-import by.javatr.cafe.connection.impl.ConnectionPool;
+import by.javatr.cafe.dao.repository.IUserRepository;
 import by.javatr.cafe.entity.Role;
 import by.javatr.cafe.entity.User;
-import by.javatr.cafe.dao.repository.IUserRepository;
 import by.javatr.cafe.exception.DAOException;
 import by.javatr.cafe.util.Cache;
 
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Contains methods for working with the database.
@@ -24,10 +29,6 @@ public class MySqlUserRepository extends AbstractRepository<User> implements IUs
     private static final String FIND_ALL_USERS = "select * from user left join role on role.role_id = user.roles_role_id";
     private static final String FIND_USER_BY_EMAIL_PSW = "select * from user left join role on user.roles_role_id = role.role_id where user.user_email = ? and user.user_password = ?;";
     private static final String GET_USER = "select * from user left join role on role.role_id = user.roles_role_id where user.user_id = ?";
-
-    @Autowired
-    private final Cache cache = Cache.getInstance();
-
 
     public MySqlUserRepository(Connection connection) {
         setConnection(connection);
@@ -43,23 +44,23 @@ public class MySqlUserRepository extends AbstractRepository<User> implements IUs
      */
     @Override
     public List<User> getAllUser() throws DAOException {
+        Cache cache = Cache.getInstance();
 
         if (!cache.getListUser().isEmpty()) {
             return cache.getListUser();
         }
 
+        Connection connection = getConnection();
+
         ArrayList<User> userList = new ArrayList<>();
 
         try (
-                Connection connection = getConnection();
                 PreparedStatement statement = connection.prepareStatement(FIND_ALL_USERS);
                 ResultSet resultSet = statement.executeQuery();
         ) {
-
             if (resultSet == null) {
                 return Collections.emptyList();
             }
-
             while (resultSet.next()) {
                 User user = new User();
                 user.setId(resultSet.getInt(DbColumns.USER_ID));
@@ -89,14 +90,15 @@ public class MySqlUserRepository extends AbstractRepository<User> implements IUs
      */
     @Override
     public User findUser(User user) throws DAOException {
+        Cache cache = Cache.getInstance();
 
         if (cache.getUser(user.getId()) != null) {
             return cache.getUser(user.getId());
         }
 
-        try (Connection connection = ConnectionPool.CONNECTION_POOL.retrieve();
-             PreparedStatement statement = connection.prepareStatement(GET_USER);
-        ) {
+        Connection connection = getConnection();
+
+        try (PreparedStatement statement = connection.prepareStatement(GET_USER);) {
             statement.setInt(1, user.getId());
             try (ResultSet resultSet = statement.executeQuery();) {
 
@@ -130,12 +132,12 @@ public class MySqlUserRepository extends AbstractRepository<User> implements IUs
      */
     @Override
     public User find(String email, String password) throws DAOException {
-
         User user = null;
 
-        try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement(FIND_USER_BY_EMAIL_PSW);
-        ) {
+        Connection connection = getConnection();
+
+        try (PreparedStatement statement = connection.prepareStatement(FIND_USER_BY_EMAIL_PSW);) {
+
             statement.setString(1, email);
             statement.setString(2, password);
 
@@ -179,9 +181,13 @@ public class MySqlUserRepository extends AbstractRepository<User> implements IUs
      */
     @Override
     public boolean delete(User user) throws DAOException {
-        super.delete(user);
-        cache.deleteUser(user);
-        return true;
+        Cache cache = Cache.getInstance();
+
+        boolean result = super.delete(user);
+        if (result){
+            cache.deleteUser(user);
+        }
+        return result;
     }
 
 
@@ -193,6 +199,8 @@ public class MySqlUserRepository extends AbstractRepository<User> implements IUs
      */
     @Override
     public User create(User user) throws DAOException {
+        Cache cache = Cache.getInstance();
+
         user = super.create(user);
         cache.addUser(user);
         return user;
@@ -200,12 +208,13 @@ public class MySqlUserRepository extends AbstractRepository<User> implements IUs
 
     /**
      * Update user
-     *
      * @param user user being updated
      * @return updated user
      */
     @Override
     public User update(User user) throws DAOException {
+        Cache cache = Cache.getInstance();
+
         user = super.update(user);
         cache.updateUser(user);
         return user;

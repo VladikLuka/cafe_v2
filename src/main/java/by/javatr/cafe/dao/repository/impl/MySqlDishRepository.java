@@ -1,9 +1,8 @@
 package by.javatr.cafe.dao.repository.impl;
 
-import by.javatr.cafe.container.annotation.Autowired;
+import by.javatr.cafe.connection.impl.ConnectionPool;
 import by.javatr.cafe.container.annotation.Component;
 import by.javatr.cafe.dao.repository.AbstractRepository;
-import by.javatr.cafe.connection.impl.ConnectionPool;
 import by.javatr.cafe.dao.repository.IDishRepository;
 import by.javatr.cafe.entity.Dish;
 import by.javatr.cafe.exception.DAOException;
@@ -32,9 +31,6 @@ public class MySqlDishRepository extends AbstractRepository<Dish> implements IDi
     private static final String GET_ALL = "select * from dish";
     private static final String GET_DISH = "select * from dish where dish_id = ?";
 
-    @Autowired
-    private final Cache cache = Cache.getInstance();
-
     public MySqlDishRepository(Connection connection) {
         setConnection(connection);
     }
@@ -50,14 +46,17 @@ public class MySqlDishRepository extends AbstractRepository<Dish> implements IDi
     @Override
     public List<Dish> getAll() throws DAOException {
 
+        Cache cache = Cache.getInstance();
+
         if(!cache.getDishes().isEmpty()){
             return cache.getDishes();
         }
 
         List<Dish> list = new ArrayList<>();
 
+        Connection connection = getConnection();
+
         try (
-            Connection connection = ConnectionPool.CONNECTION_POOL.retrieve();
             PreparedStatement statement = connection.prepareStatement(GET_ALL);
             ResultSet resultSet = statement.executeQuery();
         ){
@@ -89,16 +88,20 @@ public class MySqlDishRepository extends AbstractRepository<Dish> implements IDi
     @Override
     public Dish getById(int dishId) throws DAOException {
 
+        Cache cache = Cache.getInstance();
+
         Dish dish = cache.getDish(new Dish(dishId));
 
         if (dish!=null) {
             return cache.getDish(new Dish(dishId));
         }
 
+        Connection connection = getConnection();
+
         dish = new Dish();
 
-       try(Connection connection = ConnectionPool.CONNECTION_POOL.retrieve();
-           PreparedStatement preparedStatement = connection.prepareStatement(GET_DISH)) {
+       try(PreparedStatement preparedStatement = connection.prepareStatement(GET_DISH)) {
+
            preparedStatement.setInt(1, dishId);
 
            try(ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -126,9 +129,13 @@ public class MySqlDishRepository extends AbstractRepository<Dish> implements IDi
      */
     @Override
     public boolean delete(int dishId) throws DAOException {
-        super.delete(new Dish(dishId));
-        cache.deleteDish(new Dish(dishId));
-        return true;
+        Cache cache = Cache.getInstance();
+
+        boolean result = super.delete(new Dish(dishId));
+        if (result){
+            cache.deleteDish(new Dish(dishId));
+        }
+        return result;
     }
 
     /**
@@ -138,6 +145,8 @@ public class MySqlDishRepository extends AbstractRepository<Dish> implements IDi
      */
     @Override
     public Dish create(Dish dish) throws DAOException {
+        Cache cache = Cache.getInstance();
+
         dish = super.create(dish);
         cache.addDish(dish);
         return dish;
@@ -150,6 +159,8 @@ public class MySqlDishRepository extends AbstractRepository<Dish> implements IDi
      */
     @Override
     public Dish update(Dish dish) throws DAOException {
+        Cache cache = Cache.getInstance();
+
         dish = super.update(dish);
         cache.updateDish(dish);
         return dish;
