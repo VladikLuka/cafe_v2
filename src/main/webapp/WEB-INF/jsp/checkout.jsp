@@ -128,7 +128,7 @@
                 </tr>
                 <tr>
                     <td><local:Localization message="checkout.amount"/></td>
-                    <td>${requestScope.order.amount}</td>
+                    <td>${requestScope.order.amount} BYN</td>
                 </tr>
                 <tr>
                     <td><local:Localization message="checkout.status"/></td>

@@ -30,8 +30,8 @@ public class FileUploadController extends HttpServlet {
 
         for (Part part: req.getParts()) {
             if(part.getSubmittedFileName() != null){
-                part.write(uploadFilePath + File.separator + "\\static\\img\\upload\\" + part.getSubmittedFileName());
-                resp.getWriter().print("\\static\\img\\upload\\" + part.getSubmittedFileName());
+                part.write(uploadFilePath + File.separator + "/static/img/upload/" + part.getSubmittedFileName());
+                resp.getWriter().print("static/img/upload/" + part.getSubmittedFileName());
             }
         }
     }
